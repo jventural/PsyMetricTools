@@ -1,0 +1,18 @@
+Package: PsyMetricTools
+Version: 1.0.0
+Date: 2024-01-27
+Title: Psychometric and Statistical Analysis Tools
+Encoding: UTF-8
+Author: Jose Ventura <jventuraleon@gmail.com>
+Maintainer: Jose Ventura <jventuraleon@gmail.com>
+Depends: R (>= 3.6.0)
+Imports: tidyverse, lavaan, psych, stringr, broom, dplyr, tidyr, ggplot2, reshape2, gridExtra, gtable
+Description: PsyMetricTools is a comprehensive package designed for psychometric and statistical analysis in social sciences. It includes functions for data preprocessing, factor analysis, reliability testing, descriptive statistics, visualization of Likert-scale items, and handling multi-class imbalances. The package facilitates advanced data analysis tasks commonly encountered in psychological and educational research.
+License: GPL (>= 3)
+URL: https://github.com/jventuraleon/PsyMetricTools
+Packaged: 2024-01-27 10:50:11 UTC; JoseVentura
+Suggests: testthat (>= 3.0.0)
+Config/testthat/edition: 3
+NeedsCompilation: no
+Repository: CRAN
+Date/Publication: 2024-01-27 15:00:05 UTC
