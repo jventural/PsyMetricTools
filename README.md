@@ -57,6 +57,10 @@ Quickly rename survey items to a standardized format:
 df_renamed <- rename_items(df, prefix1 = "Q", prefix2 = "A", inici = "Question1", final = "Question10", n_items1 = 5, n_items2 = 5)
 print(df_renamed)
 ```
+### Quick Likert chart generation
+```r
+Plot_Likert(df_new_renombrado, "CCOV", 1:27, exclude = c(1))
+```
 
 ## License
 GPL-3
