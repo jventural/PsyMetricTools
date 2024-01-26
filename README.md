@@ -67,8 +67,8 @@ Plot_Likert(df_new_renombrado, "CCOV", 1:27, exclude = c(1))
 ## License
 GPL-3
 
-## URL
-PsyMetricTools on GitHub
+## Citation
+Ventura-León, J. (2024). PsyMetricTools [Software]. GitHub. https://github.com/jventural/PsyMetricTools
 
 ## Author
 Jose Ventura jventuraleon@gmail.com
