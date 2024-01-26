@@ -4,14 +4,7 @@
 [![codecov](https://codecov.io/gh/username/PsyMetricTools/branch/master/graph/badge.svg)](https://codecov.io/gh/username/PsyMetricTools)
 
 ## Installation
-
-You can install the released version of PsyMetricTools from CRAN with:
-
-```r
-install.packages("PsyMetricTools")
-```
-
-or install the latest version of PsyMetricTools from GitHub with the help of the devtools package:
+You can install the latest version of PsyMetricTools from GitHub with the help of the devtools package:
 ```r
 if (!require("devtools")) {
   install.packages("devtools")
