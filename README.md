@@ -13,8 +13,10 @@ install.packages("PsyMetricTools")
 
 or install the latest version of PsyMetricTools from GitHub with the help of the devtools package:
 ```r
-install.packages("devtools")
-devtools::install_github("username/PsyMetricTools")
+if (!require("devtools")) {
+  install.packages("devtools")
+}
+devtools::install_github("jventural/PsyMetricTools")
 ```
 
 ## Examples
