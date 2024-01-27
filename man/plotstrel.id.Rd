@@ -21,11 +21,6 @@ plotstrel.id(x, estimate, ordering = FALSE)
 The function first checks that the necessary elements are present in the list 'x'. Then, it extracts the values of the specified estimate and compares them with and without the inclusion of each item. It uses ridge density plots to visualize the distribution of the estimate values with and without each item, allowing for a visual comparison of their effects.
 }
 
-
-\details{
-The function retrieves the standardized factor loadings from the specified CFA model, allowing for a quick and clear assessment of each item's contribution to its respective factor. By applying a threshold, the function can help in identifying and focusing on the most significant item-factor associations, which is particularly useful in large models with numerous items.
-}
-
 \value{
 A data frame where each row corresponds to an item, and columns represent the standardized loadings on each factor. Loadings below the specified threshold (if `apply_threshold` is TRUE) are set to zero, simplifying the interpretation of the factor structure.
 }
