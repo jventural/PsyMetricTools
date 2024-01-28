@@ -20,7 +20,7 @@ calcula_omega_all <- function(extracted, data) {
   # Internal function to calculate reliability
   fiabilidad_interna <- function(vars, data) {
     # Extract the values of the variables in 'vars' from the data frame 'data'.
-    temp_data <- data %>% select(all_of(vars))
+    temp_data <- data %>% dplyr::select(all_of(vars))
 
     # Create the model using the variable names in 'vars'.
     model_original <- paste("F1 =~", paste0(vars, collapse = " + "))

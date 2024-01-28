@@ -12,7 +12,7 @@ Fiabilidad <- function(vars, data) {
   install_and_load("semTools")
 
   # Extraer los valores de las variables en 'vars' del data frame 'data'
-  temp_data <- data %>% select(all_of(vars))
+  temp_data <- data %>% dplyr::select(all_of(vars))
 
   # Crear el modelo utilizando los nombres de las variables en 'vars'
   model_original <- paste("F1 =~", paste0(vars, collapse = " + "))

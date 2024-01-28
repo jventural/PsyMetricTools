@@ -36,10 +36,10 @@ Plot_Likert <- function(Data, name_items, ranges, exclude = NULL) {
     mutate(
       Variables = factor(
         Variables,
-        levels = Data %>% select(all_of(cols)) %>% names()
+        levels = Data %>% dplyr::select(all_of(cols)) %>% names()
       )
     ) %>%
-    select(Variables, Var_Ptjes)
+    dplyr::select(Variables, Var_Ptjes)
 
   # Crear el gráfico
   ggplot(df_pivot, aes(x= as.factor(Var_Ptjes))) +

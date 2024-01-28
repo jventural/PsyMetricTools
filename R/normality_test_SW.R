@@ -26,7 +26,7 @@ normality_test_SW <- function(data, variables) {
       names_to = "Variables",
       values_to = "Ptje_vi"
     ) %>%
-    mutate(Variables = factor(Variables, levels = select(data, {{variables}}) %>% names())) %>%
+    mutate(Variables = factor(Variables, levels = dplyr::select(data, {{variables}}) %>% names())) %>%
     group_by(Variables) %>%
     summarise(
       `Shapiro-Wilk` = broom::tidy(shapiro.test(Ptje_vi))$statistic,

@@ -53,7 +53,7 @@ Calcule_Comparative <- function(data, cols, group_var, Robust = FALSE) {
             effectsize::cohens_d(Ptje_vi ~ data[[group_var]])$Cohens_d
           }
         ) %>%
-        select(
+        dplyr::select(
           Variables_interes, estimate, estimate1, estimate2, statistic, p.value, d_cohen, statistic, parameter
         ) %>%
         rename(M_1 = estimate1, M_2 = estimate2, Diff = estimate, gl = parameter, t = statistic, p = p.value)
@@ -74,7 +74,7 @@ Calcule_Comparative <- function(data, cols, group_var, Robust = FALSE) {
         TRUE ~ "Trivial"
       )
     ) %>%
-    select(
+    dplyr::select(
       Variables_interes, `M1(SD1)`, `M2(SD2)`, t, gl, p, d_cohen, Interpretacion
     ) %>%
     rename_with(

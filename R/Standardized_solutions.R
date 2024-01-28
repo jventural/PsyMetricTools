@@ -16,7 +16,7 @@ Standardized_solutions <- function(specification, name_items, apply_threshold = 
     filter(op == "=~") %>%
     mutate(item  = str_remove(rhs, name_items) %>% as.double(),
            factor = str_remove(lhs, "f")) %>%
-    select(lhs, rhs, est.std) %>%
+    dplyr::select(lhs, rhs, est.std) %>%
     pivot_wider(
       names_from = lhs,
       values_from = c(est.std))
