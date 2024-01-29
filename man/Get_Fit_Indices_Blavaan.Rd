@@ -3,7 +3,7 @@
 \title{Extraction of Fit Indices and HDI Intervals for Bayesian SEM Models}
 
 \description{
-This function is designed for extracting and summarizing key fit indices from Bayesian Structural Equation Models (SEM) fitted with the 'blavaan' package. It calculates the mean values for chi-square (chisq), the number of estimated parameters (pD), degrees of freedom (df), Bayesian RMSEA (BRMSEA), and Bayesian CFI (BCFI). Additionally, it computes the Highest Density Intervals (HDI) for BRMSEA and BCFI, providing a comprehensive overview of the model's fit.
+This function is designed for extracting and summarizing key fit indices from Bayesian Structural Equation Models (SEM) fitted with the 'blavaan' package. It calculates the mean values for chi-square (chisq), the number of estimated parameters (pD), degrees of freedom (df), posterior predictive p-value (ppp), Bayesian RMSEA (BRMSEA), and Bayesian CFI (BCFI). Additionally, it computes the Highest Density Intervals (HDI) for BRMSEA and BCFI, providing a comprehensive overview of the model's fit.
 }
 
 \usage{
@@ -20,7 +20,7 @@ The function first calculates mean values of chisq, pD, df, BRMSEA, and BCFI fro
 }
 
 \value{
-A data frame with a single row, containing the mean values of chisq, pD, df, BRMSEA, and BCFI, along with their respective HDIs. This summary provides a concise view of the model's performance and fit indices.
+A data frame with a single row, containing the mean values of chisq, pD, ppp, df, BRMSEA, and BCFI, along with their respective HDIs. This summary provides a concise view of the model's performance and fit indices.
 }
 
 \examples{

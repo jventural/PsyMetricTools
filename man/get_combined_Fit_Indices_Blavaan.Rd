@@ -3,7 +3,7 @@
 \title{Aggregate Fit Indices for Multiple Bayesian SEM Models}
 
 \description{
-This function is designed to aggregate and summarize key fit indices from a list of Bayesian Structural Equation Models (SEM) fitted using the 'blavaan' package. It provides an efficient way to analyze and compare multiple models simultaneously. The function calculates mean values for chi-square (chisq), number of estimated parameters (pD), degrees of freedom (df), Bayesian RMSEA (BRMSEA), and Bayesian CFI (BCFI) for each model. Additionally, it computes the Highest Density Intervals (HDI) for both BRMSEA and BCFI, offering a comprehensive comparison across different models.
+This function is designed to aggregate and summarize key fit indices from a list of Bayesian Structural Equation Models (SEM) fitted using the 'blavaan' package. It provides an efficient way to analyze and compare multiple models simultaneously. The function calculates mean values for chi-square (chisq), number of estimated parameters (pD), degrees of freedom (df), posterior predictive p-value (ppp), Bayesian RMSEA (BRMSEA), and Bayesian CFI (BCFI) for each model. Additionally, it computes the Highest Density Intervals (HDI) for both BRMSEA and BCFI, offering a comprehensive comparison across different models.
 }
 
 \usage{
@@ -20,7 +20,7 @@ For each model in the provided list, the function calculates mean values of chis
 }
 
 \value{
-A data frame where each row corresponds to one model from the input list, containing the mean values of chisq, pD, df, BRMSEA, and BCFI, along with their respective HDIs. This format facilitates easy comparison and evaluation of multiple models' fit indices.
+A data frame where each row corresponds to one model from the input list, containing the mean values of chisq, pD, df, ppp, BRMSEA, and BCFI, along with their respective HDIs. This format facilitates easy comparison and evaluation of multiple models' fit indices.
 }
 
 \examples{
