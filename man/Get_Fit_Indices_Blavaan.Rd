@@ -12,7 +12,7 @@ Get_Fit_Indices_Blavaan(model, credMass = 0.95)
 
 \arguments{
 \item{model}{A 'blavaan' model object from which fit indices are to be extracted.}
-\item{credMass}{The credible mass for the Highest Density Interval (HDI) calculation. Defaults to 0.95, representing a 95% credible interval.}
+\item{credMass}{The credible mass for the Highest Density Interval (HDI) calculation. Defaults to 0.95, representing a 95 percent credible interval.}
 }
 
 \details{
