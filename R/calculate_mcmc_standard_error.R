@@ -9,7 +9,6 @@ calculate_mcmc_standard_error <- function(fit1) {
 
   # Define la función 'calculate_mcmc_standard_error' internamente
   calculate_mcmc_standard_error <- function(stpost1) {
-
     if (!is.matrix(stpost1) && !is.data.frame(stpost1)) {
       stop("stpost1 debe ser una matriz o un data frame.")
     }
@@ -28,15 +27,29 @@ calculate_mcmc_standard_error <- function(fit1) {
     # Verificar la condición del error estándar
     checkvar1 <- se1 < 0.05 * apply(stpost1, 2, sd)
 
-    # Formatear los valores mínimos y máximos para evitar la notación científica
-    min_se <- format(min(se1[se1 > 0]), scientific = FALSE)
-    max_se <- format(max(se1), scientific = FALSE)
+    # Formatear los valores de se1 para notación científica con dos decimales
+    se1_scientific <- sapply(se1, function(x) {
+      if (x == 0) {
+        return("0")
+      } else {
+        sci_format <- sprintf("%.2e", x)
+        sci_format <- gsub("e-0?", "× 10^-", sci_format, fixed = TRUE)
+        sci_format <- gsub("e\\+0?", "× 10^", sci_format, fixed = TRUE)
+        return(sci_format)
+      }
+    })
 
-    # Formatear se1 para evitar la notación científica
-    se1_formatted <- format(se1, scientific = FALSE)
+    # Convertir los valores de se1 a formato decimal completo
+    se1_decimal <- sapply(se1, function(x) format(x, scientific = FALSE))
 
-    # Devolver una lista con los resultados y el vector completo de se1 formateado
-    return(list(min_se = min_se, max_se = max_se, checkvar1 = checkvar1, se1 = se1_formatted))
+    # Devolver una lista con los resultados y los vectores de se1 en distintos formatos
+    return(list(min_se_scientific = min(se1_scientific),
+                max_se_scientific = max(se1_scientific),
+                se1_scientific = se1_scientific,
+                min_se_decimal = min(se1_decimal),
+                max_se_decimal = max(se1_decimal),
+                se1_decimal = se1_decimal,
+                checkvar1 = checkvar1))
   }
 
   # Llama a la función 'calculate_mcmc_standard_error' con el resultado de 'standardizedPosterior'
