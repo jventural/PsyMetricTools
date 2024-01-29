@@ -1,4 +1,9 @@
 traceplot_bayesrel <- function(res, paleta_colores = NULL) {
+  library(ggplot2)
+  library(reshape2)
+  library(ggridges)
+  library(MCMCpack)
+  library(coda)
   # Extracción de las muestras de 'res'
   samp <- res[["Bayes"]][["samp"]][["Bayes_omega"]]
 
