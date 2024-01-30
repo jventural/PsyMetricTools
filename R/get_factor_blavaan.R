@@ -12,8 +12,8 @@ get_factor_blavaan <- function(fit_model, credMass = 0.95) {
   results_list <- list()
 
   # Bucle a través de las cargas factoriales
-  for (i in grep("^F1=~", names(stpost), value = TRUE)) {
-    factor_name <- sub("F1=~", "", i) # Limpiar los nombres de los factores
+  for (i in grep("=~", names(stpost), value = TRUE)) {
+    factor_name <- sub("=~", "", i) # Limpiar los nombres de los factores
     posterior_mean <- mean(stpost[[i]])
     hdi_values <- HDInterval::hdi(stpost[[i]], credMass = credMass)
     hdi_formatted <- sprintf("[%0.3f, %0.3f]", hdi_values[1], hdi_values[2])
