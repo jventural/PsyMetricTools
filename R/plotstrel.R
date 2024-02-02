@@ -116,7 +116,7 @@ plotstrel <- function(x, estimate, blackwhite = FALSE, criteria = TRUE, cuts = c
       plotShadePrior(dens.prior, xx = c(xx0, xx1, xx2, xx3), cols = colos, criteria = criteria, blackwhite = blackwhite)
       plotShadePost(dens.post, xx = c(x0, x1, x2, x3), cols = colos, criteria = criteria, blackwhite = blackwhite)
 
-      lines(density(prior, from = 0, to = 1), lty = 3, lwd = 3)
+      lines(density(prior, from = 0, to = 1), lty = 2, lwd = 3)
       axis(side = 1, at = seq(0, 1, by = .2), labels = seq(0, 1, by = .2), cex.axis = 1.2, lwd = 1.5)
       axis(side = 2, at = seq(0, peak, by = peak/5), labels = NA, cex.axis = 1.2, lwd = 1.5)
 
@@ -157,7 +157,7 @@ plotstrel <- function(x, estimate, blackwhite = FALSE, criteria = TRUE, cuts = c
       plotShadePrior(dens.prior, xx = c(xx0, xx1, xx2, xx3), cols = colos, criteria = criteria, blackwhite = blackwhite)
       plotShadePost(dens.post, xx = c(x0, x1, x2, x3), cols = colos, criteria = criteria, blackwhite = blackwhite)
 
-      lines(density(prior, from = 0, to = 1), lty = 3, lwd = 3)
+      lines(density(prior, from = 0, to = 1), lty = 3, col = "firebrick", lwd = 3)
       axis(side = 1, at = seq(0, 1, by = .2), labels = seq(0, 1, by = .2), cex.axis = 1.2, lwd = 1.5)
       axis(side = 2, at = seq(0, peak, by = peak/5), labels = NA, cex.axis = 1.2, lwd = 1.5)
       title(ylab = "Density", mgp = c(1, 1, 0), adj = 0.31)
@@ -170,7 +170,7 @@ plotstrel <- function(x, estimate, blackwhite = FALSE, criteria = TRUE, cuts = c
              paste("95% HDI: [", round(hdi[1], 3), ", ", round(hdi[2], 3),"]", sep ="")),
            cex = 1.2, pos = 2)
 
-      legend(x = 0, y = peak, lty = c(1, 3), lwd = 2, c("Posterior", "Prior"), bty = "n", cex = 1.2)
+      legend(x = 0, y = peak, lty = c(1, 3), lwd = 2, c("Posterior", "Prior"), col = c("navy", "firebrick"), bty = "n", cex = 1.2)
 
       text("insufficient", x = cuts[1]/2, y = peak*-.03, adj = 0.5, cex = 1.2)
       text("sufficient", x = (cuts[1] + cuts[2])/2, y = peak*-.03, adj = .5, cex = 1.2)
