@@ -16,7 +16,7 @@ Density_report(edge.matrix)
 
 \details{
 The function performs the following steps:
-1. Determines the total number of possible connections in the network, which is calculated as \(n \times (n-1) / 2\), where \(n\) is the number of nodes in the network.
+1. Determines the total number of possible connections in the network, which is calculated as  \eqn{n * (n-1) / 2}, where \eqn{n} is the number of nodes in the network.
 2. Calculates the number of actual connections different from zero by summing the entries in the edge matrix that are non-zero and dividing by 2, to account for the bidirectionality in an undirected network.
 3. Computes the network density as the ratio of the number of non-zero connections to the total possible connections, expressed as a percentage.
 4. Returns a string summarizing the number of non-zero connections and the calculated density of the network.
