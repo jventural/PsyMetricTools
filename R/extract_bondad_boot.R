@@ -1,4 +1,4 @@
-extract_bondad_bootnet <- function(resultados_bootstrap) {
+extract_bondad_boot <- function(resultados_bootstrap) {
   # Cargar las librerías necesarias
   require(purrr)
   require(dplyr)
