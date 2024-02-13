@@ -13,19 +13,15 @@ specification_models <- function(modelos, data, estimator) {
   AD <- list()
 
   for (i in 1:length(modelos)) {
-    # Suprimir mensajes y advertencias para cada modelo ajustado
-    suppressMessages(suppressWarnings({
-      fit.original = cfa(paste0(modelos[i]),
-                         data = data,
-                         estimator = estimator,
-                         rotation = "oblimin",
-                         mimic = "Mplus",
-                         ordered = TRUE, verbose = FALSE)
-    }))
+    fit.original = cfa(paste0(modelos[i]),
+                       data = data,
+                       estimator = estimator,
+                       rotation = "oblimin",
+                       mimic = "Mplus",
+                       ordered = TRUE)
     AD[[i]] = fit.original
-    # Si necesitas imprimir algo específico aquí, asegúrate de que no contradiga tu objetivo de supresión
+    print(fit.original)
   }
 
   return(AD)
 }
-
