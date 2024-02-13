@@ -31,7 +31,7 @@ iterativeModelEFA <- function(data, initialModel, MAX_ITERATIONS = 10) {
                                 name_items = initialModel$name_items,
                                 exclude_items = initialModel$exclude_items)
 
-    Specifications <- specification_models(modelos, data = data, estimator = "WLSMV")
+    Specifications <- specification_models2(modelos, data = data, estimator = "WLSMV")
     Bondades <- extract_fit_measures(Specifications)
 
     foundItemsToExclude <- FALSE
