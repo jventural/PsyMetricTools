@@ -1,13 +1,13 @@
-\name{extract_bondad_boot}
-\alias{extract_bondad_boot}
+\name{extract_bondad_boot_EFA}
+\alias{extract_bondad_boot_EFA}
 \title{Extraction of Goodness-of-Fit Measures from Bootstrap EFA Results}
 
 \description{
-  This function extracts goodness-of-fit measures from a set of bootstrap results generated during exploratory factor analysis (EFA). It is designed to work with the output structure of a custom EFA bootstrap analysis, specifically targeting the extraction of 'Bondades' (goodness-of-fit measures) from each bootstrap sample's combined results. The function streamlines the process of aggregating these measures across all bootstrap samples, facilitating subsequent analysis and interpretation.
+This function extracts goodness-of-fit measures from a set of bootstrap results generated during exploratory factor analysis (EFA). It is designed to work with the output structure of a custom EFA bootstrap analysis, specifically targeting the extraction of 'Bondades' (goodness-of-fit measures) from each bootstrap sample's combined results. The function streamlines the process of aggregating these measures across all bootstrap samples, facilitating subsequent analysis and interpretation.
 }
 
 \usage{
-extract_bondad_boot(resultados_bootstrap)
+extract_bondad_boot_EFA(resultados_bootstrap)
 }
 
 \arguments{
@@ -24,7 +24,7 @@ extract_bondad_boot(resultados_bootstrap)
 
 \examples{
 # Assuming 'resultados_bootstrap' is the output from a custom bootstrap EFA analysis
-bondades_df <- extract_bondad_boot(resultados_bootstrap)
+bondades_df <- extract_bondad_boot_EFA(resultados_bootstrap)
 
 # To view the first few rows of the extracted goodness-of-fit measures
 head(bondades_df)
