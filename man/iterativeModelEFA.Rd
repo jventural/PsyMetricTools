@@ -3,7 +3,7 @@
 \title{Iterative Model Exploration for Exploratory Factor Analysis (EFA)}
 
 \description{
-  This function iteratively explores different configurations for an exploratory factor analysis (EFA) model based on an initial model setup and data. It aims to identify and exclude items with significant cross-loadings across factors, thereby refining the model to achieve a simpler and more interpretable factor structure. The process is guided by iterative adjustments and evaluations, leveraging the flexibility of exploratory factor analysis to uncover underlying factor structures within the data.
+  Performs iterative explorations of EFA model configurations based on an initial setup and dataset. It refines the model by identifying and excluding items with significant cross-loadings, aiming for a simpler, interpretable factor structure. Utilizes the `lavaan` package for factor analysis and fit measure extraction.
 }
 
 \usage{
@@ -11,27 +11,26 @@ iterativeModelEFA(data, initialModel, MAX_ITERATIONS = 10)
 }
 
 \arguments{
-  \item{data}{A dataframe containing the observed variables (items) to be analyzed in the EFA model.}
-  \item{initialModel}{A list detailing the initial configuration for the EFA model, including the number of factors (\code{n_factors}), the total number of items (\code{n_items}), the naming convention for items (\code{name_items}), and optionally, any items to be excluded from the analysis (\code{exclude_items}).}
-  \item{MAX_ITERATIONS}{An optional integer specifying the maximum number of iterations to be performed in the exploratory process. Default is \code{10}.}
+  \item{data}{Dataframe with observed variables for EFA.}
+  \item{initialModel}{List with initial EFA configuration: \code{n_factors} (number of factors), \code{n_items} (total items), \code{name_items} (item naming convention), and optionally \code{exclude_items} (items to exclude).}
+  \item{MAX_ITERATIONS}{Maximum iterations for the exploratory process. Default is \code{10}.}
 }
 
 \details{
-  The function begins with an initial model configuration and performs a series of exploratory factor analyses, each time identifying and excluding items that exhibit significant cross-loadings across multiple factors. This iterative refinement process continues until no further items need to be excluded or the maximum number of iterations is reached. The goal is to simplify the factor structure, enhancing the clarity and interpretability of the resulting model. The exploration process leverages the \code{lavaan} package for conducting factor analysis and extracting model fit measures.
+  The function iteratively conducts EFA, each time excluding items that show significant cross-loadings (>0.3) across factors. This process continues until no items meet the exclusion criteria or the max iterations are reached, enhancing model simplicity and interpretability.
 }
 
 \value{
-  A list containing the final model configurations, model fit measures, excluded items, the total number of iterations completed, and a comprehensive record of the results from each iteration. This output facilitates a detailed examination of the exploratory process and the final refined model.
+  Returns a list with final model configurations, fit measures, excluded items, iteration count, and iteration results, facilitating detailed exploration and final model understanding.
 }
 
 \examples{
-# Assuming 'df_filtered' is your dataset and 'modelos1' is the initial model configuration
+# Assuming 'df_filtered' is a dataset and 'modelos1' is the initial model setup
 result <- iterativeModelEFA(data = df_filtered, initialModel = modelos1)
-
-# To view the summary of the exploration process
-print(result)
+print(result)  # View exploration summary
 }
 
 \author{
 Professor José Ventura León
 }
+

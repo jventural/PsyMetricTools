@@ -1,37 +1,77 @@
 iterativeModelEFA <- function(data, initialModel, MAX_ITERATIONS = 10) {
+  #function internal
+  specification_models_internal <- function(modelos, data, estimator) {
+    # Función para instalar y cargar librerías
+    install_and_load <- function(package) {
+      if (!requireNamespace(package, quietly = TRUE)) {
+        install.packages(package)
+      }
+      library(package, character.only = TRUE)
+    }
+
+    # Instalar y cargar la librería requerida
+    install_and_load("lavaan")
+
+    AD <- list()
+
+    for (i in 1:length(modelos)) {
+      # Intentar ajustar el modelo y capturar errores y advertencias
+      fit.original <- tryCatch({
+        cfa(paste0(modelos[i]),
+            data = data,
+            estimator = estimator,
+            rotation = "oblimin",
+            mimic = "Mplus",
+            ordered = TRUE, verbose = FALSE)
+      }, warning = function(w) {
+        # Manejar advertencias aquí si es necesario, por ejemplo, imprimirlas
+        message("\nAdvertencia en el modelo ", i, ": ", w$message)
+        return(NULL) # Devuelve NULL o un objeto diferente si es necesario
+      }, error = function(e) {
+        # Manejar errores aquí si es necesario, por ejemplo, imprimiéndolos
+        message("\nError en el modelo ", i, ": ", e$message)
+        return(NULL) # Devuelve NULL o un objeto diferente si es necesario
+      }, finally = {
+        # Código que siempre se ejecuta, éxito o error
+      })
+
+      if (!is.null(fit.original)) {
+        AD[[i]] <- fit.original
+      }
+      # No es necesario imprimir algo específico aquí a menos que quieras
+    }
+
+    return(AD)
+  }
+  library(dplyr) # Asegura cargar dplyr para las funciones de manipulación de datos
 
   identifyItemsToExclude <- function(result_df) {
-    # Asumiendo que result_df es un dataframe donde:
-    # - Las filas representan items.
-    # - Las columnas representan las cargas en cada factor (f1, f2, f3, etc.).
-
-    # Identificar items con cargas cruzadas significativas.
     crossLoadedItems <- result_df %>%
       rowwise() %>%
       mutate(crossLoad = sum(c_across(starts_with("f")) > 0.3) > 1) %>%
       filter(crossLoad) %>%
       pull(Items)
-
     return(crossLoadedItems)
   }
 
-
   excludedItems <- list()
   iteration <- 1
-  allResultsDf <- list()  # Almacena los result_df de cada modelo.
-  finalModelInfo <- NULL  # Almacena la información del modelo final deseado.
+  allResultsDf <- list()
+  finalModelInfo <- NULL
 
   name_items <- initialModel$name_items
+
+  pb <- txtProgressBar(min = 0.01, max = MAX_ITERATIONS, style = 3)
 
   while (iteration <= MAX_ITERATIONS) {
     initialModel$exclude_items <- unique(c(initialModel$exclude_items, excludedItems))
 
     modelos <- generate_modelos(n_factors = initialModel$n_factors,
                                 n_items = initialModel$n_items,
-                                name_items = initialModel$name_items,
+                                name_items = name_items,
                                 exclude_items = initialModel$exclude_items)
 
-    Specifications <- specification_models2(modelos, data = data, estimator = "WLSMV")
+    Specifications <- specification_models_internal(modelos, data = data, estimator = "WLSMV")
     Bondades <- extract_fit_measures(Specifications)
 
     foundItemsToExclude <- FALSE
@@ -47,18 +87,20 @@ iterativeModelEFA <- function(data, initialModel, MAX_ITERATIONS = 10) {
         excludedItems <- unique(c(excludedItems, itemsToExclude))
         break
       } else if (!foundItemsToExclude && i == length(Specifications)) {
-        # Si llegamos al último modelo sin encontrar items para excluir, marcamos este como el modelo final deseado.
         finalModelInfo <- key
       }
     }
 
     if (!foundItemsToExclude) {
-      # Si no se encontraron items para excluir en ninguna de las especificaciones, detener el bucle.
+      setTxtProgressBar(pb, MAX_ITERATIONS)  # Actualiza la barra al 100% antes de terminar
       break
     }
 
     iteration = iteration + 1
+    setTxtProgressBar(pb, iteration)
   }
+
+  close(pb)
 
   if (!is.null(finalModelInfo)) {
     message(paste("Análisis completado:", finalModelInfo, "tiene la estructura más simple."))

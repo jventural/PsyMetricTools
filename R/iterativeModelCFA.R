@@ -1,6 +1,10 @@
 iterativeModelCFA <- function(data, initialModel, MAX_ITERATIONS = 10, MI_THRESHOLD = 5) {
   library(lavaan)
   library(dplyr)
+
+  # Inicializa la barra de progreso
+  pb <- txtProgressBar(min = 0, max = MAX_ITERATIONS, style = 3)
+
   currentModel <- initialModel
   iteration <- 1
   allModifications <- list()
@@ -26,11 +30,19 @@ iterativeModelCFA <- function(data, initialModel, MAX_ITERATIONS = 10, MI_THRESH
       currentModel <- paste(currentModel, modification, sep = "\n")
       allModifications[[iteration]] <- list(Modification = modification, MI = modSuggestion$mi)
     } else {
+      # Actualiza la barra de progreso al 100% si no hay más modificaciones antes de terminar el ciclo
+      setTxtProgressBar(pb, MAX_ITERATIONS)
       break
     }
 
+    # Actualiza la barra de progreso en cada iteración
+    setTxtProgressBar(pb, iteration)
     iteration <- iteration + 1
   }
+
+  # Asegúrate de actualizar la barra de progreso al 100% al finalizar todas las iteraciones
+  setTxtProgressBar(pb, MAX_ITERATIONS)
+  close(pb)
 
   fitMeasuresDf <- do.call(rbind, lapply(allFitMeasures, function(x) t(as.data.frame(x))))
   rownames(fitMeasuresDf) <- paste("Iteration", seq_along(allFitMeasures))
