@@ -1,23 +1,35 @@
 crearSintaxisCFA <- function(df) {
-  # Identificar los factores únicos
-  factores_unicos <- unique(df$Factores)
-
-  # Inicializar una cadena para almacenar la sintaxis completa del modelo
   sintaxis_modelo <- ""
 
-  # Iterar sobre cada factor único
-  for (factor in factores_unicos) {
-    # Filtrar los items que pertenecen a este factor
-    items_del_factor <- df$Items[df$Factores == factor]
+  # Verificar si la columna Factores existe en el dataframe
+  if ("Factores" %in% names(df)) {
+    # Identificar los factores únicos
+    factores_unicos <- unique(df$Factores)
 
-    # Crear la parte de la sintaxis del modelo para este factor
-    # Ejemplo: F1 =~ item1 + item2 + item3
-    sintaxis_factor <- paste0("F", which(factores_unicos == factor), " =~ ", paste(items_del_factor, collapse = " + "), "\n")
+    # Iterar sobre cada factor único
+    for (factor in factores_unicos) {
+      # Filtrar los items que pertenecen a este factor
+      items_del_factor <- df$Items[df$Factores == factor]
 
-    # Agregar esta parte de la sintaxis al modelo completo
-    sintaxis_modelo <- paste0(sintaxis_modelo, sintaxis_factor)
+      # Crear la parte de la sintaxis del modelo para este factor
+      sintaxis_factor <- paste0("F", which(factores_unicos == factor), " =~ ", paste(items_del_factor, collapse = " + "), "\n")
+
+      # Agregar esta parte de la sintaxis al modelo completo
+      sintaxis_modelo <- paste0(sintaxis_modelo, sintaxis_factor)
+    }
+  } else {
+    # Identificar automáticamente los factores basados en las cargas más altas de los ítems
+    cols_factores <- names(df)[grepl("^f[0-9]+$", names(df))]
+
+    for (col in cols_factores) {
+      items_del_factor <- df$Items[df[[col]] > 0]
+      if (length(items_del_factor) > 0) {
+        sintaxis_factor <- paste0(col, " =~ ", paste(items_del_factor, collapse = " + "), "\n")
+        sintaxis_modelo <- paste0(sintaxis_modelo, sintaxis_factor)
+      }
+    }
   }
 
   # Retornar la sintaxis completa del modelo
-  trimws(sintaxis_modelo) # Eliminar espacios en blanco al final
+  return(trimws(sintaxis_modelo)) # Eliminar espacios en blanco al final
 }
