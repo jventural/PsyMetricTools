@@ -1,5 +1,7 @@
-get_combined_Fit_Indices_Blavaan <- function(models_list, credMass = 0.95) {
-  model_summaries <- lapply(models_list, function(model) {
+get_combined_Fit_Indices_Blavaan <- function(models_list, credMass = 0.95, fits) {
+  model_summaries <- mapply(function(model, fit) {
+    # Asegúrate de que 'fit' es el objeto de modelo ajustado apropiado para 'fitMeasures'
+
     # Calcular medias
     chisq_mean <- mean(model@details$chisq)
     pD_mean <- mean(model@details$pD)
@@ -13,8 +15,8 @@ get_combined_Fit_Indices_Blavaan <- function(models_list, credMass = 0.95) {
     hdi_bcfi <- HDInterval::hdi(model@indices$BCFI, credMass = credMass)
     bcfi_hdi <- sprintf("[%0.3f, %0.3f]", hdi_bcfi[1], hdi_bcfi[2])
 
-    # Extraer ppp de las medidas de ajuste del modelo
-    ppp <- (fitMeasures(fit1) %>% as_tibble() %>% slice(3) %>% pull())
+    # Extraer ppp de las medidas de ajuste del modelo usando 'fit'
+    ppp <- (fitMeasures(fit) %>% as_tibble() %>% slice(3) %>% pull())
 
     # Crear un data frame con una sola fila y una columna para cada estadística
     summary_df <- data.frame(
@@ -29,7 +31,7 @@ get_combined_Fit_Indices_Blavaan <- function(models_list, credMass = 0.95) {
     )
 
     return(summary_df)
-  })
+  }, models_list, fits, SIMPLIFY = FALSE)
 
   # Combinar todos los data frames de la lista en uno solo
   combined_df <- do.call(rbind, model_summaries)
