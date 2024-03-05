@@ -1,4 +1,4 @@
-filtrar_aberrantes <- function(data, items) {
+filtrar_aberrantes <- function(data, items, plot = FALSE) {
   library(careless)
   library(dplyr)
   library(tibble)
@@ -8,7 +8,7 @@ filtrar_aberrantes <- function(data, items) {
   }
 
   # Seleccionar los ítems específicos y ejecutar mahad
-  mahad_flags <- mahad(data %>% select(all_of(items)), flag = TRUE, confidence = 0.999)
+  mahad_flags <- mahad(data %>% select(all_of(items)), flag = TRUE, confidence = 0.999, plot = plot)
 
   # Identificar los IDs con patrones aberrantes
   ids_aberrantes <- mahad_flags %>%
