@@ -21,14 +21,20 @@ Here is an example of how to use the library to estimate an EFA model using a WL
 -----
 
 ## Outlier detection for factorial analysis using PsyMetricTools library
-Here is an example of how to use the library for the detection of aberrant data:
+
 [Detección de OL](https://rpubs.com/jventural/Deteccion_OL_AF)
 
 -----
 
 ## Generation of bar chart for Likert Scale using PsyMetricTools library
-Here is an example of how to make a bar chart in a simple way:
+
 [Plot Likert Scale](https://rpubs.com/jventural/Plot_Likert_Scale)
+
+-----
+
+## Using the SMOTE algorithm for data balancing using PsyMetricTools library
+
+[Balanceo de datos](https://rpubs.com/jventural/Balanceo_SMOTE)
 
 -----
 
