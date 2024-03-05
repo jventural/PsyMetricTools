@@ -12,7 +12,9 @@ if (!require("devtools")) {
 devtools::install_github("jventural/PsyMetricTools")
 ```
 
-## EFA examples with WLSMV using PsyMetricTools library
+# Examples
+
+## EFA with WLSMV using PsyMetricTools library
 Here is an example of how to use the library to estimate an EFA model using a WLSMV estimator:
 [Estimación de EFA con WLSMV](https://rpubs.com/jventural/EFA_Estimador_WLSMV)
 
