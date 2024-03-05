@@ -12,7 +12,13 @@ if (!require("devtools")) {
 devtools::install_github("jventural/PsyMetricTools")
 ```
 
-## Examples
+## EFA examples with WLSMV using PsyMetricTools library
+Here is an example of how to use the library to estimate an EFA model using a WLSMV estimator:
+[Estimación de EFA con WLSMV](https://rpubs.com/jventural/EFA_Estimador_WLSMV)
+
+-----
+
+## Example of some functions of the PsyMetricTools library
 ### Calculate Descriptive Statistics
 This is an example of how to calculate descriptive statistics for a given range of variables in a dataset:
 ```r
@@ -29,14 +35,6 @@ result_df <- Standardized_solutions(specifications[[1]], name_items = "CCOV", ap
 print(result_df)
 ```
 
-### Calculate Percentages for Specific Columns
-You can calculate percentage distributions for selected columns with:
-```r
-#Assuming 'data' is your dataset and 'columnas' is a vector of column names
-porcentajes <- calcular_porcentajes(data, columnas = c("Gender", "AgeGroup"))
-print(porcentajes)
-```
-
 ### SMOTE for Multi-Class Imbalance
 Here's how to apply SMOTE to handle multi-class imbalance:
 ```r
@@ -45,13 +43,6 @@ balanced_data <- smote_multiclass(data, outcome = "class_label", perc_maj = 100,
 print(balanced_data)
 ```
 
-### Rename Survey Items
-Quickly rename survey items to a standardized format:
-```r
-# Assuming 'df' is your dataset with verbose item names
-df_renamed <- rename_items(df, prefix1 = "Q", prefix2 = "A", inici = "Question1", final = "Question10", n_items1 = 5, n_items2 = 5)
-print(df_renamed)
-```
 ### Quick Likert chart generation
 ```r
 Plot_Likert(df_new_renombrado, "CCOV", 1:27, exclude = c(1))
