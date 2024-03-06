@@ -169,8 +169,7 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
 
   omega2 <- pbapply::pblapply(Replicaciones$fit_cfa1, function(model) {
     semTools::compRelSEM(model, tau.eq = FALSE, ord.scale = TRUE)
-  }) %>%
-    map_dfr(~ bind_rows(.))
+  }) %>%  map_dfr(~ bind_rows(.))
 
   # Agregar los resultados de omega2 a Replicaciones y renombrar columnas
   Replicaciones <- Replicaciones %>% bind_cols(omega2)  %>%
