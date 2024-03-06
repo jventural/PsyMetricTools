@@ -47,6 +47,21 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
     return(fit_measure)
   }
 
+  # Función interna
+  is_robust_estimator_lavaan <- function(x) {
+    if (lavaan::lavInspect(x, "options")$test %in% c(
+      "satorra.bentler",
+      "yuan.bentler",
+      "yuan.bentler.mplus",
+      "mean.var.adjusted",
+      "scaled.shifted"
+    )) {
+      type <- "robust"
+    } else {
+      type <- "non-robust"
+    }
+    return(type)
+  }
 
   set.seed(seed)
 
