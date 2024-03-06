@@ -28,7 +28,7 @@ A data frame containing the results of the bootstrap CFA analyses for each repli
 
 \examples{
 
-model_original <- F1 =~ "PHQ1+PHQ2+PHQ3+PHQ4+PHQ5+PHQ6+PHQ7+PHQ8"
+model_original <- "F1 =~ PHQ1+PHQ2+PHQ3+PHQ4+PHQ5+PHQ6+PHQ7+PHQ8"
 
 # Assuming 'my_dataset' is your dataset, and you have a model string and item prefix defined
 results <- boot_cfa(new_df = my_dataset,
