@@ -168,13 +168,13 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
   message("\nCalculando la fiabilidad con bootstrapping")
 
   omega2 <- pbapply::pblapply(Replicaciones$fit_cfa1, function(model) {
-    semTools::compRelSEM(model, tau.eq = FALSE, ord.scale = TRUE)[1]
+    semTools::compRelSEM(model, tau.eq = FALSE, ord.scale = TRUE)
   }) %>%
-    map_dfr(~ as_tibble(.))
+    map_dfr(~ bind_rows(.))
 
   # Agregar los resultados de omega2 a Replicaciones y renombrar columnas
-  Replicaciones <- Replicaciones %>% bind_cols(omega2) %>%
-    rename_at(vars(starts_with("value")), ~ paste0("Rel", seq_along(.)))
+  Replicaciones <- Replicaciones %>% bind_cols(omega2)  %>%
+    rename_with(~ gsub("^F(\\d+)$", "Rel\\1", .), .cols = starts_with("F"))
 
   return(Replicaciones)
 }
