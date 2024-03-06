@@ -19,8 +19,8 @@ Plot_and_Table_comparative <- function(df_repli, comp_ymin_annot = NULL, comp_ym
 
   # Establecer comp_ymin_annot y comp_ymax_annot si no se proporcionan
   if(is.null(comp_ymin_annot) || is.null(comp_ymax_annot)) {
-    min_value <- min(table$min) - 0.05 # menos que el mínimo ajustado
-    comp_ymin_annot <- min_value
+    min_value <- min(table$min)  # menos que el mínimo ajustado
+    comp_ymin_annot <- min_value - 0.05
     comp_ymax_annot <- max(table$max) + 0.05 # Ajuste para ymax basado en el máximo de la tabla
   }
 
@@ -33,7 +33,7 @@ Plot_and_Table_comparative <- function(df_repli, comp_ymin_annot = NULL, comp_ym
     ggplot(aes(x=Fit, y=Value, fill=Fit)) +
     geom_boxplot(outlier.shape = 16, outlier.size = 1) +
     theme_bw() +
-    coord_cartesian(ylim = c(comp_ymin_annot, 1)) + # Usa los límites personalizados
+    coord_cartesian(ylim = c(min_value, 1)) + # Usa los límites personalizados
     scale_fill_grey(start = 0.5, end = 0.9) +
     theme(legend.position = "none") +
     annotation_custom(gridExtra::tableGrob(table, rows=NULL, theme = ttheme_default(

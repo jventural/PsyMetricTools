@@ -18,7 +18,7 @@ Plot_and_Table_absolute <- function(df_repli, abs_ymin_annot = NULL, abs_ymax_an
 
   # Establecer ymin_annot y ymax_annot si no se proporcionan
   if(is.null(abs_ymin_annot)) {
-    abs_ymin_annot <- 0 -0.05 # Ajuste manual para la posición de la tabla
+    abs_ymin_annot <- 0  # Ajuste manual para la posición de la tabla
   }
 
   if(is.null(abs_ymax_annot)) {
