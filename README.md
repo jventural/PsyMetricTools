@@ -1,5 +1,3 @@
-# PsyMetricTools
-
 <p align="center">
   <img src="URL_DE_TU_IMAGEN" alt="PsyMetricTools" width="200" height="200"/>
 </p>
@@ -18,10 +16,6 @@
 <p align="center">
   <!-- Si tienes badges de CRAN, puedes incluirlos así: -->
   <img src="https://www.r-pkg.org/badges/version/EL_NOMBRE_DEL_PAQUETE" alt="CRAN version"/>
-  <!-- Badges de estado del build -->
-  <img src="URL_DEL_BADGE_DE_BUILD_STATUS" alt="Build status"/>
-  <!-- Otras badges -->
-  <img src="URL_DE_OTRA_BADGE" alt="Otra badge"/>
 </p>
 
 <!-- ESTADÍSTICAS -->
