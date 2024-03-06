@@ -12,11 +12,32 @@ if (!require("devtools")) {
 devtools::install_github("jventural/PsyMetricTools")
 ```
 
-## EFA examples with WLSMV using PsyMetricTools library
+# Examples
+
+## EFA with WLSMV using PsyMetricTools library
 Here is an example of how to use the library to estimate an EFA model using a WLSMV estimator:
 [Estimación de EFA con WLSMV](https://rpubs.com/jventural/EFA_Estimador_WLSMV)
 
 -----
+
+## Outlier detection for factorial analysis using PsyMetricTools library
+Here is an example of how to perform the detection of aberrant data, a previous action for the factor analysis.
+[Detección de OL](https://rpubs.com/jventural/Deteccion_OL_AF)
+
+-----
+
+## Generation of bar chart for Likert Scale using PsyMetricTools library
+Here is a code to generate a quick graph to describe the behavior of the Likert scale
+[Plot Likert Scale](https://rpubs.com/jventural/Plot_Likert_Scale)
+
+-----
+
+## Using the SMOTE algorithm for data balancing using PsyMetricTools library
+Here is an example of how to use the SMOTE algorithm to balance data with comparison groups of 2 or more elements.
+[Balanceo de datos](https://rpubs.com/jventural/Balanceo_SMOTE)
+
+-----
+
 
 ## Example of some functions of the PsyMetricTools library
 ### Calculate Descriptive Statistics
@@ -52,7 +73,7 @@ Plot_Likert(df_new_renombrado, "CCOV", 1:27, exclude = c(1))
 GPL-3
 
 ## Citation
-Ventura-León, J. (2024). PsyMetricTools [Software]. GitHub. https://github.com/jventural/PsyMetricTools
+Ventura-León, J. (2024). _PsyMetricTools_ [Software]. GitHub. https://github.com/jventural/PsyMetricTools
 
 ## Author
 Jose Ventura jventuraleon@gmail.com
