@@ -1,7 +1,7 @@
 # PsyMetricTools
 
 <p align="center">
-  <img src="URL_DE_TU_IMAGEN" alt="Logo de tu proyecto" width="200" height="200"/>
+  <img src="URL_DE_TU_IMAGEN" alt="PsyMetricTools" width="200" height="200"/>
 </p>
 
 <h1 align="center">PsyMetricTools</h1>
