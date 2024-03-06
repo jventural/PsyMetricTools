@@ -20,7 +20,7 @@ plot_and_table_omega <- function(df_repli) {
     ungroup()
 
   # Calcular el mínimo ajustado y los límites para la escala y
-  min_adjusted <- min(res_omega_table$min) - 0.10
+  min_adjusted <- min(res_omega_table$min) - 0.05
   ymin_annot = min_adjusted  # el mínimo ajustado
   ymax_annot = ymin_annot + 0.04    # 2 puntos porcentuales más que ymin_annot
 
@@ -33,7 +33,7 @@ plot_and_table_omega <- function(df_repli) {
   plot <- ggplot(data_long, aes(x = Reliability, y = value, fill = Reliability)) +
     geom_boxplot(outlier.shape = 16) +
     theme_bw() +
-    scale_y_continuous(limits = c(min_adjusted, 1), breaks = seq(min_adjusted, 1, by = 0.02)) +
+    scale_y_continuous(limits = c(min_adjusted, 1), breaks = seq(min_adjusted, 1, by = 0.05)) +
     scale_fill_grey(start = 0.5, end = 0.9) +
     labs(y = "\u03C9 values") +
     theme(legend.position = "none") +
