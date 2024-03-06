@@ -1,7 +1,37 @@
 # PsyMetricTools
 
-![R-CMD-check](https://github.com/jventural/PsyMetricTools/workflows/R-CMD-check/badge.svg)
-[![codecov](https://codecov.io/gh/jventural/PsyMetricTools/branch/master/graph/badge.svg)](https://codecov.io/gh/username/PsyMetricTools)
+<p align="center">
+  <img src="URL_DE_TU_IMAGEN" alt="Logo de tu proyecto" width="200" height="200"/>
+</p>
+
+<h1 align="center">Nombre de tu Proyecto</h1>
+
+<p align="center">
+    Una breve descripción de tu proyecto.
+    <br />
+    <a href="https://joseventuraleon.com/"><strong>Explorar la página web »</strong></a>
+    <br />
+    <br />
+</p>
+
+<!-- BADGES -->
+<p align="center">
+  <!-- Si tienes badges de CRAN, puedes incluirlos así: -->
+  <img src="https://www.r-pkg.org/badges/version/EL_NOMBRE_DEL_PAQUETE" alt="CRAN version"/>
+  <!-- Badges de estado del build -->
+  <img src="URL_DEL_BADGE_DE_BUILD_STATUS" alt="Build status"/>
+  <!-- Otras badges -->
+  <img src="URL_DE_OTRA_BADGE" alt="Otra badge"/>
+</p>
+
+<!-- ESTADÍSTICAS -->
+<p align="center">
+  <!-- Estadísticas de descargas -->
+  <img src="URL_DE_LA_BADGE_DE_DESCARGAS" alt="downloads"/>
+  <!-- Otras estadísticas -->
+  <!-- ... -->
+</p>
+
 
 ## Installation
 You can install the latest version of PsyMetricTools from GitHub with the help of the devtools package:
