@@ -1,7 +1,7 @@
 # PsyMetricTools
 
-![R-CMD-check](https://github.com/username/PsyMetricTools/workflows/R-CMD-check/badge.svg)
-[![codecov](https://codecov.io/gh/username/PsyMetricTools/branch/master/graph/badge.svg)](https://codecov.io/gh/username/PsyMetricTools)
+![R-CMD-check](https://github.com/jventural/PsyMetricTools/workflows/R-CMD-check/badge.svg)
+[![codecov](https://codecov.io/gh/jventural/PsyMetricTools/branch/master/graph/badge.svg)](https://codecov.io/gh/username/PsyMetricTools)
 
 ## Installation
 You can install the latest version of PsyMetricTools from GitHub with the help of the devtools package:
