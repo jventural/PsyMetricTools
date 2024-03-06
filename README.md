@@ -1,7 +1,23 @@
-# PsyMetricTools
+<p align="center">
+  <img src="https://github.com/jventural/PsyMetricTools/blob/master/Logo%20PsyMetricTools2.png" alt="PsyMetricTools" width="200" height="200"/>
+</p>
 
-![R-CMD-check](https://github.com/username/PsyMetricTools/workflows/R-CMD-check/badge.svg)
-[![codecov](https://codecov.io/gh/username/PsyMetricTools/branch/master/graph/badge.svg)](https://codecov.io/gh/username/PsyMetricTools)
+<h1 align="center">PsyMetricTools</h1>
+
+<p align="center">
+    Una paquetería que permite de forma facil calcular diferentes análisis.
+    <br />
+    <a href="https://joseventuraleon.com/"><strong>Explorar la página web »</strong></a>
+    <br />
+    <br />
+</p>
+
+<!-- BADGES -->
+<p align="center">
+  <!-- Si tienes badges de CRAN, puedes incluirlos así: -->
+  <img src="https://www.r-pkg.org/badges/version/EL_NOMBRE_DEL_PAQUETE" alt="CRAN version"/>
+</p>
+
 
 ## Installation
 You can install the latest version of PsyMetricTools from GitHub with the help of the devtools package:
@@ -21,20 +37,26 @@ Here is an example of how to use the library to estimate an EFA model using a WL
 -----
 
 ## Outlier detection for factorial analysis using PsyMetricTools library
-Here is an example of how to perform the detection of aberrant data, a previous action for the factor analysis.
+Here is an example of how to perform the detection of aberrant data, a previous action for the factor analysis:
 [Detección de OL](https://rpubs.com/jventural/Deteccion_OL_AF)
 
 -----
 
 ## Generation of bar chart for Likert Scale using PsyMetricTools library
-Here is a code to generate a quick graph to describe the behavior of the Likert scale
+Here is a code to generate a quick graph to describe the behavior of the Likert scale:
 [Plot Likert Scale](https://rpubs.com/jventural/Plot_Likert_Scale)
 
 -----
 
 ## Using the SMOTE algorithm for data balancing using PsyMetricTools library
-Here is an example of how to use the SMOTE algorithm to balance data with comparison groups of 2 or more elements.
+Here is an example of how to use the SMOTE algorithm to balance data with comparison groups of 2 or more elements:
 [Balanceo de datos](https://rpubs.com/jventural/Balanceo_SMOTE)
+
+-----
+
+## Performing bootstraping from confirmatory factor analysis (CFA)
+Here is an example of how to bootstrap from CFA:
+[Bootstraping con CFA](https://rpubs.com/jventural/Bootstrapping_CFA)
 
 -----
 
