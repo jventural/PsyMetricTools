@@ -1,5 +1,5 @@
-\name{boot_cfa_plot_and_save}
-\alias{boot_cfa_plot_and_save}
+\name{boot_cfa_plot}
+\alias{boot_cfa_plot}
 \title{Comprehensive Visualization and Optional Saving of Bootstrap CFA Results}
 
 \description{
@@ -7,13 +7,19 @@ This enhanced function generates a comprehensive graphical display of bootstrap 
 }
 
 \usage{
-boot_cfa_plot_and_save(df, save = TRUE, dpi = 600)
+boot_cfa_plot_and_save(df, save = TRUE, dpi = 600, omega_ymin_annot = NULL, omega_ymax_annot = NULL, comp_ymin_annot = NULL, comp_ymax_annot = NULL, abs_ymin_annot = NULL, abs_ymax_annot = NULL)
 }
 
 \arguments{
   \item{df}{The dataset containing the results of the bootstrap CFA, including fit measures and omega reliability coefficients for each replication.}
   \item{save}{Logical flag indicating whether to save the generated figure to a file. Defaults to TRUE.}
   \item{dpi}{Dots per inch for the saved image file. Used only if save is TRUE. Defaults to 600 for high resolution.}
+  \item{omega_ymin_annot}{Optional. Minimum y-axis limit for the omega reliability coefficients plot annotation.}
+  \item{omega_ymax_annot}{Optional. Maximum y-axis limit for the omega reliability coefficients plot annotation.}
+  \item{comp_ymin_annot}{Optional. Minimum y-axis limit for the Comparative Fit Index (CFI) and Tucker-Lewis Index (TLI) plot annotation.}
+  \item{comp_ymax_annot}{Optional. Maximum y-axis limit for the Comparative Fit Index (CFI) and Tucker-Lewis Index (TLI) plot annotation.}
+  \item{abs_ymin_annot}{Optional. Minimum y-axis limit for the absolute fit measures plot annotation.}
+  \item{abs_ymax_annot}{Optional. Maximum y-axis limit for the absolute fit measures plot annotation.}
 }
 
 \details{
@@ -26,7 +32,7 @@ A singular graphical object encapsulating the combined plots of omega reliabilit
 
 \examples{
 # Assuming 'df' is your dataset with CFA results
-figure <- boot_cfa_plot_and_save(df, save = TRUE, dpi = 600)
+figure <- boot_cfa_plot_and_save(df, save = TRUE, dpi = 600, omega_ymin_annot = NULL, omega_ymax_annot = NULL, comp_ymin_annot = NULL, comp_ymax_annot = NULL, abs_ymin_annot = NULL, abs_ymax_annot = NULL)
 
 # To display the combined figure (if not saved)
 if (!save) {
@@ -37,3 +43,4 @@ if (!save) {
 \author{
 Professor José Ventura León
 }
+

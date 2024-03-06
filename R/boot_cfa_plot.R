@@ -1,4 +1,4 @@
-boot_cfa_plot <- function(df, save = TRUE, dpi = 600) {
+boot_cfa_plot <- function(df, save = TRUE, dpi = 600, omega_ymin_annot = NULL, omega_ymax_annot = NULL, comp_ymin_annot = NULL, comp_ymax_annot = NULL, abs_ymin_annot = NULL, abs_ymax_annot = NULL) {
   suppressWarnings({
     # Establece los valores predeterminados internos
     filename <- "Plot_boot_cfa.jpg"
@@ -9,12 +9,12 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600) {
     # Asegúrate de tener cargadas las bibliotecas necesarias
     library(ggpubr)
 
-    # Genera los plots y tablas con las funciones previas
-    p1 <- plot_and_table_omega(df)
+    # Genera los plots y tablas con las funciones previas, incluyendo los nuevos argumentos
+    p1 <- plot_and_table_omega(df, omega_ymin_annot, omega_ymax_annot)
     a1 <- p1$plot
-    p2 <- Plot_and_Table_comparative(df)
+    p2 <- Plot_and_Table_comparative(df, comp_ymin_annot, comp_ymax_annot)
     a2 <- p2$plot
-    p3 <- Plot_and_Table_absolute(df)
+    p3 <- Plot_and_Table_absolute(df, abs_ymin_annot, abs_ymax_annot)
     a3 <- p3$plot
 
     # Combina los plots en una única figura
@@ -31,3 +31,4 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600) {
     return(figure)
   })
 }
+

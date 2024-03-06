@@ -1,4 +1,4 @@
-plot_and_table_omega <- function(df_repli) {
+plot_and_table_omega <- function(df_repli, omega_ymin_annot = NULL, omega_ymax_annot = NULL) {
   library(ggplot2)
   library(tidyr)
   library(dplyr)
@@ -19,10 +19,14 @@ plot_and_table_omega <- function(df_repli) {
     ) %>%
     ungroup()
 
-  # Calcular el mínimo ajustado y los límites para la escala y
-  min_adjusted <- min(res_omega_table$min) -0.05
-  ymin_annot = max(res_omega_table$mean)
-  ymax_annot = 0.92    # 2 puntos porcentuales más que ymin_annot
+  # Calcular el mínimo ajustado y los límites para la escala y si no se especifican
+  if(is.null(omega_ymin_annot)) {
+    omega_ymin_annot = max(res_omega_table$mean) # Ajustar según la lógica necesaria
+  }
+
+  if(is.null(omega_ymax_annot)) {
+    omega_ymax_annot = 0.92  # Asumir un valor por defecto o calcularlo si es necesario
+  }
 
   # Preparar datos para el gráfico
   data_long <- df_repli %>%
@@ -33,7 +37,7 @@ plot_and_table_omega <- function(df_repli) {
   plot <- ggplot(data_long, aes(x = Reliability, y = value, fill = Reliability)) +
     geom_boxplot(outlier.shape = 16) +
     theme_bw() +
-    scale_y_continuous(limits = c(min_adjusted, 1), breaks = seq(min_adjusted, 1, by = 0.05)) +
+    scale_y_continuous(limits = c(min(res_omega_table$min) - 0.05, 1), breaks = seq(min(res_omega_table$min) - 0.05, 1, by = 0.05)) +
     scale_fill_grey(start = 0.5, end = 0.9) +
     labs(y = "\u03C9 values") +
     theme(legend.position = "none") +
@@ -48,11 +52,7 @@ plot_and_table_omega <- function(df_repli) {
         gtable::gtable_add_grob(.,
                                 grobs = grid::rectGrob(gp = grid::gpar(fill = NA, lwd = 2)),
                                 t = 1, l = 1, r = ncol(.)),
-      xmin=1, xmax=length(res_omega_table$Variable), ymin=ymin_annot, ymax=ymax_annot) +
-    # scale_fill_grey(start = 0.5, end = 0.9)+
-    labs(y = "\u03C9 values")+
-    theme(legend.position = "none")
-
+      xmin=1, xmax=length(res_omega_table$Variable), ymin=omega_ymin_annot, ymax=omega_ymax_annot)
 
   # Retornar tanto la tabla como el gráfico
   return(list(table = res_omega_table, plot = plot))

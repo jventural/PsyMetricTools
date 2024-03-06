@@ -7,15 +7,17 @@ This function generates a comparative visualization and statistical summary tabl
 }
 
 \usage{
-Plot_and_Table_comparative(df_repli)
+Plot_and_Table_comparative(df_repli, comp_ymin_annot = NULL, comp_ymax_annot = NULL)
 }
 
 \arguments{
   \item{df_repli}{The dataset containing the results of the bootstrap CFA, specifically the fit measures calculated for each replication.}
+  \item{comp_ymin_annot}{Optional. A numeric value to set the minimum y-axis limit for the annotation in the plot. If NULL, a default calculation based on the dataset is used.}
+  \item{comp_ymax_annot}{Optional. A numeric value to set the maximum y-axis limit for the annotation in the plot. If NULL, a default value is used.}
 }
 
 \details{
-Utilizing a series of R packages for data manipulation and visualization, the function first extracts the CFI and TLI values from the provided dataset. It then rounds these values for presentation and calculates summary statistics for each measure. Additionally, it creates a boxplot for both CFI and TLI values to visually depict their distribution across replications. The function concludes by combining the statistical summary table and the boxplot into a single graphical output, providing a comprehensive overview of the model fit measures' performance.
+Utilizing a series of R packages for data manipulation and visualization, the function first extracts the CFI and TLI values from the provided dataset. It then rounds these values for presentation and calculates summary statistics for each measure. Additionally, it creates a boxplot for both CFI and TLI values to visually depict their distribution across replications. The function concludes by combining the statistical summary table and the boxplot into a single graphical output, providing a comprehensive overview of the model fit measures' performance. The inclusion of `comp_ymin_annot` and `comp_ymax_annot` arguments allows for adjustable visualization detail, catering to the user's specific analysis needs.
 }
 
 \value{
@@ -37,3 +39,4 @@ print(plot)
 \author{
 Professor José Ventura León
 }
+

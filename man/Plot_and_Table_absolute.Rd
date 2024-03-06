@@ -3,19 +3,21 @@
 \title{Comparative Plot and Table of Absolute Fit Measures}
 
 \description{
-This function creates a comparative visualization and statistical summary table for absolute fit measures including RMSEA (Root Mean Square Error of Approximation), SRMR (Standardized Root Mean Square Residual), and CRMR (a typographical error, possibly meant to be another fit measure like CFI or TLI, but since CRMR is not a standard fit measure, it could be a custom or mistakenly included term). It's designed to provide insights into the absolute fit of models from a dataset of bootstrap confirmatory factor analysis (CFA) replications, highlighting the distribution and statistical properties (mean, standard deviation, minimum, and maximum) of these fit indices. This tool aids in the detailed evaluation and comparison of model fit to empirical data, enhancing the selection of optimal measurement models based on absolute fit criteria.
+This function creates a comparative visualization and statistical summary table for absolute fit measures including RMSEA (Root Mean Square Error of Approximation), SRMR (Standardized Root Mean Square Residual), and potentially another fit measure, correcting for the previously mentioned CRMR, which may have been a typographical error or a specific custom term. It's designed to provide insights into the absolute fit of models from a dataset of bootstrap confirmatory factor analysis (CFA) replications, highlighting the distribution and statistical properties (mean, standard deviation, minimum, and maximum) of these fit indices. This tool aids in the detailed evaluation and comparison of model fit to empirical data, enhancing the selection of optimal measurement models based on absolute fit criteria.
 }
 
 \usage{
-Plot_and_Table_absolute(df_repli)
+Plot_and_Table_absolute(df_repli, abs_ymin_annot = NULL, abs_ymax_annot = NULL)
 }
 
 \arguments{
   \item{df_repli}{The dataset containing the results of the bootstrap CFA, specifically the absolute fit measures calculated for each replication.}
+  \item{abs_ymin_annot}{Optional. A numeric value to set the minimum y-axis limit for the annotation in the plot. If NULL, a default value based on the dataset is used.}
+  \item{abs_ymax_annot}{Optional. A numeric value to set the maximum y-axis limit for the annotation in the plot. If NULL, a default value is used.}
 }
 
 \details{
-Leveraging a suite of R packages for data manipulation and visualization, the function begins by extracting RMSEA, SRMR, and possibly a corrected term for CRMR, from the provided dataset. It rounds these values for precision and computes summary statistics for each measure. A boxplot for each of the absolute fit measures is then generated to visually represent their distribution across replications. Finally, the statistical summary table and the boxplot are combined into a single output, offering a comprehensive overview of the absolute fit measures' performance across multiple model replications.
+Leveraging a suite of R packages for data manipulation and visualization, the function begins by extracting the RMSEA, SRMR, and the correct term for the third fit measure from the provided dataset. These values are then rounded for precision and used to compute summary statistics for each measure. A boxplot for each of the absolute fit measures is generated to visually represent their distribution across replications. The function concludes by combining the statistical summary table and the boxplot into a single output, offering a comprehensive overview of the absolute fit measures' performance across multiple model replications.
 }
 
 \value{
@@ -37,3 +39,4 @@ print(plot)
 \author{
 Professor José Ventura León
 }
+
