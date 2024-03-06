@@ -48,7 +48,7 @@ plot_and_table_omega <- function(df_repli) {
         gtable::gtable_add_grob(.,
                                 grobs = grid::rectGrob(gp = grid::gpar(fill = NA, lwd = 2)),
                                 t = 1, l = 1, r = ncol(.)),
-      xmin=0, xmax=2, ymin=ymin_annot, ymax=ymax_annot) +
+      xmin=1, xmax=2, ymin=ymin_annot, ymax=ymax_annot) +
     # scale_fill_grey(start = 0.5, end = 0.9)+
     labs(y = "\u03C9 values")+
     theme(legend.position = "none")
