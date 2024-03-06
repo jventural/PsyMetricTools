@@ -21,25 +21,25 @@ Here is an example of how to use the library to estimate an EFA model using a WL
 -----
 
 ## Outlier detection for factorial analysis using PsyMetricTools library
-Here is an example of how to perform the detection of aberrant data, a previous action for the factor analysis.
+Here is an example of how to perform the detection of aberrant data, a previous action for the factor analysis:
 [Detección de OL](https://rpubs.com/jventural/Deteccion_OL_AF)
 
 -----
 
 ## Generation of bar chart for Likert Scale using PsyMetricTools library
-Here is a code to generate a quick graph to describe the behavior of the Likert scale
+Here is a code to generate a quick graph to describe the behavior of the Likert scale:
 [Plot Likert Scale](https://rpubs.com/jventural/Plot_Likert_Scale)
 
 -----
 
 ## Using the SMOTE algorithm for data balancing using PsyMetricTools library
-Here is an example of how to use the SMOTE algorithm to balance data with comparison groups of 2 or more elements.
+Here is an example of how to use the SMOTE algorithm to balance data with comparison groups of 2 or more elements:
 [Balanceo de datos](https://rpubs.com/jventural/Balanceo_SMOTE)
 
 -----
 
 ## Performing bootstraping from confirmatory factor analysis (CFA)
-Here is an example of how to bootstrap from CFA
+Here is an example of how to bootstrap from CFA:
 [Bootstraping con CFA](https://rpubs.com/jventural/Bootstrapping_CFA)
 
 -----
