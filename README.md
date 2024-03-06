@@ -4,10 +4,10 @@
   <img src="URL_DE_TU_IMAGEN" alt="Logo de tu proyecto" width="200" height="200"/>
 </p>
 
-<h1 align="center">Nombre de tu Proyecto</h1>
+<h1 align="center">PsyMetricTools</h1>
 
 <p align="center">
-    Una breve descripción de tu proyecto.
+    Una paquetería que permite de forma facil calcular diferentes análisis.
     <br />
     <a href="https://joseventuraleon.com/"><strong>Explorar la página web »</strong></a>
     <br />
