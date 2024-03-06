@@ -20,9 +20,9 @@ plot_and_table_omega <- function(df_repli) {
     ungroup()
 
   # Calcular el mínimo ajustado y los límites para la escala y
-  min_adjusted <- min(res_omega_table$min)
-  ymin_annot = max(res_omega_table$min) + 0.05
-  ymax_annot = 0.99    # 2 puntos porcentuales más que ymin_annot
+  min_adjusted <- min(res_omega_table$min) -0.05
+  ymin_annot = max(res_omega_table$mean)
+  ymax_annot = 0.92    # 2 puntos porcentuales más que ymin_annot
 
   # Preparar datos para el gráfico
   data_long <- df_repli %>%
@@ -48,7 +48,7 @@ plot_and_table_omega <- function(df_repli) {
         gtable::gtable_add_grob(.,
                                 grobs = grid::rectGrob(gp = grid::gpar(fill = NA, lwd = 2)),
                                 t = 1, l = 1, r = ncol(.)),
-      xmin=1, xmax=length(res_omega_table$Variable), ymin=min_adjusted, ymax=ymax_annot) +
+      xmin=1, xmax=length(res_omega_table$Variable), ymin=ymin_annot, ymax=ymax_annot) +
     # scale_fill_grey(start = 0.5, end = 0.9)+
     labs(y = "\u03C9 values")+
     theme(legend.position = "none")
