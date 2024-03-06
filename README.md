@@ -38,6 +38,12 @@ Here is an example of how to use the SMOTE algorithm to balance data with compar
 
 -----
 
+## Performing bootstraping from confirmatory factor analysis (CFA)
+Here is an example of how to bootstrap from CFA
+[Bootstraping con CFA](https://rpubs.com/jventural/Bootstrapping_CFA)
+
+-----
+
 
 ## Example of some functions of the PsyMetricTools library
 ### Calculate Descriptive Statistics
