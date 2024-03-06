@@ -18,14 +18,6 @@
   <img src="https://www.r-pkg.org/badges/version/EL_NOMBRE_DEL_PAQUETE" alt="CRAN version"/>
 </p>
 
-<!-- ESTADÍSTICAS -->
-<p align="center">
-  <!-- Estadísticas de descargas -->
-  <img src="URL_DE_LA_BADGE_DE_DESCARGAS" alt="downloads"/>
-  <!-- Otras estadísticas -->
-  <!-- ... -->
-</p>
-
 
 ## Installation
 You can install the latest version of PsyMetricTools from GitHub with the help of the devtools package:
