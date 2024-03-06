@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="URL_DE_TU_IMAGEN" alt="PsyMetricTools" width="200" height="200"/>
+  <img src="https://raw.githubusercontent.com/jventural/PsyMetricTools/master/Logo%20PsyMetricTools.webp" alt="PsyMetricTools" width="200" height="200"/>
 </p>
 
 <h1 align="center">PsyMetricTools</h1>
