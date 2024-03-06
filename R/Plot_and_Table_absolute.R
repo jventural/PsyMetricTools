@@ -22,7 +22,7 @@ Plot_and_Table_absolute <- function(df_repli, abs_ymin_annot = NULL, abs_ymax_an
   }
 
   if(is.null(abs_ymax_annot)) {
-    abs_ymax_annot <- max(table$max) + 0.10  # Ajuste manual para la posición de la tabla
+    abs_ymax_annot <- max(table$max)   # Ajuste manual para la posición de la tabla
   }
 
   # Crear el gráfico de RMSEA, SRMR, CRMR
