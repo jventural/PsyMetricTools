@@ -47,8 +47,6 @@ Plot_and_Table_comparative <- function(df_repli){
                                 t = 1, l = 1, r = ncol(.)),
       xmin=0, xmax=3, ymin=ymin_annot, ymax=ymax_annot)
 
-  # Mostrar el gráfico
-  print(plot)
 
   # Retornar tanto la tabla como el gráfico
   return(list(table = table, plot = plot))

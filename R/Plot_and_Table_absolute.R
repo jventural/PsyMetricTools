@@ -49,9 +49,6 @@ Plot_and_Table_absolute <- function(df_repli){
     scale_fill_grey(start = 0.5, end = 0.9)+
     theme(legend.position = "none")
 
-  # Mostrar el gráfico
-  print(plot)
-
   # Retornar tanto la tabla como el gráfico
   return(list(table = table, plot = plot))
 }

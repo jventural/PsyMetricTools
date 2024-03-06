@@ -53,8 +53,6 @@ plot_and_table_omega <- function(df_repli) {
     labs(y = "\u03C9 values")+
     theme(legend.position = "none")
 
-  # Mostrar el gráfico
-  print(plot)
 
   # Retornar tanto la tabla como el gráfico
   return(list(table = res_omega_table, plot = plot))
