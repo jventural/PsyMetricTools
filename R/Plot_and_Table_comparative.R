@@ -17,11 +17,11 @@ Plot_and_Table_comparative <- function(df_repli, comp_ymin_annot = NULL, comp_ym
               max = round(max(Value, na.rm = TRUE), 2)) %>%
     ungroup()
 
-  # Establecer comp_ymin_annot y comp_ymax_annot si no se proporcionan
+  # Calcular el mínimo ajustado y los límites para la escala y si no se especifican
   if(is.null(comp_ymin_annot) || is.null(comp_ymax_annot)) {
-    min_value <- min(table$min)  # menos que el mínimo ajustado
-    comp_ymin_annot <- min_value - 0.05
-    comp_ymax_annot <- max(table$max) + 0.05 # Ajuste para ymax basado en el máximo de la tabla
+    min_adjusted <- min(table$min) - 0.05
+    comp_ymin_annot <- min_adjusted  # menos que el mínimo ajustado
+    comp_ymax_annot <- comp_ymin_annot + 0.05  # ajuste para ymax basado en ymin
   }
 
   # Crear el gráfico de CFI y TLI
@@ -33,10 +33,10 @@ Plot_and_Table_comparative <- function(df_repli, comp_ymin_annot = NULL, comp_ym
     ggplot(aes(x=Fit, y=Value, fill=Fit)) +
     geom_boxplot(outlier.shape = 16, outlier.size = 1) +
     theme_bw() +
-    coord_cartesian(ylim = c(min_value, 1)) + # Usa los límites personalizados
+    coord_cartesian(ylim = c(comp_ymin_annot, 1.00)) + # Usa los límites personalizados
     scale_fill_grey(start = 0.5, end = 0.9) +
     theme(legend.position = "none") +
-    annotation_custom(gridExtra::tableGrob(table, rows=NULL, theme = ttheme_default(
+    annotation_custom(gridExtra::tableGrob(table, rows=NULL, theme = gridExtra::ttheme_default(
       core=list(bg_params = list(fill = c("#F2F3F4","#F2F3F4", "#F2F3F4"), col=NA),
                 fg_params=list(fontface= 1)),
       colhead=list(fg_params=list(col="black", fontface=c(1,1,3,1,1))),
