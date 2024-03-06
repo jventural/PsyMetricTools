@@ -20,8 +20,8 @@ Plot_and_Table_absolute <- function(df_repli){
   ymin_annot = 0  # Ajuste manual para la posición de la tabla
   ymax_annot = max(table$max) + 0.10  # Ajuste manual para la posición de la tabla
 
-  min_adjusted <- 0.11  # Asumiendo que el rango empieza en 0 para medidas absolutas
-  max_adjusted <- 0.12  # el máximo esté cubierto
+  min_adjusted <- ymax_annot - 0.04  # Asumiendo que el rango empieza en 0 para medidas absolutas
+  max_adjusted <- min_adjusted +0.02  # el máximo esté cubierto
 
   # Crear el gráfico de RMSEA, SRMR, CRMR
   plot <- df_repli$fit_measures1 %>%
