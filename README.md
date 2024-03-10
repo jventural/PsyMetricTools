@@ -7,7 +7,7 @@
 <p align="center">
     Una paquetería que permite de forma facil calcular diferentes análisis.
     <br />
-    <a href="https://joseventuraleon.com/"><strong>Explorar la página web »</strong></a>
+    <a href="https://joseventuraleon.com/"><strong>Explorar la página web del autor»</strong></a>
     <br />
     <br />
 </p>
