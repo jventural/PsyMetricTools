@@ -24,6 +24,14 @@ Plot_and_Table_comparative <- function(df_repli, comp_ymin_annot = NULL, comp_ym
     comp_ymax_annot <- comp_ymin_annot + 0.05  # ajuste para ymax basado en ymin
   }
 
+  # Calcular el límite inferior para ylim
+  ymin_limit <- min(table$min)
+
+  # Si ymin_limit es mayor a 0.95, establecerlo a 0.90
+  if(ymin_limit > 0.95) {
+    ymin_limit <- 0.90
+  }
+
   # Crear el gráfico de CFI y TLI
   plot <- df_repli$fit_measures1 %>%
     map_dfr(~as_tibble(.)) %>%
@@ -33,7 +41,7 @@ Plot_and_Table_comparative <- function(df_repli, comp_ymin_annot = NULL, comp_ym
     ggplot(aes(x=Fit, y=Value, fill=Fit)) +
     geom_boxplot(outlier.shape = 16, outlier.size = 1) +
     theme_bw() +
-    coord_cartesian(ylim = c(min(table$min), 1.00)) + # Usa los límites personalizados
+    coord_cartesian(ylim = c(ymin_limit, 1.00)) + # Usa los límites personalizados
     scale_fill_grey(start = 0.5, end = 0.9) +
     theme(legend.position = "none") +
     annotation_custom(gridExtra::tableGrob(table, rows=NULL, theme = gridExtra::ttheme_default(
