@@ -1,174 +1,75 @@
-BootstrapEFA_Algorithm <- function(original_data, initialModel, n_samples = 100, seed = NULL) {
-
-  #function internal
-  specification_models_internal <- function(modelos, data, estimator) {
-    # Función para instalar y cargar librerías
-    install_and_load <- function(package) {
-      if (!requireNamespace(package, quietly = TRUE)) {
-        install.packages(package)
-      }
-      library(package, character.only = TRUE)
-    }
-
-    # Instalar y cargar la librería requerida
-    install_and_load("lavaan")
-
-    AD <- list()
-
-    for (i in 1:length(modelos)) {
-      # Intentar ajustar el modelo y capturar errores y advertencias
-      fit.original <- tryCatch({
-        cfa(paste0(modelos[i]),
-            data = data,
-            estimator = estimator,
-            rotation = "oblimin",
-            mimic = "Mplus",
-            ordered = TRUE, verbose = FALSE)
-      }, warning = function(w) {
-        # Manejar advertencias aquí si es necesario, por ejemplo, imprimirlas
-        message("\nAdvertencia en el modelo ", i, ": ", w$message)
-        return(NULL) # Devuelve NULL o un objeto diferente si es necesario
-      }, error = function(e) {
-        # Manejar errores aquí si es necesario, por ejemplo, imprimiéndolos
-        message("\nError en el modelo ", i, ": ", e$message)
-        return(NULL) # Devuelve NULL o un objeto diferente si es necesario
-      }, finally = {
-        # Código que siempre se ejecuta, éxito o error
-      })
-
-      if (!is.null(fit.original)) {
-        AD[[i]] <- fit.original
-      }
-      # No es necesario imprimir algo específico aquí a menos que quieras
-    }
-
-    return(AD)
-  }
-
-  iterativeModelEFA_internal <- function(data, initialModel, MAX_ITERATIONS = 10) {
-    identifyItemsToExclude <- function(result_df) {
-      crossLoadedItems <- result_df %>%
-        rowwise() %>%
-        mutate(crossLoad = sum(c_across(starts_with("f")) > 0.3) > 1) %>%
-        filter(crossLoad) %>%
-        pull(Items)
-      return(crossLoadedItems)
-    }
-
-    excludedItems <- list()
-    iteration <- 1
-    allResultsDf <- list()
-    finalModelInfo <- NULL
-    modeloFinalEncontrado <- FALSE
-
-    name_items <- initialModel$name_items
-
-    while (iteration <= MAX_ITERATIONS) {
-      initialModel$exclude_items <- unique(c(initialModel$exclude_items, excludedItems))
-
-      modelos <- generate_modelos(n_factors = initialModel$n_factors,
-                                  n_items = initialModel$n_items,
-                                  name_items = name_items,
-                                  exclude_items = initialModel$exclude_items)
-
-      Specifications <- specification_models_internal(modelos, data = data, estimator = "WLSMV")
-      Bondades <- extract_fit_measures(Specifications)
-
-      foundItemsToExclude <- FALSE
-
-      for (i in seq_along(Specifications)) {
-        result_df <- Standardized_solutions(Specifications[[i]], name_items = name_items, apply_threshold = TRUE)
-        key <- paste("Modelo", i, "Iteración", iteration)
-        allResultsDf[[key]] <- result_df
-
-        itemsToExclude <- identifyItemsToExclude(result_df)
-        if (length(itemsToExclude) > 0) {
-          foundItemsToExclude <- TRUE
-          excludedItems <- unique(c(excludedItems, itemsToExclude))
-          break
-        } else if (!foundItemsToExclude && i == length(Specifications)) {
-          finalModelInfo <- key
-          modeloFinalEncontrado <- TRUE
-        }
-      }
-
-      if (!foundItemsToExclude) {
-        break
-      }
-
-      iteration <- iteration + 1
-    }
-
-    if (modeloFinalEncontrado) {
-      message("\nAnálisis completado:", finalModelInfo, " tiene la estructura más simple.")
-    } else {
-      message("\nSe alcanzó el número máximo de iteraciones sin encontrar una estructura factorial completamente aceptable.")
-    }
-
-    return(list(Models = Specifications, Bondades = Bondades, ExcludedItems = excludedItems, FinalIteration = iteration, AllResultsDf = allResultsDf, FinalModelInfo = finalModelInfo))
-  }
-
-  ## fin internal functions
-
-  generateBootstrapSamples <- function(data, n_samples = 10, seed = NULL) {
+BootstrapEFA_Algorithm <- function(original_data, n_factors, estimator = "WLSMV", name_items = "RAS",
+                            n_items = NULL, specific_items = NULL, rotation = "oblimin", verbose = FALSE,
+                            n_samples = 100, seed = NULL) {
+  #función internal
+  generateBootstrapSamples <- function(data, n_samples = 100, seed = NULL) {
     if (!is.null(seed)) {
       set.seed(seed)
     }
-
     bootstrapped_samples <- lapply(1:n_samples, function(i) {
-      sample_n(data, n(), replace = TRUE)
+      data[sample(nrow(data), replace = TRUE), ]
     })
     return(bootstrapped_samples)
   }
 
-  # Generar muestras de bootstrap
-  bootstrapped_samples <- generateBootstrapSamples(data = original_data, n_samples = n_samples, seed = seed)
+  library(pbapply)  # Asegúrate de que esta línea esté al principio de tu script
+  # Genera muestras bootstrap
+  bootstrapped_samples <- generateBootstrapSamples(original_data, n_samples, seed)
 
-  # Inicializar contador de errores
-  error_count <- 0
+  # Inicializa contadores para advertencias y errores
+  count_warnings <- 0
+  count_errors <- 0
 
-  # Inicializa la barra de progreso
-  pb <- txtProgressBar(min = 0.01, max = n_samples, style = 3)
+  bootstrap_results <- list()  # Inicializa la lista de resultados
 
-  results <- lapply(seq_along(bootstrapped_samples), function(i) {
+  for(i in 1:length(bootstrapped_samples)) {
+    cat(sprintf("Iniciando la iteración %d de %d \n", i, n_samples))
+    pb <- txtProgressBar(min = 0, max = 1, style = 3)  # Crea una barra de progreso para cada iteración
+
     result <- tryCatch({
-      # Ejecutar el análisis EFA iterativo
-      result <- iterativeModelEFA_internal(data = bootstrapped_samples[[i]], initialModel = initialModel)
-
-      # Si el análisis es exitoso, preparar los resultados
-      combined_results <- data.frame(
-        Bondades = I(list(result$Bondades)),
-        ExcludedItems = I(list(result$ExcludedItems))
-      )
-
-      list(
-        Models = result$Models,
-        CombinedResults = combined_results,
-        FinalIteration = result$FinalIteration,
-        AllResultsDf = result$AllResultsDf,
-        FinalModelInfo = result$FinalModelInfo
-      )
+      iterative_factor_analysis(bootstrapped_samples[[i]], n_factors, estimator, name_items, n_items, specific_items, rotation, verbose)
     }, error = function(e) {
-      # Incrementar el contador de errores
-      error_count <<- error_count + 1
-
-      # Manejar el error pero no detener la ejecución; simplemente retorna NULL
-      message("Error de convergencia detectado: ", e$message)
-      NULL # Retorna NULL para análisis fallidos
+      message("\n Error durante el bootstrap: ", e$message)
+      count_errors <<- count_errors + 1
+      NULL  # Devuelve NULL para muestras que resulten en error.
+    }, warning = function(w) {
+      message("\n Advertencia durante el bootstrap: ", w$message)
+      count_warnings <<- count_warnings + 1
+      NULL  # Devuelve NULL para muestras que resulten en advertencia.
     })
 
-    # Actualiza la barra de progreso aquí, asegurando que se actualice tanto en éxito como en error
-    setTxtProgressBar(pb, i)
+    if (!is.null(result)) {
+      bootstrap_results[[i]] <- result
+    }
 
-    return(result)
+    setTxtProgressBar(pb, 1)  # Actualiza la barra de progreso al final de cada iteración
+    close(pb)
+    cat("Iteración", i, "completada\n")
+  }
+
+  # Filtra los resultados nulos que podrían haberse generado debido a errores
+  bootstrap_results <- Filter(Negate(is.null), bootstrap_results)
+
+  # Procesar los resultados para empaquetarlos adecuadamente
+  processed_results <- lapply(bootstrap_results, function(result) {
+    list(
+      final_model = result$final_model,
+      excluded_items = result$excluded_items,
+      final_items = result$final_items,
+      all_specifications = result$all_specifications,
+      all_fit_measures = result$all_fit_measures,
+      all_results = result$all_results,
+      all_interFactors = result$all_interFactors
+    )
   })
 
-  # Cerrar la barra de progreso
-  close(pb)
+  # Agrega los contadores de advertencias y errores a los resultados procesados
+  results_summary <- list(
+    processed_results = processed_results,
+    count_warnings = count_warnings,
+    count_errors = count_errors
+  )
 
-  # Filtrar los resultados para excluir los análisis fallidos (NULLs)
-  results <- Filter(Negate(is.null), results)
-
-  # Retornar resultados y la cantidad de errores
-  return(list(Results = results, ErrorCount = error_count))
+  # Retorna la lista de resultados bootstrap procesados junto con los conteos de advertencias y errores
+  return(results_summary)
 }

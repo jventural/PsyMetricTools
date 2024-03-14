@@ -3,36 +3,49 @@
 \title{Bootstrap Algorithm for Exploratory Factor Analysis (EFA)}
 
 \description{
-  Implements a bootstrap algorithm for exploratory factor analysis (EFA) to evaluate the stability and robustness of an EFA model across multiple bootstrap samples derived from the original dataset. This process aims to provide insights into the model's reliability and the performance of individual items within the model.
+  A refined version of the bootstrap algorithm for exploratory factor analysis (EFA) designed to assess the stability and robustness of EFA models. This modified function evaluates multiple bootstrap samples from the original data, facilitating a deeper understanding of model reliability and item performance.
 }
 
 \usage{
-BootstrapEFA_Algorithm(original_data, initialModel, n_samples = 100, seed = NULL)
+BootstrapEFA_Algorithm(original_data, initialModel, n_factors, estimator = "WLSMV", name_items = "RAS", n_items = NULL, specific_items = NULL, rotation = "oblimin", verbose = FALSE, n_samples = 100, seed = NULL)
 }
 
 \arguments{
-  \item{original_data}{Dataframe with observed variables for the EFA analysis.}
-  \item{initialModel}{List detailing the EFA model's initial configuration, including parameters like the number of factors, and any specific settings required for the `lavaan` analysis.}
-  \item{n_samples}{Number of bootstrap samples to generate and analyze. Default is 100.}
-  \item{seed}{Seed value for reproducibility of bootstrap sampling. Defaults to NULL, allowing for random sampling.}
+  \item{original_data}{DataFrame containing the observed variables for EFA analysis.}
+  \item{initialModel}{A detailed configuration of the initial EFA model, specifying the number of factors, estimation method, item names, optional specific items, rotation method, verbosity of the output, and other settings required for the analysis.}
+  \item{n_factors}{The number of factors to extract in the EFA model.}
+  \item{estimator}{The estimation method used in the analysis, with "WLSMV" as the default.}
+  \item{name_items}{Prefix for item names in the dataset, defaulting to "RAS".}
+  \item{n_items}{Optional; specifies the number of items to consider from the dataset. If NULL, all items are included.}
+  \item{specific_items}{Optional; allows for specifying particular items to be included in the analysis. NULL indicates no specific items are targeted.}
+  \item{rotation}{The rotation method applied to the factor analysis, with "oblimin" as the default.}
+  \item{verbose}{Boolean flag to enable detailed output during execution. Defaults to FALSE.}
+  \item{n_samples}{Specifies the number of bootstrap samples to generate for analysis. The default is 100.}
+  \item{seed}{Seed value for the random number generator to ensure reproducibility of results. Default is NULL, which does not set a seed.}
 }
 
 \details{
-  The function generates bootstrap samples from the provided dataset, each of which is analyzed using an iterative EFA process based on the initial model configuration. The function captures and reports errors such as convergence issues, allowing for uninterrupted analysis across samples. Results from each analysis, including model fit measures and configurations, are compiled for review.
+  This function enhances the traditional EFA bootstrap approach by integrating customizable options for factor analysis and bootstrap sampling. It generates bootstrap samples, applies EFA to each sample according to the initial model configuration, and aggregates results, including errors and warnings for comprehensive analysis.
 }
 
 \value{
-  Returns a list with two primary elements: 'Results'—a list of detailed EFA results for each bootstrap sample, including fit measures and model configurations; and 'ErrorCount'—the number of samples that failed to converge, highlighting potential stability issues with the model. This comprehensive output aids in assessing the model's performance across different samples.
+  The function returns a list containing two major components: 'processed_results'—a collection of EFA results for each bootstrap sample, including model configurations and fit measures; and 'summary'—a summary including the count of warnings and errors encountered, providing insight into model stability and robustness.
 }
 
 \examples{
-# Assuming 'data' is your dataset and 'initialModel' specifies your EFA model setup
-results <- BootstrapEFA_Algorithm(original_data = data, initialModel = initialModel, n_samples = 100, seed = 123)
-
-# To review the number of errors and explore the results
-print(results$ErrorCount)
-print(results$Results)
+# Given 'data' as your dataset and 'initialModel' specifying your EFA model configuration
+res <- BootstrapEFA_Algorithm(original_data = df_filtered,
+                       n_factors = 3,
+                       estimator = "ULSMV",
+                       rotation = "oblimin",
+                       name_items = "MA",
+                       n_items = 11,
+                       n_samples = 1000, seed = 2024)
+# Examining errors and results
+print(results$summary$count_errors)
+print(results$processed_results)
 }
+
 
 \author{
   Professor José Ventura León
