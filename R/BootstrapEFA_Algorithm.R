@@ -27,7 +27,7 @@ BootstrapEFA_Algorithm <- function(original_data, n_factors, estimator = "WLSMV"
     pb <- txtProgressBar(min = 0, max = 1, style = 3)  # Crea una barra de progreso para cada iteración
 
     result <- tryCatch({
-      iterative_factor_analysis(bootstrapped_samples[[i]], n_factors, estimator, name_items, n_items, specific_items, rotation, verbose)
+      iterativeModelEFA(bootstrapped_samples[[i]], n_factors, estimator, name_items, n_items, specific_items, rotation, verbose)
     }, error = function(e) {
       message("\n Error durante el bootstrap: ", e$message)
       count_errors <<- count_errors + 1
