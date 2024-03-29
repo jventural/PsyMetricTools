@@ -7,12 +7,12 @@
 }
 
 \usage{
-invertir_items(df, columns, num_respuestas, comienza_con_cero = TRUE)
+invertir_items(df, items, num_respuestas, comienza_con_cero = TRUE)
 }
 
 \arguments{
   \item{df}{A dataframe containing the data to be transformed.}
-  \item{columns}{A character vector specifying the names of the columns within the dataframe whose values will be inverted.}
+  \item{items}{A character vector specifying the names of the items within the dataframe whose values will be inverted.}
   \item{num_respuestas}{An integer indicating the number of response options. This determines the range of values for inversion.}
   \item{comienza_con_cero}{A logical flag indicating whether the response scale starts with 0 (\code{TRUE}) or 1 (\code{FALSE}). Defaults to \code{TRUE}.}
 }
@@ -27,8 +27,8 @@ invertir_items(df, columns, num_respuestas, comienza_con_cero = TRUE)
 
 \examples{
 # Assuming df_survey is your dataframe and you wish to invert the items 'q1' and 'q4' with a 5-point scale starting at 1
-columns_to_invert <- c("q1", "q4")
-df_survey_modified <- invertir_items(df_survey, columns_to_invert, num_respuestas = 5, comienza_con_cero = FALSE)
+items <- c("q1", "q4")
+df_survey_modified <- invertir_items(df_survey, items, num_respuestas = 5, comienza_con_cero = FALSE)
 print(df_survey_modified)
 # This will print the dataframe with the values of 'q1' and 'q4' inverted according to the function's logic.
 }

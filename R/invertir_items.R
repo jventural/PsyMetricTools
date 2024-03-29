@@ -1,6 +1,6 @@
-invertir_items <- function(df, columns, num_respuestas, comienza_con_cero = TRUE) {
+invertir_items <- function(df, items, num_respuestas, comienza_con_cero = TRUE) {
   df %>%
-    mutate(across(all_of(columns), function(x) {
+    mutate(across(all_of(items), function(x) {
       if (comienza_con_cero) {
         # Si las respuestas comienzan con 0, el máximo valor es num_respuestas - 1
         max_val = num_respuestas - 1
