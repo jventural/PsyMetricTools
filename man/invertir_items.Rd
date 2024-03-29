@@ -1,34 +1,36 @@
 \name{invertir_items}
 \alias{invertir_items}
-\title{Invert Specific Items' Values in a DataFrame}
+\title{Invert Specific Items' Values in a DataFrame Based on Response Scale}
 
 \description{
-  A function designed to invert the values of specific columns in a dataframe, taking into account whether the values include zero. It is useful for transforming measurement scales where the lowest value becomes the highest and vice versa, especially in the context of surveys or psychometric questionnaires where one wishes to adjust the directionality of items.
+  This function inverts the values of specific columns in a dataframe, accommodating different scales of measurement that either include or exclude zero. It's particularly useful for adjusting the directionality of survey or psychometric questionnaire items, ensuring that lower values are transformed to higher ones and vice versa, in alignment with the desired measurement scale.
 }
 
 \usage{
-invertir_items(df, items)
+invertir_items(df, columns, num_respuestas, comienza_con_cero = TRUE)
 }
 
 \arguments{
   \item{df}{A dataframe containing the data to be transformed.}
-  \item{items}{A character vector specifying the names of the columns within the dataframe whose values will be inverted.}
+  \item{columns}{A character vector specifying the names of the columns within the dataframe whose values will be inverted.}
+  \item{num_respuestas}{An integer indicating the number of response options. This determines the range of values for inversion.}
+  \item{comienza_con_cero}{A logical flag indicating whether the response scale starts with 0 (\code{TRUE}) or 1 (\code{FALSE}). Defaults to \code{TRUE}.}
 }
 
 \details{
-  The function first checks whether the value 0 is present in the data of the specified columns. If 0 is present, it assumes a scale of 0 to 3 for inverting values. Otherwise, it calculates the maximum value from the unique data in each column to determine the inversion value, thus dynamically adjusting to different data ranges. This functionality is particularly useful in processing questionnaire items where some items are formulated inversely and need to be recalculated for consistent analysis.
+  Based on the specified number of responses and whether the scale starts with zero, the function dynamically calculates the maximum inversion value for each column. This approach allows for flexible adaptation to various scales, ensuring accurate value inversion across different data collection instruments. It is particularly adept at handling psychometric scales or survey items that require inversion for consistent analytical interpretation.
 }
 
 \value{
-  Returns a modified dataframe where the specified columns have been transformed, inverting their values according to the described logic. The transformed values facilitate subsequent data interpretation and analysis.
+  The function returns a dataframe with the specified columns' values inverted according to the provided scale information. This modification aids in the consistent analysis and interpretation of survey or questionnaire data.
 }
 
 \examples{
-# Assuming Data_Final is your dataframe and you want to invert the items 'phq1' and 'phq2'
-items_to_invert <- c("phq1", "phq2")
-Data_Final_modified <- invertir_items(Data_Final, items_to_invert)
-print(Data_Final_modified)
-# This will print the dataframe with the values of 'phq1' and 'phq2' inverted according to the function's logic.
+# Assuming df_survey is your dataframe and you wish to invert the items 'q1' and 'q4' with a 5-point scale starting at 1
+columns_to_invert <- c("q1", "q4")
+df_survey_modified <- invertir_items(df_survey, columns_to_invert, num_respuestas = 5, comienza_con_cero = FALSE)
+print(df_survey_modified)
+# This will print the dataframe with the values of 'q1' and 'q4' inverted according to the function's logic.
 }
 
 \author{
