@@ -37,7 +37,7 @@ plot_and_table_omega <- function(df_repli, omega_ymin_annot = NULL, omega_ymax_a
   plot <- ggplot(data_long, aes(x = Reliability, y = value, fill = Reliability)) +
     geom_boxplot(outlier.shape = 16) +
     theme_bw() +
-    scale_y_continuous(limits = c(min(res_omega_table$min) - 0.05, 1), breaks = seq(min(res_omega_table$min) - 0.05, 1, by = 0.05)) +
+    scale_y_continuous(limits = c(min(res_omega_table$min) - 0.1, 1), breaks = seq(min(res_omega_table$min) - 0.1, 1, by = 0.05)) +
     scale_fill_grey(start = 0.5, end = 0.9) +
     labs(y = "\u03C9 values") +
     theme(legend.position = "none") +
