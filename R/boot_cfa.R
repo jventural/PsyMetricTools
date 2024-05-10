@@ -1,69 +1,5 @@
-boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replications = 1000) {
+boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replications = 1000, ordered = TRUE, estimator = "WLSMV") {
   # Función interna
-  fit_lavaan_simplified <- function(x) {
-
-    library(dplyr)
-    library(tidyr)
-    library(lavaan)
-    library(tibble)
-    library(stringr)
-
-
-    type <- is_robust_estimator_lavaan(x)
-    converged <- lavaan::lavInspect(x, "converged")
-    estimator_info <- tibble(
-      nobs = sum(lavaan::lavInspect(x, "nobs")),
-      estimator = lavaan_estimator(x),
-      ngroups = lavaan::lavInspect(x, "ngroups"),
-      converged = converged,
-      estimator_type = type
-    )
-
-    if (!converged) {
-      return(estimator_info %>%
-               mutate(across(chisq:crmr, ~NA_real_)) %>%
-               rename_with(~stringr::str_to_upper(.), c(cfi:crmr)))
-    }
-
-    fit_measures <- if (type == "robust") {
-      c("npar", "chisq.scaled", "df.scaled", "pvalue.scaled", "rmsea.scaled",
-        "rmsea.ci.lower.scaled", "rmsea.ci.upper.scaled", "srmr", "wrmr", "crmr",
-        "tli.scaled", "cfi.scaled")
-    } else {
-      c("npar", "chisq", "df", "pvalue", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper",
-        "srmr", "wrmr", "crmr", "aic", "bic", "tli", "cfi")
-    }
-
-    fit_measure <- x %>%
-      lavaan::fitmeasures(fit.measures = fit_measures) %>%
-      enframe(name = "term") %>%
-      pivot_wider(names_from = term, values_from = value) %>%
-      mutate(across(everything(), as.numeric)) %>%
-      bind_cols(estimator_info) %>%
-      select(-estimator_type) %>%
-      rename_with(~stringr::str_remove(., ".scaled")) %>%
-      rename_with(.fn = ~stringr::str_to_upper(.), .cols = c(cfi:crmr))
-
-    return(fit_measure)
-  }
-
-  # Función interna
-  is_robust_estimator_lavaan <- function(x) {
-    if (lavaan::lavInspect(x, "options")$test %in% c(
-      "satorra.bentler",
-      "yuan.bentler",
-      "yuan.bentler.mplus",
-      "mean.var.adjusted",
-      "scaled.shifted"
-    )) {
-      type <- "robust"
-    } else {
-      type <- "non-robust"
-    }
-    return(type)
-  }
-
-  # Funcion interna
   lavaan_estimator <- function(x) {
     if (lavaan::lavInspect(x, "options")$estimator == "DWLS") {
       if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
@@ -131,6 +67,150 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
     return(estimator)
   }
 
+  # Funcion interna
+  is_robust_estimator_lavaan <- function(x) {
+    if (lavaan::lavInspect(x, "options")$test %in% c(
+      "satorra.bentler",
+      "yuan.bentler",
+      "yuan.bentler.mplus",
+      "mean.var.adjusted",
+      "scaled.shifted"
+    )) {
+      type <- "robust"
+    } else {
+      type <- "non-robust"
+    }
+    return(type)
+  }
+  # Función interna
+  fit_lavaan <- function(x) {
+    type <- is_robust_estimator_lavaan(x)
+
+    if (lavaan::lavInspect(x, "converged")) {
+      if (type == "robust") {
+        fit_measure <- x %>%
+          lavaan::fitmeasures(
+            fit.measures =
+              c(
+                "npar",
+                "chisq.scaled",
+                "df.scaled",
+                "pvalue.scaled",
+                "rmsea.scaled",
+                "rmsea.ci.lower.scaled",
+                "rmsea.ci.upper.scaled",
+                "srmr",
+                "wrmr",
+                "crmr",
+                "tli.scaled",
+                "cfi.scaled"
+              )
+          ) %>%
+          tibble::enframe(name = "term") %>%
+          tidyr::pivot_wider(
+            names_from = term,
+            values_from = value
+          ) %>%
+          dplyr::mutate(
+            dplyr::across(dplyr::everything(), as.numeric)
+          ) %>%
+          dplyr::bind_cols(
+            tibble::tibble(
+              converged = lavaan::lavInspect(x, "converged"),
+              estimator = lavaan_estimator(x),
+              ngroups = lavaan::lavInspect(x, "ngroups"),
+              nobs = sum(lavaan::lavInspect(x, "nobs"))
+            )
+          ) %>%
+          dplyr::select(
+            nobs, estimator, ngroups, converged, chisq.scaled,
+            df.scaled, pvalue.scaled, npar, cfi.scaled, tli.scaled,
+            rmsea.scaled, rmsea.ci.lower.scaled, rmsea.ci.upper.scaled,
+            srmr, wrmr,crmr
+          ) %>%
+          dplyr::rename_with(
+            ~ stringr::str_remove(., ".scaled")
+          )
+      } else {
+        fit_measure <- x %>%
+          lavaan::fitmeasures(
+            fit.measures =
+              c(
+                "npar",
+                "chisq",
+                "df",
+                "pvalue",
+                "rmsea",
+                "rmsea.ci.lower",
+                "rmsea.ci.upper",
+                "srmr",
+                "wrmr",
+                "crmr",
+                "aic",
+                "bic",
+                "tli",
+                "cfi"
+              )
+          ) %>%
+          tibble::enframe(name = "term") %>%
+          tidyr::pivot_wider(
+            id_cols = term,
+            names_from = term,
+            values_from = value
+          ) %>%
+          dplyr::mutate(
+            dplyr::across(dplyr::everything(), as.numeric)
+          ) %>%
+          dplyr::bind_cols(
+            tibble::tibble(
+              converged = lavaan::lavInspect(x, "converged"),
+              estimator = lavaan::lavInspect(x, "options")$estimator,
+              ngroups = lavaan::lavInspect(x, "ngroups"),
+              missing_method = lavaan::lavInspect(x, "options")$missing,
+              nobs = sum(lavaan::lavInspect(x, "nobs"))
+            )
+          ) %>%
+          dplyr::relocate(
+            nobs, estimator, ngroups, converged,
+            chisq, df, pvalue, npar, cfi, tli, rmsea,
+            rmsea.ci.lower, rmsea.ci.upper, srmr, wrmr,crmr,
+            aic, bic
+          ) %>%
+          dplyr::rename(
+            AIC = aic,
+            BIC = bic
+          )
+      }
+    } else {
+      fit_measure <- tibble::tibble(
+        nobs = sum(lavaan::lavInspect(x, "nobs")),
+        estimator = lavaan_estimator(x),
+        ngroups = lavaan::lavInspect(x, "ngroups"),
+        converged = lavaan::lavInspect(x, "converged"),
+        chisq = NA_real_,
+        df = NA_real_,
+        pvalue = NA_real_,
+        nparameter = NA_real_,
+        cfi = NA_real_,
+        tli = NA_real_,
+        rmsea = NA_real_,
+        rmsea.ci.lower = NA_real_,
+        rmsea.ci.upper = NA_real_,
+        srmr = NA_real_,
+        wrmr = NA_real_,
+        crmr = NA_real_
+      )
+    }
+
+    fit_measure <- fit_measure %>%
+      dplyr::rename_with(
+        .fn = ~ stringr::str_to_upper(.),
+        .cols = c(cfi:crmr)
+      )
+
+    return(fit_measure)
+  }
+
   set.seed(seed)
 
   # Cargar las bibliotecas necesarias
@@ -154,13 +234,12 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
       fit_cfa1 = pblapply(seq_along(data), function(i) {
         cfa(model = model_cfa1[[i]],
             data = data[[i]],
-            ordered = TRUE,
-            estimator = "WLSMV")
+            ordered = ordered,
+            estimator = estimator)
       }, cl = 1),  # Usar pblapply para aplicar cfa con barra de progreso
       converged1 = map_lgl(fit_cfa1, ~ lavInspect(.x, "converged")),
       validity1 = map_lgl(fit_cfa1, ~ suppressWarnings(lavInspect(.x, "post.check"))),
-      fit_measures1 = map(fit_cfa1, ~ fit_lavaan_simplified(.x) %>%
-                            rename_with(.fn = toupper, .cols = c("rmsea", "rmsea.ci.lower", "rmsea.ci.upper", "srmr", "wrmr")))
+      fit_measures1 = map(fit_cfa1, ~ fit_lavaan(.x))
     ) %>%
     collect()
 

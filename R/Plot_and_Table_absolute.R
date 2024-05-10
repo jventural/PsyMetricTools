@@ -22,7 +22,7 @@ Plot_and_Table_absolute <- function(df_repli, abs_ymin_annot = NULL, abs_ymax_an
   }
 
   if(is.null(abs_ymax_annot)) {
-    abs_ymax_annot <- max(table$max)   # Ajuste manual para la posición de la tabla
+    abs_ymax_annot   # Ajuste manual para la posición de la tabla
   }
 
   # Crear el gráfico de RMSEA, SRMR, CRMR
@@ -34,8 +34,8 @@ Plot_and_Table_absolute <- function(df_repli, abs_ymin_annot = NULL, abs_ymax_an
     ggplot(aes(x=Fit, y=Value, fill=Fit)) +
     geom_boxplot(outlier.shape = 16, outlier.size = 1) +
     theme_bw() +
-    scale_y_continuous(limits = c(0, abs_ymax_annot),
-                       breaks = seq(0, abs_ymax_annot, by = 0.01)) +
+    scale_y_continuous(limits = c(0, max(table$max) ),
+                       breaks = seq(0, max(table$max) , by = 0.01)) +
     annotation_custom(gridExtra::tableGrob(table, rows=NULL, theme = ttheme_default(
       core=list(bg_params = list(fill = c("#F2F3F4","#F2F3F4", "#F2F3F4"), col=NA),
                 fg_params=list(fontface= 1)),
