@@ -1,7 +1,10 @@
-smote_multiclass <- function(data, outcome, perc_maj = 100, k = 5) {
+smote_multiclass <- function(data, outcome, perc_maj = 100, k = 5, seed = NULL) {
 
   # Función SMOTE para una clase específica
-  smote_for_class <- function(x_min, syn_size, k, y_coln, class_name) {
+  smote_for_class <- function(x_min, syn_size, k, y_coln, class_name, seed = NULL) {
+    if (!is.null(seed)) {
+      set.seed(seed)
+    }
     n <- nrow(x_min)
     m <- ncol(x_min)
     synthetic_data <- matrix(runif(syn_size * m), ncol = m)
@@ -56,7 +59,7 @@ smote_multiclass <- function(data, outcome, perc_maj = 100, k = 5) {
     syn_size <- round(((major_class_count - class_counts[min_class]) * perc_maj) / 100)
 
     # Aplica SMOTE a esta clase
-    smote_data <- smote_for_class(x_min, syn_size, k, y_coln, min_class)
+    smote_data <- smote_for_class(x_min, syn_size, k, y_coln, min_class, seed)
 
     # Combina los datos SMOTE con el conjunto de datos original
     data <- rbind(data, smote_data)
@@ -64,3 +67,4 @@ smote_multiclass <- function(data, outcome, perc_maj = 100, k = 5) {
 
   return(data)
 }
+
