@@ -1,4 +1,4 @@
-Plot_Likert <- function(Data, name_items, ranges, exclude = NULL) {
+Plot_Likert <- function(Data, name_items, ranges, exclude = NULL, text_size = 3) {
   # Carga los paquetes necesarios
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     install.packages("ggplot2")
@@ -37,7 +37,7 @@ Plot_Likert <- function(Data, name_items, ranges, exclude = NULL) {
   ggplot(df_pivot, aes(x = as.factor(Var_Ptjes))) +
     geom_bar(fill = "#CCD1D1", colour = "black") +
     geom_text(stat = "count", aes(label = scales::percent(..count../nrow(Data), accuracy = 0.01)),
-              vjust = -0.1, size = 3) +
+              vjust = -0.1, size = text_size) + # Usar el parámetro text_size aquí
     scale_y_continuous(limits = c(0, nrow(Data))) +
     facet_wrap(~ Variables, scale = "free_x") +
     theme_bw() +
