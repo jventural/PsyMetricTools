@@ -7,7 +7,7 @@ This function creates a series of bar charts for visualizing responses to Likert
 }
 
 \usage{
-Plot_Likert(Data, name_items, ranges, exclude = NULL)
+Plot_Likert(Data, name_items, ranges, exclude = NULL, text_size = 3)
 }
 
 \arguments{
@@ -15,6 +15,7 @@ Plot_Likert(Data, name_items, ranges, exclude = NULL)
   \item{name_items}{The base name or prefix of the item variables.}
   \item{ranges}{A numeric range specifying the suffixes of item names. For example, `1:25` for items named from 'item1' to 'item25'.}
   \item{exclude}{Optional. A vector of item suffixes to be excluded from the plot. For example, `c(1, 2)` to exclude 'item1' and 'item2'.}
+  \item{text_size}{It consists of modifying the size of the percentages within the bar chart.}
 }
 
 \details{
@@ -27,7 +28,7 @@ A ggplot object representing the bar charts for the specified Likert scale items
 
 \examples{
 # Assuming 'Data' is a data frame with Likert scale items named 'CCOV1', 'CCOV2', ..., 'CCOV25'
-plot <- Plot_Likert(Data, "CCOV", 1:25, exclude = c(1, 2))
+plot <- Plot_Likert(Data, "CCOV", 1:25, exclude = c(1, 2), text_size = 3)
 print(plot)
 }
 
