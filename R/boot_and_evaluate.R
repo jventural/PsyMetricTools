@@ -1,5 +1,6 @@
 boot_and_evaluate <- function(data, true_network, algorithms, correlation_methods,
                               sample_sizes = c(100, 250, 500, 1000), n_simulations = 100, seed = 123) {
+
   library(EGAnet)
   library(dplyr)
   library(psych)
@@ -7,8 +8,8 @@ boot_and_evaluate <- function(data, true_network, algorithms, correlation_method
   library(bootnet)
   library(ggplot2)
   library(tidyverse)
+  # Funciones auxiliares para calcular la correlación y el sesgo
 
-  # FUNCIONES INTERNAS
   # Función modificada para calcular la correlación entre matrices aplanadas
   cor0 <- function(matrix1, matrix2, ...) {
     # Aplanar las matrices a vectores
@@ -89,7 +90,7 @@ boot_and_evaluate <- function(data, true_network, algorithms, correlation_method
   results_list <- pblapply(1:n_simulations, function(simulation) {
     simulation_results <- list()
     for (sample_size in sample_sizes) {
-      sampled_data <- data %>% sample_frac(sample_size / nrow(data))
+      sampled_data <- data %>% sample_frac(sample_size / nrow(data), replace = TRUE)
 
       for (algorithm in algorithms) {
         for (cor_method in correlation_methods) {
