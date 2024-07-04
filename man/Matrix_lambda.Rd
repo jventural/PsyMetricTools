@@ -21,7 +21,7 @@ The function begins by validating the input parameters to ensure that the length
 }
 
 \value{
-A matrix of size \(n\_items \times factores\) with ones in specified blocks indicating factor loadings, and zeros elsewhere. This matrix can be used directly in SEM software packages for model specification.
+A matrix of size with ones in specified blocks indicating factor loadings, and zeros elsewhere. This matrix can be used directly in SEM software packages for model specification.
 }
 
 \examples{
