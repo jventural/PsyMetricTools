@@ -79,7 +79,7 @@ plot_lvm <- function(
     }
     fCovs <- solve(rotmat) %*% x@modelmatrices$fullsample$sigma_zeta %*% t(solve(rotmat))
     rownames(load) <- rownames(x@modelmatrices$fullsample$lambda)[obs]
-    Res$loadings <- qgraph.loadings(load, factorCors = fCovs, ..., title = "Estimated factor loadings", color = colors, labels = rownames(x@modelmatrices$fullsample$lambda)[obs], model = "reflective", vsize = vsize)
+    Res$loadings <- qgraph.loadings(load, factorCors = fCovs, ..., title = "Estimated net loadings", color = colors, labels = rownames(x@modelmatrices$fullsample$lambda)[obs], model = "reflective", vsize = vsize)
   }
 
   if ("latents" %in% plot){
