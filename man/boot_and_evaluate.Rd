@@ -8,7 +8,7 @@ This function performs bootstrapping and evaluation of network estimation algori
 
 \usage{
 boot_and_evaluate(data, true_network, algorithms, correlation_methods,
-                  sample_sizes = c(100, 250, 500, 1000), n_simulations = 100, seed = 123)
+                  sample_sizes = c(100, 250, 500, 1000), n_simulations = 100, seed = 123, n_cores = 8)
 }
 
 \arguments{
@@ -19,6 +19,7 @@ boot_and_evaluate(data, true_network, algorithms, correlation_methods,
   \item{sample_sizes}{A numeric vector indicating the sample sizes to be used in each simulation. Default is \code{c(100, 250, 500, 1000)}.}
   \item{n_simulations}{An integer indicating the number of simulations to be performed. Default is 100.}
   \item{seed}{An integer for setting the seed for reproducibility. Default is 123.}
+  \item{n_cores}{An integer that depends on the number of cores in the user's computer. Default is 8.}
 }
 
 \details{
@@ -59,11 +60,12 @@ results <- boot_and_evaluate(
   algorithms = c("walktrap", "leiden", "louvain", "fast_greedy"),
   correlation_methods = c("pearson", "spearman", "cor_auto"),
   n_simulations = 100,
-  seed = 2024
+  seed = 2024,
+  n_cores = 8
 )
 
 }
 
 \author{
-José Ventura-León
+Dr. José Ventura-León
 }
