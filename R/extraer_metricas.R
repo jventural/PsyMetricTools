@@ -25,7 +25,7 @@ extraer_metricas <- function(modelo_fit) {
   metricas_df <- metricas_ordenadas %>%
     pivot_wider(names_from = Measure, values_from = Value) %>%
     mutate(Model = nombre_modelo) %>%
-    select(Model, everything())
+    dplyr::select(Model, everything())
 
   return(metricas_df)
 }
