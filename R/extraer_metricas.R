@@ -5,7 +5,7 @@ extraer_metricas <- function(modelo_fit) {
   metricas <- tibble(Measure = modelo_fit$Measure, Value = modelo_fit$Value)
 
   metricas_filtradas <- metricas %>%
-    filter(Measure %in% c("df", "chisq", "aic", "bic", "ebic", "rmsea", "tli", "cfi")) %>%
+    filter(Measure %in% c("df", "chisq", "aic", "bic", "ebic1", "rmsea", "tli", "cfi")) %>%
     mutate(Measure = case_when(
       Measure == "aic" ~ "AIC",
       Measure == "bic" ~ "BIC",
