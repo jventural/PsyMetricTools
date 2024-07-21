@@ -9,7 +9,7 @@ extraer_metricas <- function(modelo_fit) {
     mutate(Measure = case_when(
       Measure == "aic" ~ "AIC",
       Measure == "bic" ~ "BIC",
-      Measure == "ebic" ~ "EBIC",
+      Measure == "ebic1" ~ "EBIC",
       Measure == "rmsea" ~ "RMSEA",
       Measure == "tli" ~ "TLI",
       Measure == "cfi" ~ "CFI",
