@@ -43,8 +43,8 @@ easy_invariance <- function(model, data, estimator, ordered, ID.cat, group, leve
 
   # Función para extraer CFI y RMSEA
   extract_cfi_rmsea <- function(fit) {
-    cfi <- round(fit[, "cfi.scaled"], 2)
-    rmsea <- round(fit[, "rmsea.scaled"], 2)
+    cfi <- round(fit[, "cfi.scaled"], 3)
+    rmsea <- round(fit[, "rmsea.scaled"], 3)
     result <- data.frame(
       Model = rownames(fit),
       CFI = cfi,
@@ -74,8 +74,8 @@ easy_invariance <- function(model, data, estimator, ordered, ID.cat, group, leve
     left_join(final_values, by = "Model") %>%
     relocate(Model) %>%
     select(-AIC, -BIC) %>%
-    mutate(Chisq_df = paste0(round(Chisq, 2), " (", Df, ")")) %>%
-    mutate(`Chisq diff` = round(`Chisq diff`, 2)) %>%
+    mutate(Chisq_df = paste0(round(Chisq, 3), " (", Df, ")")) %>%
+    mutate(`Chisq diff` = round(`Chisq diff`, 3)) %>%
     mutate(`Pr(>Chisq)` = round(`Pr(>Chisq)`, 3)) %>%
     relocate(Model, Chisq_df, `Chisq diff`, `Df diff`, `Pr(>Chisq)`, CFI, RMSEA, CFI_diff, RMSEA_diff) %>%
     select(-Df, -Chisq)
