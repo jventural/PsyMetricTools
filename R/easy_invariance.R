@@ -2,6 +2,7 @@ easy_invariance <- function(model, data, estimator, ordered, ID.cat, group, leve
   # Cargar las librerías necesarias
   library(semTools)
   library(dplyr)
+
   # Definir una función interna para ejecutar semTools::measEq.syntax con diferentes niveles de invarianza
   run_invariance <- function(model, data, estimator, ordered, ID.cat, group, group.equal, long.equal = NULL) {
     result <- semTools::measEq.syntax(
@@ -29,17 +30,17 @@ easy_invariance <- function(model, data, estimator, ordered, ID.cat, group, leve
       results$data_configural <- run_invariance(model, data, estimator, ordered, ID.cat, group, "configural")
     } else if (level == "threshold") {
       results$data_threshold <- run_invariance(model, data, estimator, ordered, ID.cat, group, "thresholds", "thresholds")
-    } else if (level == "metrica") {
-      results$data_metrica <- run_invariance(model, data, estimator, ordered, ID.cat, group, c("thresholds", "loadings"), c("thresholds", "loadings"))
-    } else if (level == "escalar") {
-      results$data_escalar <- run_invariance(model, data, estimator, ordered, ID.cat, group, c("thresholds", "loadings", "intercepts"), c("thresholds", "loadings", "intercepts"))
-    } else if (level == "estricto") {
-      results$data_estricto <- run_invariance(model, data, estimator, ordered, ID.cat, group, c("thresholds", "loadings", "intercepts", "residuals"), c("thresholds", "loadings", "intercepts", "residuals"))
+    } else if (level == "metric") {
+      results$data_metric <- run_invariance(model, data, estimator, ordered, ID.cat, group, c("thresholds", "loadings"), c("thresholds", "loadings"))
+    } else if (level == "scalar") {
+      results$data_scalar <- run_invariance(model, data, estimator, ordered, ID.cat, group, c("thresholds", "loadings", "intercepts"), c("thresholds", "loadings", "intercepts"))
+    } else if (level == "strict") {
+      results$data_strict <- run_invariance(model, data, estimator, ordered, ID.cat, group, c("thresholds", "loadings", "intercepts", "residuals"), c("thresholds", "loadings", "intercepts", "residuals"))
     }
   }
 
   # Comparar los modelos
-  a <- semTools::compareFit(results$data_configural, results$data_threshold, results$data_metrica, results$data_escalar, results$data_estricto)
+  a <- semTools::compareFit(results$data_configural, results$data_threshold, results$data_metric, results$data_scalar, results$data_strict)
 
   # Función para extraer CFI y RMSEA
   extract_cfi_rmsea <- function(fit) {
@@ -58,8 +59,8 @@ easy_invariance <- function(model, data, estimator, ordered, ID.cat, group, leve
   fit.diff_values <- extract_cfi_rmsea(a@fit.diff)
 
   # Ajustar los nombres de los modelos en fit_values y fit.diff_values para que coincidan con nested_data
-  fit_values$Model <- c("data_configural", "data_threshold", "data_metrica", "data_escalar", "data_estricto")
-  fit.diff_values$Model <- c("data_threshold", "data_metrica", "data_escalar", "data_estricto")
+  fit_values$Model <- c("data_configural", "data_threshold", "data_metric", "data_scalar", "data_strict")
+  fit.diff_values$Model <- c("data_threshold", "data_metric", "data_scalar", "data_strict")
 
   # Unir los dataframes por la columna Model
   final_values <- fit_values %>%
@@ -67,7 +68,7 @@ easy_invariance <- function(model, data, estimator, ordered, ID.cat, group, leve
 
   # Convertir a@nested en un dataframe y agregar la columna Model
   nested_data <- as.data.frame(a@nested)
-  nested_data$Model <- c("data_configural", "data_threshold", "data_metrica", "data_escalar", "data_estricto")
+  nested_data$Model <- c("data_configural", "data_threshold", "data_metric", "data_scalar", "data_strict")
 
   # Combinar ambos dataframes en uno solo
   combined_data <- nested_data %>%

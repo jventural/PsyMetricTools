@@ -17,7 +17,7 @@ easy_invariance(model, data, estimator, ordered, ID.cat, group, levels_of_invari
   \item{ordered}{A boolean indicating whether the data contains ordered categorical variables.}
   \item{ID.cat}{A string specifying the method for identifying categories in the SEM analysis.}
   \item{group}{A string specifying the grouping variable for testing invariance.}
-  \item{levels_of_invariance}{A character vector specifying the levels of invariance to be tested (e.g., "configural", "threshold", "metrica", "escalar", "estricto").}
+  \item{levels_of_invariance}{A character vector specifying the levels of invariance to be tested (e.g., "configural", "threshold", "metric", "scalar", "strict").}
 }
 
 \details{
@@ -51,7 +51,7 @@ results <- easy_invariance(
   ordered = TRUE,
   ID.cat = "Wu.Estabrook.2016",
   group = "school",
-  levels_of_invariance = c("configural", "threshold", "metrica", "escalar", "estricto")
+  levels_of_invariance = c("configural", "threshold", "metric", "scalar", "strict")
 )
 
 # Print the results
