@@ -7,7 +7,7 @@ This function performs measurement invariance testing across multiple levels (co
 }
 
 \usage{
-easy_invariance(model, data, estimator, ordered, ID.cat, group, levels_of_invariance)
+easy_invariance(model, data, estimator, ordered, ID.cat, group, levels_of_invariance, group.partial = NULL)
 }
 
 \arguments{
@@ -18,6 +18,7 @@ easy_invariance(model, data, estimator, ordered, ID.cat, group, levels_of_invari
   \item{ID.cat}{A string specifying the method for identifying categories in the SEM analysis.}
   \item{group}{A string specifying the grouping variable for testing invariance.}
   \item{levels_of_invariance}{A character vector specifying the levels of invariance to be tested (e.g., "configural", "threshold", "metric", "scalar", "strict").}
+  \item{group.partial}{A character vector specifying parameters to be freed across groups for partial invariance. Default is NULL.}
 }
 
 \details{
@@ -36,26 +37,32 @@ A dataframe containing the model fit indices and statistical terms for each leve
 # Example usage with a sample dataset and model
 
 # Define the model
-model <- 'visual =~ x1 + x2 + x3
-          textual =~ x4 + x5 + x6
-          speed =~ x7 + x8 + x9'
+model_original <- "F1 =~ A1+A2+A3+A4+A5
+                   F2 =~ C1+C2+C3+C4+C5
+                   F3 =~ E1+E2+E3+E4+E5
+                   F4 =~ N1+N2+N3+N4+N5
+                   F5 =~ O1+O2+O3+O4+O5
+"
 
 # Example dataset
-data <- lavaan::HolzingerSwineford1939
+big5 <- as_tibble(psych::bfi)
+big5 <- na.omit(big5)
+big5 <- select(big5, -education, -age)
+big5 <- slice(big5, 1:500)
 
 # Run the invariance testing function
 results <- easy_invariance(
-  model = model,
-  data = data,
+  model = model_original,
+  data = big5,
   estimator = "WLSMV",
   ordered = TRUE,
   ID.cat = "Wu.Estabrook.2016",
-  group = "school",
+  group = "gender",
   levels_of_invariance = c("configural", "threshold", "metric", "scalar", "strict")
 )
 
 # Print the results
-print(results)
+print(results$combined_data)
 }
 
 \author{

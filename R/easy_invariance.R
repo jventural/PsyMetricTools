@@ -1,10 +1,10 @@
-easy_invariance <- function(model, data, estimator, ordered, ID.cat, group, levels_of_invariance) {
+easy_invariance <- function(model, data, estimator, ordered, ID.cat, group, levels_of_invariance, group.partial = NULL) {
   # Cargar las librerías necesarias
-  library(semTools)
   library(dplyr)
-
+  library(semTools)
+  library(lavaan.mi)
   # Definir una función interna para ejecutar semTools::measEq.syntax con diferentes niveles de invarianza
-  run_invariance <- function(model, data, estimator, ordered, ID.cat, group, group.equal, long.equal = NULL) {
+  run_invariance <- function(model, data, estimator, ordered, ID.cat, group, group.equal, long.equal = NULL, group.partial = NULL) {
     result <- semTools::measEq.syntax(
       configural.model = model,
       data = data,
@@ -16,6 +16,7 @@ easy_invariance <- function(model, data, estimator, ordered, ID.cat, group, leve
       group = group,
       group.equal = group.equal,
       long.equal = long.equal,
+      group.partial = group.partial,
       return.fit = TRUE
     )
     return(result)
@@ -27,15 +28,15 @@ easy_invariance <- function(model, data, estimator, ordered, ID.cat, group, leve
   # Ejecutar las diferentes pruebas de invarianza según los niveles proporcionados
   for (level in levels_of_invariance) {
     if (level == "configural") {
-      results$data_configural <- run_invariance(model, data, estimator, ordered, ID.cat, group, "configural")
+      results$data_configural <- run_invariance(model, data, estimator, ordered, ID.cat, group, "configural", group.partial = group.partial)
     } else if (level == "threshold") {
-      results$data_threshold <- run_invariance(model, data, estimator, ordered, ID.cat, group, "thresholds", "thresholds")
+      results$data_threshold <- run_invariance(model, data, estimator, ordered, ID.cat, group, "thresholds", "thresholds", group.partial = group.partial)
     } else if (level == "metric") {
-      results$data_metric <- run_invariance(model, data, estimator, ordered, ID.cat, group, c("thresholds", "loadings"), c("thresholds", "loadings"))
+      results$data_metric <- run_invariance(model, data, estimator, ordered, ID.cat, group, c("thresholds", "loadings"), c("thresholds", "loadings"), group.partial = group.partial)
     } else if (level == "scalar") {
-      results$data_scalar <- run_invariance(model, data, estimator, ordered, ID.cat, group, c("thresholds", "loadings", "intercepts"), c("thresholds", "loadings", "intercepts"))
+      results$data_scalar <- run_invariance(model, data, estimator, ordered, ID.cat, group, c("thresholds", "loadings", "intercepts"), c("thresholds", "loadings", "intercepts"), group.partial = group.partial)
     } else if (level == "strict") {
-      results$data_strict <- run_invariance(model, data, estimator, ordered, ID.cat, group, c("thresholds", "loadings", "intercepts", "residuals"), c("thresholds", "loadings", "intercepts", "residuals"))
+      results$data_strict <- run_invariance(model, data, estimator, ordered, ID.cat, group, c("thresholds", "loadings", "intercepts", "residuals"), c("thresholds", "loadings", "intercepts", "residuals"), group.partial = group.partial)
     }
   }
 
@@ -84,6 +85,13 @@ easy_invariance <- function(model, data, estimator, ordered, ID.cat, group, leve
   # Renombrar las columnas
   colnames(combined_data) <- c("Model", "χ²(df)", "Δχ²", "Δdf", "p", "CFI", "RMSEA", "ΔCFI", "ΔRMSEA")
 
-  # Retornar el dataframe combinado
-  return(combined_data)
+  # Retornar el dataframe combinado y los resultados individuales
+  return(list(
+    combined_data = combined_data,
+    data_configural = results$data_configural,
+    data_threshold = results$data_threshold,
+    data_metric = results$data_metric,
+    data_scalar = results$data_scalar,
+    data_strict = results$data_strict
+  ))
 }
