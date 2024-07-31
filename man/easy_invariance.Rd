@@ -34,7 +34,17 @@ A dataframe containing the model fit indices and statistical terms for each leve
 }
 
 \examples{
-# Example usage with a sample dataset and model
+# You install these libraries in this way
+if (!require("remotes")) {
+  install.packages("remotes")
+}
+remotes::install_github("simsem/semTools/semTools")
+remotes::install_github("TDJorgensen/lavaan.mi")
+
+# You load the following libraries
+library(psych)
+library(semTools)
+library(lavaan.mi)
 
 # Define the model
 model_original <- "F1 =~ A1+A2+A3+A4+A5
@@ -45,7 +55,7 @@ model_original <- "F1 =~ A1+A2+A3+A4+A5
 "
 
 # Example dataset
-big5 <- as_tibble(psych::bfi)
+big5 <- as_tibble(bfi)
 big5 <- na.omit(big5)
 big5 <- select(big5, -education, -age)
 big5 <- slice(big5, 1:500)
