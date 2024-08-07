@@ -3,8 +3,8 @@ Version: 1.0.0
 Date: 2024-01-27
 Title: Psychometric and Statistical Analysis Tools
 Encoding: UTF-8
-Author: Jose Ventura <jventuraleon@gmail.com>
-Maintainer: Jose Ventura <jventuraleon@gmail.com>
+Author: José Ventura-León <jventuraleon@gmail.com>
+Maintainer: José Ventura-León <jventuraleon@gmail.com>
 Depends: R (>= 3.6.0)
 Imports: tidyverse, lavaan, psych, stringr, broom, dplyr, tidyr, ggplot2, reshape2, gridExtra, gtable
 Description: PsyMetricTools is a comprehensive package designed for psychometric and statistical analysis in social sciences. It includes functions for data preprocessing, factor analysis, reliability testing, descriptive statistics, visualization of Likert-scale items, and handling multi-class imbalances. The package facilitates advanced data analysis tasks commonly encountered in psychological and educational research.
