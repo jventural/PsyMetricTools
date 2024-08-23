@@ -5,7 +5,7 @@ Table_fit_index <- function(resultados) {
       # Convertir los resultados de bondades de ajuste en un tibble
       bondades_ajuste <- resultados$bondades_ajuste %>%
         as_tibble() %>%
-        tibble::rownames_to_column("Model")
+        tibble::rownames_to_column("Model") %>% select(-wrmr)
 
       # Convertir los resultados de fiabilidad en un tibble
       fiabilidad <- resultados$fiabilidad %>%
