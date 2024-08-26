@@ -88,10 +88,10 @@ plot_cfa_stability2 <- function(resultados,
           axis.text.y = element_text(size = ylab_size))
 
   # Combinar todos los gráficos en una figura
-  figure3 <- suppressMessages(suppressWarnings(ggarrange(b1, b2, b3, b4, b5, b6,
+  figure4 <- suppressMessages(suppressWarnings(ggarrange(b1, b2, b3, b4, b5, b6,
                                                          labels = c("A", "B", "C", "D", "E", "F"),
-                                                         ncol = 3, nrow = 2,
-                                                         label_size = label_size)))
+                                                         ncol = 3, nrow = 2)))
 
-  return(figure3)
+  return(figure4)
+
 }
