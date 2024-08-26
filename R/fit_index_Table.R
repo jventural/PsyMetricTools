@@ -1,4 +1,4 @@
-Table_fit_index <- function(resultados) {
+fit_index_Table <- function(resultados) {
   # Capturar y suprimir mensajes temporales durante la ejecución del código
   suppressMessages({
     suppressWarnings({
@@ -36,3 +36,4 @@ Table_fit_index <- function(resultados) {
   # Retornar el resultado final
   return(resultado_final)
 }
+
