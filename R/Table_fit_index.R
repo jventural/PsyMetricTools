@@ -5,14 +5,18 @@ Table_fit_index <- function(resultados) {
       # Convertir los resultados de bondades de ajuste en un tibble
       bondades_ajuste <- resultados$bondades_ajuste %>%
         as_tibble() %>%
-        tibble::rownames_to_column("Model") %>% select(-wrmr)
+        tibble::rownames_to_column("Model") %>%
+        select(-wrmr)
 
       # Convertir los resultados de fiabilidad en un tibble
       fiabilidad <- resultados$fiabilidad %>%
-        map_df(~ tibble(ω = .), .id = "Model") %>% select(ω)
+        map_dfr(~ as_tibble(as.data.frame(t(as.numeric(.)))), .id = "Model") %>%
+        rename_with(~ gsub("^V", "F", .x)) %>%
+        rename_with(~ paste0("ω_", .), -Model) %>%
+        mutate(Model = row_number()) %>% mutate(Model = as.character(Model))
 
       # Unir los dos tibbles por la columna "Model"
-      resultado_final <- bind_cols(bondades_ajuste, fiabilidad)
+      resultado_final <- left_join(bondades_ajuste, fiabilidad)
 
       # Renombrar las columnas para que coincidan con el formato deseado
       resultado_final <- resultado_final %>%
@@ -24,8 +28,7 @@ Table_fit_index <- function(resultados) {
           CFI = cfi.scaled,
           TLI = tli.scaled,
           RMSEA = rmsea.scaled,
-          CRMR = crmr,
-          ω = ω
+          CRMR = crmr
         )
     })
   })
