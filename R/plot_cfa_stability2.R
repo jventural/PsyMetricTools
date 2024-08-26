@@ -33,7 +33,7 @@ plot_cfa_stability2 <- function(resultados,
           axis.text.y = element_text(size = ylab_size))
 
   # Crear el gráfico de boxplot TLI
-  b2 <- ggplot(resultados, aes(x = factor(Porcentaje), y = Ttli.scaled)) +
+  b2 <- ggplot(resultados, aes(x = factor(Porcentaje), y = tli.scaled)) +
     geom_boxplot() +
     labs(x = "Percentages", y = "TLI", title = "") +
     theme_bw() +
