@@ -1,4 +1,4 @@
-plot_cfa_stability2 <- function(resultados,
+plot_cfa_stability_box <- function(resultados,
                                 y_min_cfi = 0.9, y_max_cfi = 1,
                                 y_min_tli  = 0.9, y_max_tli = 1,
                                 y_min_rmsea = 0, y_max_rmsea = 0.15,

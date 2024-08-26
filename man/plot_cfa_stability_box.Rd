@@ -1,13 +1,13 @@
-\name{plot_cfa_stability2}
-\alias{plot_cfa_stability2}
+\name{plot_cfa_stability_box}
+\alias{plot_cfa_stability_box}
 \title{Create Stability Plots for Model Fit Indices and Reliability}
 
 \description{
-The `plot_cfa_stability2` function generates a set of stability plots for key model fit indices and reliability measures, based on different percentages of sampled data. This function produces boxplots for indices such as CFI, RMSEA, SRMR, CRMR, and reliability, allowing for a visual assessment of their stability across different subsamples.
+The `plot_cfa_stability_box` function generates a set of stability plots for key model fit indices and reliability measures, based on different percentages of sampled data. This function produces boxplots for indices such as CFI, RMSEA, SRMR, CRMR, and reliability, allowing for a visual assessment of their stability across different subsamples.
 }
 
 \usage{
-plot_cfa_stability2(resultados,
+plot_cfa_stability_box(resultados,
                     y_min_cfi = 0.9, y_max_cfi = 1,
                     y_min_rmsea = 0, y_max_rmsea = 0.15,
                     y_min_srmr = 0, y_max_srmr = 0.15,
@@ -42,7 +42,7 @@ plot_cfa_stability2(resultados,
 }
 
 \details{
-The `plot_cfa_stability2` function creates boxplots for CFI, RMSEA, SRMR, CRMR, and reliability, displaying their distribution across different percentages of sampled data. The function allows customization of axis limits, break points, and label sizes, providing flexibility in how the stability of these indices is visualized.
+The `plot_cfa_stability_box` function creates boxplots for CFI, RMSEA, SRMR, CRMR, and reliability, displaying their distribution across different percentages of sampled data. The function allows customization of axis limits, break points, and label sizes, providing flexibility in how the stability of these indices is visualized.
 
 To ensure a smooth execution, the function suppresses any messages and warnings that might be generated during the plotting process. The resulting figure consists of five subplots, arranged in a 3x2 grid, each representing a different model fit index or reliability measure.
 
@@ -61,10 +61,10 @@ A ggplot object containing the following boxplots:
 }
 
 \examples{
-# Example usage of the plot_cfa_stability2 function
+# Example usage of the plot_cfa_stability_box function
 
 # Assuming `resultados` is a data frame with CFA results
-stability_plots <- plot_cfa_stability2(resultados,
+stability_plots <- plot_cfa_stability_box(resultados,
                                        y_min_cfi = 0.9, y_max_cfi = 1,
                                        y_min_rmsea = 0, y_max_rmsea = 0.15,
                                        y_min_srmr = 0, y_max_srmr = 0.15,
