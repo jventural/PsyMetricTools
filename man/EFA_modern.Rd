@@ -3,11 +3,11 @@
 \title{Perform Exploratory Factor Analysis (EFA) with Modern Specifications}
 
 \description{
-The `EFA_modern` function facilitates the execution of Exploratory Factor Analysis (EFA) using the lavaan package. It generates a model based on specified factors and items, computes model fit indices, standardizes solutions, and assesses inter-factor correlations, returning all relevant outputs in a structured list.
+The `EFA_modern` function facilitates the execution of Exploratory Factor Analysis (EFA) using the lavaan package. It generates a model based on specified factors and items, applies rotation, computes model fit indices, standardizes solutions, and assesses inter-factor correlations, returning all relevant outputs in a structured list.
 }
 
 \usage{
-EFA_modern(n_factors, n_items, name_items, data, apply_threshold, estimator = "WLSMV", exclude_items = NULL)
+EFA_modern(n_factors, n_items, name_items, data, apply_threshold, estimator = "WLSMV", exclude_items = NULL, rotation = "oblimin")
 }
 
 \arguments{
@@ -18,12 +18,13 @@ EFA_modern(n_factors, n_items, name_items, data, apply_threshold, estimator = "W
   \item{apply_threshold}{A logical value indicating whether to apply thresholds in the standardized solutions.}
   \item{estimator}{A string specifying the estimator to be used in the EFA. Default is "WLSMV".}
   \item{exclude_items}{A vector of item names or indices to be excluded from the analysis. Default is \code{NULL}, meaning no items are excluded.}
+  \item{rotation}{A string specifying the type of rotation to be applied in the EFA. Default is "oblimin".}
 }
 
 \details{
-The `EFA_modern` function is designed to simplify the process of conducting Exploratory Factor Analysis using a modern approach with the lavaan package. The function handles the generation of EFA models, applies specified exclusions, computes key fit indices, and standardizes the solution matrix. Additionally, it calculates inter-factor correlations, providing a comprehensive output that is ready for further interpretation or reporting.
+The `EFA_modern` function is designed to simplify the process of conducting Exploratory Factor Analysis using a modern approach with the lavaan package. The function handles the generation of EFA models, applies specified exclusions, computes key fit indices, applies rotation, and standardizes the solution matrix. Additionally, it calculates inter-factor correlations, providing a comprehensive output that is ready for further interpretation or reporting.
 
-The function is highly flexible, allowing the user to specify the number of factors, items, and items to be excluded. The default estimator is "WLSMV", which is appropriate for models with categorical data, but this can be modified to suit different data types.
+The function is highly flexible, allowing the user to specify the number of factors, items, items to be excluded, and the type of rotation to be applied. The default estimator is "WLSMV", which is appropriate for models with categorical data, but this can be modified to suit different data types. The default rotation method is "oblimin", but this can be changed to other methods such as "varimax" or "promax" depending on the requirements of the analysis.
 
 Messages and warnings are managed within the function to ensure clean outputs. The resulting list includes the fit indices, specifications, inter-factor correlations, and the standardized solution matrix, all of which are essential for interpreting the results of the EFA.
 }
@@ -41,8 +42,8 @@ A \code{list} containing the following elements:
 \examples{
 # Example usage of the EFA_modern function
 
-# Perform EFA with 4 factors and 21 items
-results <- EFA_modern(n_factors = 4, n_items = 21, name_items = "IS", data = df_EFA, apply_threshold = TRUE)
+# Perform EFA with 4 factors, 21 items, and default oblimin rotation
+results <- EFA_modern(n_factors = 4, n_items = 21, name_items = "IS", data = df_EFA, apply_threshold = TRUE, rotation = "oblimin")
 
 # Access the model fit indices
 Bondades_Original <- results$Bondades_Original

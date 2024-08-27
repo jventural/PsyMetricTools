@@ -1,11 +1,19 @@
-EFA_modern <- function(n_factors, n_items, name_items, data, apply_threshold, estimator = "WLSMV", exclude_items = NULL) {
+EFA_modern <- function(n_factors,
+                       n_items,
+                       name_items,
+                       data,
+                       apply_threshold,
+                       estimator = "WLSMV",
+                       rotation = "oblimin",
+                       exclude_items = NULL) {
   library(lavaan)
   library(dplyr)
+
   # Generar modelo para lavaan exploratorio
   modelos <- generate_modelos(n_factors = n_factors, n_items = n_items, name_items = name_items, exclude_items = exclude_items)
 
-  # Especificación para lavaan exploratorio
-  Specifications <- specification_models(modelos, data = data, estimator = estimator)
+  # Especificación para lavaan exploratorio con rotación
+  Specifications <- specification_models(modelos, data = data, estimator = estimator, rotation = rotation)
 
   # Bondades de ajuste para lavaan exploratorio
   Bondades_Original <- extract_fit_measures(Specifications)
