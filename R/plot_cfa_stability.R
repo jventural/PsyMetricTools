@@ -1,8 +1,10 @@
-plot_cfa_stability <- function(resultados, num_factors = 3, y_min_cfi = 0.9, y_max_cfi = 1,
+plot_cfa_stability <- function(resultados, num_factors = 3,
+                                y_min_omega = 0.7, y_max_omega = 1, y_breaks_omega = 0.05,
+                                y_min_cfi = 0.9, y_max_cfi = 1,
                                 y_min_tli = 0.9, y_max_tli = 1, y_min_rmsea = 0, y_max_rmsea = 0.15,
                                 y_min_srmr = 0, y_max_srmr = 0.15, y_min_crmr = 0, y_max_crmr = 0.15,
                                 y_min_reliability = 0.5, y_max_reliability = 1,
-                                y_breaks = 0.01, y_breaks_reliability = 0.05,
+                                y_breaks_comparative = 0.02, y_breaks_absolutes = 0.05,
                                 hline_color = "red", xlab_size = 12, ylab_size = 12)
 {
   library(tidyverse)
@@ -19,7 +21,7 @@ plot_cfa_stability <- function(resultados, num_factors = 3, y_min_cfi = 0.9, y_m
     geom_line() +
     geom_point() +
     labs(x = "Percentage", y = "CFI") +
-    scale_y_continuous(limits = c(y_min_cfi, y_max_cfi), breaks = seq(y_min_cfi, y_max_cfi, y_breaks)) +
+    scale_y_continuous(limits = c(y_min_cfi, y_max_cfi), breaks = seq(y_min_cfi, y_max_cfi, y_breaks_comparative)) +
     geom_hline(yintercept = 0.95, linetype = "solid", color = hline_color, size = 0.5) +
     scale_x_reverse(breaks = seq(90, 30, -10)) +
     theme_minimal() +
@@ -35,7 +37,7 @@ plot_cfa_stability <- function(resultados, num_factors = 3, y_min_cfi = 0.9, y_m
     geom_line() +
     geom_point() +
     labs(x = "Percentage", y = "TLI") +
-    scale_y_continuous(limits = c(y_min_tli, y_max_tli), breaks = seq(y_min_tli, y_max_tli, y_breaks)) +
+    scale_y_continuous(limits = c(y_min_tli, y_max_tli), breaks = seq(y_min_tli, y_max_tli, y_breaks_comparative)) +
     geom_hline(yintercept = 0.95, linetype = "solid", color = hline_color, size = 0.5) +
     scale_x_reverse(breaks = seq(90, 30, -10)) +
     theme_minimal() +
@@ -51,7 +53,7 @@ plot_cfa_stability <- function(resultados, num_factors = 3, y_min_cfi = 0.9, y_m
     geom_line() +
     geom_point() +
     labs(x = "Percentage", y = "RMSEA") +
-    scale_y_continuous(limits = c(y_min_rmsea, y_max_rmsea), breaks = seq(y_min_rmsea, y_max_rmsea, y_breaks)) +
+    scale_y_continuous(limits = c(y_min_rmsea, y_max_rmsea), breaks = seq(y_min_rmsea, y_max_rmsea, y_breaks_absolutes)) +
     geom_hline(yintercept = 0.08, linetype = "solid", color = hline_color, size = 0.5) +
     scale_x_reverse(breaks = seq(90, 30, -10)) +
     theme_minimal() +
@@ -67,7 +69,7 @@ plot_cfa_stability <- function(resultados, num_factors = 3, y_min_cfi = 0.9, y_m
     geom_line() +
     geom_point() +
     labs(x = "Percentage", y = "SRMR") +
-    scale_y_continuous(limits = c(y_min_srmr, y_max_srmr), breaks = seq(y_min_srmr, y_max_srmr, y_breaks)) +
+    scale_y_continuous(limits = c(y_min_srmr, y_max_srmr), breaks = seq(y_min_srmr, y_max_srmr, y_breaks_absolutes)) +
     geom_hline(yintercept = 0.06, linetype = "solid", color = hline_color, size = 0.5) +
     scale_x_reverse(breaks = seq(90, 30, -10)) +
     theme_minimal() +
@@ -83,7 +85,7 @@ plot_cfa_stability <- function(resultados, num_factors = 3, y_min_cfi = 0.9, y_m
     geom_line() +
     geom_point() +
     labs(x = "Percentage", y = "CRMR") +
-    scale_y_continuous(limits = c(y_min_crmr, y_max_crmr), breaks = seq(y_min_crmr, y_max_crmr, y_breaks)) +
+    scale_y_continuous(limits = c(y_min_crmr, y_max_crmr), breaks = seq(y_min_crmr, y_max_crmr, y_breaks_absolutes)) +
     geom_hline(yintercept = 0.05, linetype = "solid", color = hline_color, size = 0.5) +
     scale_x_reverse(breaks = seq(90, 30, -10)) +
     theme_minimal() +
@@ -101,9 +103,10 @@ plot_cfa_stability <- function(resultados, num_factors = 3, y_min_cfi = 0.9, y_m
 
   # Crear el gráfico para la cantidad de factores especificada
   p9 <- ggplot(summary_long, aes(x = Porcentaje, group = 1)) +
-    geom_hline(yintercept = 0.70, linetype = "solid", color = "red", size = 0.5) +
+    geom_hline(yintercept = 0.70, linetype = "solid", color = hline_color, size = 0.5) +
     scale_x_reverse(breaks = seq(90, 30, -10)) +
     labs(x = "Percentage", y = "ω values", shape = "Variables", linetype = "Variables") +
+    scale_y_continuous(limits = c(y_min_omega, y_max_omega), breaks = seq(y_min_omega, y_max_omega, y_breaks_omega)) +
     theme_minimal()
 
   for (i in 1:num_factors) {
