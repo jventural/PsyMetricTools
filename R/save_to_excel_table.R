@@ -1,4 +1,4 @@
-save_to_excel_table <- function(file_name, ...) {
+save_to_excel_table <- function(file_name, ..., na.string = "") {
   if (!require(openxlsx)) install.packages("openxlsx")
   # Crear un objeto Workbook
   wb <- createWorkbook()
@@ -17,7 +17,7 @@ save_to_excel_table <- function(file_name, ...) {
   # Añadir cada tabla como una hoja diferente
   for (i in seq_along(tables)) {
     addWorksheet(wb, table_names[i])
-    writeData(wb, sheet = table_names[i], tables[[i]])
+    writeData(wb, sheet = table_names[i], tables[[i]], na.string = na.string)
   }
 
   # Guardar el workbook en un archivo Excel
