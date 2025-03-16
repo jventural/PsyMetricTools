@@ -7,7 +7,7 @@ This enhanced function generates a comprehensive graphical display of bootstrap 
 }
 
 \usage{
-boot_cfa_plot_and_save(df, save = TRUE, dpi = 600,
+boot_cfa_plot(df, save = TRUE, dpi = 600,
                        omega_ymin_annot = NULL, omega_ymax_annot = NULL,
                        comp_ymin_annot = NULL, comp_ymax_annot = NULL,
                        abs_ymin_annot = NULL, abs_ymax_annot = NULL,
@@ -39,7 +39,7 @@ A singular graphical object encapsulating the combined plots of omega reliabilit
 
 \examples{
 # Assuming 'df' is your dataset with CFA results
-figure <- boot_cfa_plot_and_save(df,
+figure <- boot_cfa_plot(df,
                                  save = TRUE,
                                  dpi = 600,
                                  omega_ymin_annot = NULL,
