@@ -8,10 +8,10 @@ This enhanced function generates a comprehensive graphical display of bootstrap 
 
 \usage{
 boot_cfa_plot(df, save = TRUE, dpi = 600,
-                       omega_ymin_annot = NULL, omega_ymax_annot = NULL,
-                       comp_ymin_annot = NULL, comp_ymax_annot = NULL,
-                       abs_ymin_annot = NULL, abs_ymax_annot = NULL,
-                       palette = "grey")
+              omega_ymin_annot = NULL, omega_ymax_annot = NULL,
+              comp_ymin_annot = NULL, comp_ymax_annot = NULL,
+              abs_ymin_annot = NULL, abs_ymax_annot = NULL,
+              palette = "grey", rename_omega = NULL)
 }
 
 \arguments{
@@ -25,12 +25,15 @@ boot_cfa_plot(df, save = TRUE, dpi = 600,
   \item{abs_ymin_annot}{Optional. Minimum y-axis limit for the absolute fit measures plot annotation.}
   \item{abs_ymax_annot}{Optional. Maximum y-axis limit for the absolute fit measures plot annotation.}
   \item{palette}{Character string specifying the color palette for the boxplots. Accepts a single color name (e.g., \code{"red"}), a hex code (e.g., \code{"#FF0000"}), the keyword \code{"grey"} for a grayscale, or one of the palette names provided by the \pkg{wesanderson} package (e.g., \code{"Zissou1"}). Defaults to \code{"grey"}.}
+  \item{rename_omega}{Optional. A named character vector for renaming the omega reliability coefficients. The names should correspond to the original omega labels (e.g., \code{"ω1"}, \code{"ω2"}), and the values to the desired new names.}
 }
 
 \details{
 Upon invocation, the function methodically calls upon the three designated plotting functions to generate visuals corresponding to distinct aspects of the CFA results: omega reliability coefficients, CFI and TLI measures, and absolute fit measures (RMSEA, SRMR). These visuals are subsequently merged into a singular figure comprising three panels, labeled A, B, and C, correlating to the omega reliability plot, the comparative fit plot, and the absolute fit plot, respectively. This amalgamated visual representation facilitates a concurrent review of diverse model evaluation metrics, providing comprehensive insights into the model’s consistency, fitting accuracy, and overall suitability. If the \code{save} parameter is set to \code{TRUE}, the combined figure is saved to a JPEG file using specified \code{dpi} and default dimensions, otherwise, it is returned for display in the R console.
 
 Additionally, the \code{palette} argument enables customization of the boxplot colors. Users can select a single color, a grayscale, or one of the palettes available in the \pkg{wesanderson} package, allowing the resulting plots to be tailored to various stylistic or publication requirements.
+
+The optional \code{rename_omega} argument permits users to rename omega coefficients (e.g., \code{"ω1"}, \code{"ω2"}, etc.) in both the reliability plot and the corresponding summary table, providing a personalized label for each coefficient.
 }
 
 \value{
@@ -40,15 +43,16 @@ A singular graphical object encapsulating the combined plots of omega reliabilit
 \examples{
 # Assuming 'df' is your dataset with CFA results
 figure <- boot_cfa_plot(df,
-                                 save = TRUE,
-                                 dpi = 600,
-                                 omega_ymin_annot = NULL,
-                                 omega_ymax_annot = NULL,
-                                 comp_ymin_annot = NULL,
-                                 comp_ymax_annot = NULL,
-                                 abs_ymin_annot = NULL,
-                                 abs_ymax_annot = NULL,
-                                 palette = "Zissou1")
+                        save = TRUE,
+                        dpi = 600,
+                        omega_ymin_annot = NULL,
+                        omega_ymax_annot = NULL,
+                        comp_ymin_annot = NULL,
+                        comp_ymax_annot = NULL,
+                        abs_ymin_annot = NULL,
+                        abs_ymax_annot = NULL,
+                        palette = "Zissou1",
+                        rename_omega = c("ω1" = "Omega Calidad", "ω2" = "Omega Consistencia"))
 
 # To display the combined figure (if not saved)
 if (!save) {

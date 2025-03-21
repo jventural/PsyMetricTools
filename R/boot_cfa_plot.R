@@ -1,8 +1,9 @@
 boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
-                           omega_ymin_annot = NULL, omega_ymax_annot = NULL,
-                           comp_ymin_annot = NULL, comp_ymax_annot = NULL,
-                           abs_ymin_annot = NULL, abs_ymax_annot = NULL,
-                           palette = "grey") {
+                          omega_ymin_annot = NULL, omega_ymax_annot = NULL,
+                          comp_ymin_annot = NULL, comp_ymax_annot = NULL,
+                          abs_ymin_annot = NULL, abs_ymax_annot = NULL,
+                          palette = "grey",
+                          rename_omega = NULL) {  # Nuevo argumento para renombrar los omega
   suppressWarnings({
     #---------------------------------------------------------------------------
     # Cargar librerías necesarias
@@ -21,48 +22,32 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
     # 1. Función que define la paleta para los boxplots
     #---------------------------------------------------------------------------
     get_palette <- function(palette, n) {
-      # 1) Si 'palette' es el nombre de una paleta de wesanderson (ej. "Zissou1"),
-      #    usamos esa paleta de manera "discrete".
       if (palette %in% names(wesanderson::wes_palettes)) {
         return(wes_palette(palette, n, type = "discrete"))
-      }
-      # 2) Si es "grey", emulamos la escala de grises
-      else if (palette == "grey") {
+      } else if (palette == "grey") {
         return(gray.colors(n, start = 0.5, end = 0.9))
-      }
-      # 3) Si no, asumimos que es un color simple (p. ej. "red", "blue", "#00FF00", etc.)
-      #    y lo repetimos para las n categorías.
-      else {
+      } else {
         return(rep(palette, n))
       }
     }
 
     #---------------------------------------------------------------------------
     # 2. Función que define el color del encabezado de la tabla
-    #    - Si "grey", se usa gris claro.
-    #    - Si es paleta de wesanderson, se usa el primer color de esa paleta.
-    #    - Si es un color simple, se usa tal cual.
     #---------------------------------------------------------------------------
     get_header_color <- function(palette) {
       if (palette == "grey") {
         return("grey85")
       } else if (palette %in% names(wesanderson::wes_palettes)) {
-        # Toma el primer color de la paleta de Wes Anderson
         return(wes_palette(palette, 1, type = "discrete"))
       } else {
-        # Asumimos que es un color simple
         return(palette)
       }
     }
 
     #---------------------------------------------------------------------------
     # 3. Función auxiliar para añadir líneas horizontales en la tabla:
-    #    - Encima de la primera fila
-    #    - Debajo del encabezado (entre fila 1 y fila 2)
-    #    - Abajo de todo (última fila)
     #---------------------------------------------------------------------------
     add_horizontal_borders <- function(tbl) {
-      # Línea horizontal superior (arriba de la fila 1)
       tbl <- gtable::gtable_add_grob(
         tbl,
         grobs = grid::segmentsGrob(
@@ -72,8 +57,6 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
         ),
         t = 1, l = 1, r = ncol(tbl)
       )
-
-      # Línea horizontal justo debajo del encabezado (fila 2)
       if (nrow(tbl) > 1) {
         tbl <- gtable::gtable_add_grob(
           tbl,
@@ -85,8 +68,6 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
           t = 2, l = 1, r = ncol(tbl)
         )
       }
-
-      # Línea horizontal inferior (última fila)
       tbl <- gtable::gtable_add_grob(
         tbl,
         grobs = grid::segmentsGrob(
@@ -96,14 +77,11 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
         ),
         t = nrow(tbl), l = 1, r = ncol(tbl)
       )
-
       return(tbl)
     }
 
     #---------------------------------------------------------------------------
     # 4. Función que crea el "theme" de la tabla:
-    #    - Encabezado con color según 'palette'
-    #    - Cuerpo blanco
     #---------------------------------------------------------------------------
     make_table_theme <- function(palette) {
       header_col <- get_header_color(palette)
@@ -122,8 +100,8 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
     #---------------------------------------------------------------------------
     plot_and_table_omega <- function(df_repli,
                                      omega_ymin_annot = NULL, omega_ymax_annot = NULL,
-                                     palette = "grey") {
-
+                                     palette = "grey",
+                                     rename_omega = NULL) {
       # Generar la tabla de estadísticas de fiabilidad
       res_omega_table <- df_repli %>%
         select(starts_with("Rel")) %>%
@@ -138,7 +116,14 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
         ) %>%
         ungroup()
 
-      # Definir límites para la anotación si no se han especificado
+      # Si se especifica renombrar los omega, se aplica sobre la tabla
+      if (!is.null(rename_omega)) {
+        res_omega_table$Variable <- as.character(res_omega_table$Variable)
+        res_omega_table$Variable <- ifelse(res_omega_table$Variable %in% names(rename_omega),
+                                           rename_omega[res_omega_table$Variable],
+                                           res_omega_table$Variable)
+      }
+
       if (is.null(omega_ymin_annot)) {
         omega_ymin_annot <- max(res_omega_table$mean)
       }
@@ -151,12 +136,19 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
         pivot_longer(cols = starts_with("Rel"), names_to = "Reliability", values_to = "value") %>%
         mutate(Reliability = gsub("Rel", "ω", Reliability))
 
+      # Si se especifica renombrar, se aplica también al gráfico
+      if (!is.null(rename_omega)) {
+        data_long$Reliability <- as.character(data_long$Reliability)
+        data_long$Reliability <- ifelse(data_long$Reliability %in% names(rename_omega),
+                                        rename_omega[data_long$Reliability],
+                                        data_long$Reliability)
+      }
+
       # Crear la tabla con el tema
       table_theme <- make_table_theme(palette)
       table_omega <- gridExtra::tableGrob(res_omega_table, rows = NULL, theme = table_theme)
       table_omega <- add_horizontal_borders(table_omega)
 
-      # Número de categorías (para la paleta de boxplot)
       categories <- unique(data_long$Reliability)
 
       # Crear el gráfico de fiabilidad
@@ -185,8 +177,6 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
     Plot_and_Table_comparative <- function(df_repli,
                                            comp_ymin_annot = NULL, comp_ymax_annot = NULL,
                                            palette = "grey") {
-
-      # Generar la tabla de estadísticas para CFI y TLI
       table <- map_dfr(df_repli$fit_measures1, ~as_tibble(.)) %>%
         select(CFI, TLI) %>%
         pivot_longer(cols = everything(), names_to = "Fit", values_to = "Value") %>%
@@ -200,7 +190,6 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
         ) %>%
         ungroup()
 
-      # Si no se especifican los límites para la anotación, se calculan
       if (is.null(comp_ymin_annot) || is.null(comp_ymax_annot)) {
         min_adjusted <- min(table$min) - 0.05
         comp_ymin_annot <- min_adjusted
@@ -212,12 +201,10 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
         ymin_limit <- 0.90
       }
 
-      # Crear la tabla con el tema
       table_theme <- make_table_theme(palette)
       table_comp <- gridExtra::tableGrob(table, rows = NULL, theme = table_theme)
       table_comp <- add_horizontal_borders(table_comp)
 
-      # Datos para el boxplot
       data_plot <- map_dfr(df_repli$fit_measures1, ~as_tibble(.)) %>%
         select(CFI, TLI) %>%
         pivot_longer(cols = everything(), names_to = "Fit", values_to = "Value") %>%
@@ -225,7 +212,6 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
 
       categories <- unique(data_plot$Fit)
 
-      # Crear el gráfico de CFI y TLI
       plot <- ggplot(data_plot, aes(x = Fit, y = Value, fill = Fit)) +
         geom_boxplot(outlier.shape = 16, outlier.size = 1) +
         theme_bw() +
@@ -247,8 +233,6 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
     Plot_and_Table_absolute <- function(df_repli,
                                         abs_ymin_annot = NULL, abs_ymax_annot = NULL,
                                         palette = "grey") {
-
-      # Generar la tabla de estadísticas para RMSEA, SRMR, CRMR
       table <- map_dfr(df_repli$fit_measures1, ~as_tibble(.)) %>%
         select(RMSEA, SRMR, CRMR) %>%
         pivot_longer(cols = everything(), names_to = "Fit", values_to = "Value") %>%
@@ -262,7 +246,6 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
         ) %>%
         ungroup()
 
-      # Establecer límites para la anotación si no se especifican
       if (is.null(abs_ymin_annot)) {
         abs_ymin_annot <- 0
       }
@@ -270,12 +253,10 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
         abs_ymax_annot <- max(table$max)
       }
 
-      # Crear la tabla con el tema
       table_theme <- make_table_theme(palette)
       table_abs <- gridExtra::tableGrob(table, rows = NULL, theme = table_theme)
       table_abs <- add_horizontal_borders(table_abs)
 
-      # Datos para el boxplot
       data_plot <- map_dfr(df_repli$fit_measures1, ~as_tibble(.)) %>%
         select(RMSEA, SRMR, CRMR) %>%
         pivot_longer(cols = everything(), names_to = "Fit", values_to = "Value") %>%
@@ -283,7 +264,6 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
 
       categories <- unique(data_plot$Fit)
 
-      # Crear el gráfico de RMSEA, SRMR, CRMR
       plot <- ggplot(data_plot, aes(x = Fit, y = Value, fill = Fit)) +
         geom_boxplot(outlier.shape = 16, outlier.size = 1) +
         theme_bw() +
@@ -310,20 +290,17 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
     width    <- 22
     units    <- "cm"
 
-    # Generar los gráficos y tablas utilizando las funciones internas
-    p1 <- plot_and_table_omega(df, omega_ymin_annot, omega_ymax_annot, palette)
+    p1 <- plot_and_table_omega(df, omega_ymin_annot, omega_ymax_annot, palette, rename_omega)
     a1 <- p1$plot
     p2 <- Plot_and_Table_comparative(df, comp_ymin_annot, comp_ymax_annot, palette)
     a2 <- p2$plot
     p3 <- Plot_and_Table_absolute(df, abs_ymin_annot, abs_ymax_annot, palette)
     a3 <- p3$plot
 
-    # Combinar los gráficos en una única figura
     figure <- ggarrange(a1, a2, a3,
                         labels = c("A", "B", "C"),
                         ncol = 3, nrow = 1)
 
-    # Guardar la figura si se indica
     if (save) {
       ggsave(filename = filename, plot = figure, height = height, width = width, dpi = dpi, units = units)
     }
