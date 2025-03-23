@@ -11,7 +11,7 @@ boot_cfa_plot(df, save = TRUE, dpi = 600,
               omega_ymin_annot = NULL, omega_ymax_annot = NULL,
               comp_ymin_annot = NULL, comp_ymax_annot = NULL,
               abs_ymin_annot = NULL, abs_ymax_annot = NULL,
-              palette = "grey", rename_omega = NULL)
+              palette = "grey")
 }
 
 \arguments{
@@ -25,7 +25,6 @@ boot_cfa_plot(df, save = TRUE, dpi = 600,
   \item{abs_ymin_annot}{Optional. Minimum y-axis limit for the absolute fit measures plot annotation.}
   \item{abs_ymax_annot}{Optional. Maximum y-axis limit for the absolute fit measures plot annotation.}
   \item{palette}{Character string specifying the color palette for the boxplots. Accepts a single color name (e.g., \code{"red"}), a hex code (e.g., \code{"#FF0000"}), the keyword \code{"grey"} for a grayscale, or one of the palette names provided by the \pkg{wesanderson} package (e.g., \code{"Zissou1"}). Defaults to \code{"grey"}.}
-  \item{rename_omega}{Optional. A named character vector for renaming the omega reliability coefficients. The names should correspond to the original omega labels (e.g., \code{"ω1"}, \code{"ω2"}), and the values to the desired new names.}
 }
 
 \details{
@@ -51,8 +50,7 @@ figure <- boot_cfa_plot(df,
                         comp_ymax_annot = NULL,
                         abs_ymin_annot = NULL,
                         abs_ymax_annot = NULL,
-                        palette = "Zissou1",
-                        rename_omega = c("ω1" = "Omega Calidad", "ω2" = "Omega Consistencia"))
+                        palette = "Zissou1")
 
 # To display the combined figure (if not saved)
 if (!save) {
