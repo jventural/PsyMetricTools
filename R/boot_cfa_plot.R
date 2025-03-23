@@ -1,9 +1,8 @@
 boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
-                          omega_ymin_annot = NULL, omega_ymax_annot = NULL,
-                          comp_ymin_annot = NULL, comp_ymax_annot = NULL,
-                          abs_ymin_annot = NULL, abs_ymax_annot = NULL,
-                          palette = "grey",
-                          rename_omega = NULL) {  # Nuevo argumento para renombrar los omega
+                           omega_ymin_annot = NULL, omega_ymax_annot = NULL,
+                           comp_ymin_annot = NULL, comp_ymax_annot = NULL,
+                           abs_ymin_annot = NULL, abs_ymax_annot = NULL,
+                           palette = "grey") {
   suppressWarnings({
     #---------------------------------------------------------------------------
     # Cargar librerías necesarias
@@ -100,29 +99,25 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
     #---------------------------------------------------------------------------
     plot_and_table_omega <- function(df_repli,
                                      omega_ymin_annot = NULL, omega_ymax_annot = NULL,
-                                     palette = "grey",
-                                     rename_omega = NULL) {
-      # Generar la tabla de estadísticas de fiabilidad
+                                     palette = "grey") {
+      # Generar la tabla de estadísticas de fiabilidad utilizando las columnas
+      # que están después de "fit_measures1" y acortando los nombres a 3 caracteres
       res_omega_table <- df_repli %>%
-        select(starts_with("Rel")) %>%
-        rename_with(~gsub("Rel", "ω", .)) %>%
-        pivot_longer(cols = everything(), names_to = "Variable", values_to = "Value") %>%
+        select(-(1:which(names(.) == "fit_measures1"))) %>%
+        pivot_longer(
+          cols = everything(),
+          names_to = "Variable",
+          values_to = "Value"
+        ) %>%
+        mutate(Variable = substr(Variable, 1, 3)) %>%
         group_by(Variable) %>%
         summarise(
           mean = round(mean(Value, na.rm = TRUE), 2),
-          sd = round(sd(Value, na.rm = TRUE), 2),
-          min = round(min(Value, na.rm = TRUE), 2),
-          max = round(max(Value, na.rm = TRUE), 2)
+          sd   = round(sd(Value, na.rm = TRUE), 2),
+          min  = round(min(Value, na.rm = TRUE), 2),
+          max  = round(max(Value, na.rm = TRUE), 2)
         ) %>%
         ungroup()
-
-      # Si se especifica renombrar los omega, se aplica sobre la tabla
-      if (!is.null(rename_omega)) {
-        res_omega_table$Variable <- as.character(res_omega_table$Variable)
-        res_omega_table$Variable <- ifelse(res_omega_table$Variable %in% names(rename_omega),
-                                           rename_omega[res_omega_table$Variable],
-                                           res_omega_table$Variable)
-      }
 
       if (is.null(omega_ymin_annot)) {
         omega_ymin_annot <- max(res_omega_table$mean)
@@ -131,18 +126,15 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
         omega_ymax_annot <- 0.92
       }
 
-      # Preparar datos para el gráfico
+      # Preparar los datos para el gráfico de forma similar:
       data_long <- df_repli %>%
-        pivot_longer(cols = starts_with("Rel"), names_to = "Reliability", values_to = "value") %>%
-        mutate(Reliability = gsub("Rel", "ω", Reliability))
-
-      # Si se especifica renombrar, se aplica también al gráfico
-      if (!is.null(rename_omega)) {
-        data_long$Reliability <- as.character(data_long$Reliability)
-        data_long$Reliability <- ifelse(data_long$Reliability %in% names(rename_omega),
-                                        rename_omega[data_long$Reliability],
-                                        data_long$Reliability)
-      }
+        select(-(1:which(names(.) == "fit_measures1"))) %>%
+        pivot_longer(
+          cols = everything(),
+          names_to = "Reliability",
+          values_to = "value"
+        ) %>%
+        mutate(Reliability = substr(Reliability, 1, 3))
 
       # Crear la tabla con el tema
       table_theme <- make_table_theme(palette)
@@ -170,6 +162,7 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
 
       return(list(table = res_omega_table, plot = plot))
     }
+
 
     #---------------------------------------------------------------------------
     # 6. Función interna: Plot_and_Table_comparative (CFI, TLI)
@@ -290,7 +283,7 @@ boot_cfa_plot <- function(df, save = TRUE, dpi = 600,
     width    <- 22
     units    <- "cm"
 
-    p1 <- plot_and_table_omega(df, omega_ymin_annot, omega_ymax_annot, palette, rename_omega)
+    p1 <- plot_and_table_omega(df, omega_ymin_annot, omega_ymax_annot, palette)
     a1 <- p1$plot
     p2 <- Plot_and_Table_comparative(df, comp_ymin_annot, comp_ymax_annot, palette)
     a2 <- p2$plot
