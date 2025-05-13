@@ -4,6 +4,7 @@ combine_likert_sem <- function(
 
     ## Parámetros de semPaths
     sem_args    = list(),
+    nodeLabels  = NULL,    # ahora configurable por el usuario
 
     ## Disposición
     ncol        = 2,
@@ -27,30 +28,30 @@ combine_likert_sem <- function(
 
   # 2) Prepara args para semPaths()
   defaults <- list(
-    object             = fit_sem,
-    whatLabels         = "std",
-    rotation           = 2,
-    curve              = 1.5,
-    optimizeLatRes     = FALSE,
-    residuals          = FALSE,
-    edge.label.cex     = 1.2,
-    nCharEdges         = 0.9,
-    edge.label.position= 0.5,
-    edge.label.font    = 0.2,
-    thresholds         = FALSE,
-    intercepts         = FALSE,
-    curvature          = 1.5,
-    curvePivot         = FALSE,
-    sizeMan            = 8,
-    sizeMan2           = 4,
-    sizeLat            = 10,
-    sizeLat2           = 10,
-    esize              = 3,
-    asize              = 3,
-    nodeLabels         = c(paste0("AGPS", c(1,3,4,6,7)), "Goal"),
-    mar                = c(1.5, 22, 1.5, 25),
-    label.prop         = 0.7,
-    style              = "lisrel"
+    object              = fit_sem,
+    whatLabels          = "std",
+    rotation            = 2,
+    curve               = 1.5,
+    optimizeLatRes      = FALSE,
+    residuals           = FALSE,
+    edge.label.cex      = 1.2,
+    nCharEdges          = 0.9,
+    edge.label.position = 0.5,
+    edge.label.font     = 0.2,
+    thresholds          = FALSE,
+    intercepts          = FALSE,
+    curvature           = 1.5,
+    curvePivot          = FALSE,
+    sizeMan             = 8,
+    sizeMan2            = 4,
+    sizeLat             = 10,
+    sizeLat2            = 10,
+    esize               = 3,
+    asize               = 3,
+    nodeLabels          = nodeLabels,   # uso del argumento
+    mar                 = c(1.5, 22, 1.5, 25),
+    label.prop          = 0.7,
+    style               = "lisrel"
   )
   sem_plot_args <- modifyList(defaults, sem_args)
 
