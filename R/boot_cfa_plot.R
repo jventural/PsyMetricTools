@@ -1,29 +1,29 @@
-# Definir una versión de boot_cfa_plot que no dependa de ggpubr
 boot_cfa_plot <- function(df,
-                           save = TRUE,
-                           path = "Plot_boot_cfa.jpg",
-                           dpi = 600,
-                           omega_ymin_annot = NULL,
-                           omega_ymax_annot = NULL,
-                           comp_ymin_annot = NULL,
-                           comp_ymax_annot = NULL,
-                           abs_ymin_annot = NULL,
-                           abs_ymax_annot = NULL,
-                           palette = "grey",
-                           ...) {
+                          save = TRUE,
+                          path = "Plot_boot_cfa.jpg",
+                          dpi = 600,
+                          omega_ymin_annot = NULL,
+                          omega_ymax_annot = NULL,
+                          comp_ymin_annot = NULL,
+                          comp_ymax_annot = NULL,
+                          abs_ymin_annot = NULL,
+                          abs_ymax_annot = NULL,
+                          palette = "grey",
+                          ...) {
   suppressWarnings({
     #------------------------------------------------------------
-    # 0. Cargar librerías necesarias (sin ggpubr)
+    # 0. Cargar librerías necesarias (sin ggpubr; sí ggplot2 y patchwork)
     #------------------------------------------------------------
     library(ggplot2)
     library(tidyr)
     library(dplyr)
-    library(gridExtra)
-    library(gtable)
-    # library(ggpubr)   # <-- OMITIDO en esta versión para Posit Connect
     library(wesanderson)
     library(purrr)
     library(reshape2)
+    if (!requireNamespace("patchwork", quietly = TRUE)) {
+      stop("Para combinar los paneles, instale el paquete 'patchwork'.")
+    }
+    library(patchwork)
 
     #------------------------------------------------------------
     # 1. Paleta de colores
@@ -103,7 +103,6 @@ boot_cfa_plot <- function(df,
     # 5. Panel A: Omega (fiabilidad)
     #------------------------------------------------------------
     plot_and_table_omega <- function(df_repli, ymin_ann, ymax_ann, pal) {
-      # Extraer solo columnas numéricas antes de fit_measures1 (si existe)
       if ("fit_measures1" %in% names(df_repli)) {
         idx <- which(names(df_repli) == "fit_measures1")
         dat <- df_repli %>% select(-(1:idx))
@@ -111,7 +110,6 @@ boot_cfa_plot <- function(df,
         dat <- df_repli %>% select(where(is.numeric))
       }
 
-      # Tabla de resumen
       res_tbl <- dat %>%
         pivot_longer(everything(), names_to = "Variable", values_to = "Value") %>%
         mutate(Variable = substr(Variable, 1, 3)) %>%
@@ -247,15 +245,12 @@ boot_cfa_plot <- function(df,
     c <- plot_and_table_comp(df, comp_ymin_annot, comp_ymax_annot, palette)
     a <- plot_and_table_abs(df, abs_ymin_annot, abs_ymax_annot, palette)
 
-    # Usar grid.arrange en lugar de ggarrange (para no depender de ggpubr)
-    combined <- gridExtra::grid.arrange(
-      o$plot, c$plot, a$plot,
-      ncol = 3,
-      top = grid::textGrob("Bootstrap CFA Results", gp = grid::gpar(fontsize = 16, fontface = "bold"))
-    )
+    # Combinar con patchwork (devuelve un objeto ggplot)
+    combined <- (o$plot | c$plot | a$plot) +
+      plot_layout(ncol = 3) +
+      plot_annotation(title = "Bootstrap CFA Results")
 
     if (save) {
-      # Guardar la figura completa usando ggsave sobre un objeto gtable
       ggsave(
         filename = path,
         plot     = combined,
