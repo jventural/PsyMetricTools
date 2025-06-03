@@ -1,25 +1,26 @@
+# Definir una versión de boot_cfa_plot que no dependa de ggpubr
 boot_cfa_plot <- function(df,
-                          save = TRUE,
-                          path = "Plot_boot_cfa.jpg",
-                          dpi = 600,
-                          omega_ymin_annot = NULL,
-                          omega_ymax_annot = NULL,
-                          comp_ymin_annot = NULL,
-                          comp_ymax_annot = NULL,
-                          abs_ymin_annot = NULL,
-                          abs_ymax_annot = NULL,
-                          palette = "grey",
-                          ...) {
+                           save = TRUE,
+                           path = "Plot_boot_cfa.jpg",
+                           dpi = 600,
+                           omega_ymin_annot = NULL,
+                           omega_ymax_annot = NULL,
+                           comp_ymin_annot = NULL,
+                           comp_ymax_annot = NULL,
+                           abs_ymin_annot = NULL,
+                           abs_ymax_annot = NULL,
+                           palette = "grey",
+                           ...) {
   suppressWarnings({
     #------------------------------------------------------------
-    # 0. Cargar librerías
+    # 0. Cargar librerías necesarias (sin ggpubr)
     #------------------------------------------------------------
     library(ggplot2)
     library(tidyr)
     library(dplyr)
     library(gridExtra)
     library(gtable)
-    library(ggpubr)
+    # library(ggpubr)   # <-- OMITIDO en esta versión para Posit Connect
     library(wesanderson)
     library(purrr)
     library(reshape2)
@@ -61,8 +62,7 @@ boot_cfa_plot <- function(df,
                                        y0 = unit(1, "npc"), y1 = unit(1, "npc"),
                                        gp = grid::gpar(lwd = 2)
                                      ),
-                                     t = 1, l = 1, r = ncol(tbl)
-      )
+                                     t = 1, l = 1, r = ncol(tbl))
       # inferior
       tbl <- gtable::gtable_add_grob(tbl,
                                      grobs = grid::segmentsGrob(
@@ -70,8 +70,7 @@ boot_cfa_plot <- function(df,
                                        y0 = unit(0, "npc"), y1 = unit(0, "npc"),
                                        gp = grid::gpar(lwd = 2)
                                      ),
-                                     t = nrow(tbl), l = 1, r = ncol(tbl)
-      )
+                                     t = nrow(tbl), l = 1, r = ncol(tbl))
       # tras encabezado
       if (nrow(tbl) > 1) {
         tbl <- gtable::gtable_add_grob(tbl,
@@ -81,8 +80,7 @@ boot_cfa_plot <- function(df,
                                          y1 = unit(1, "npc") - unit(1, "pt"),
                                          gp = grid::gpar(lwd = 1)
                                        ),
-                                       t = 2, l = 1, r = ncol(tbl)
-        )
+                                       t = 2, l = 1, r = ncol(tbl))
       }
       tbl
     }
@@ -249,18 +247,24 @@ boot_cfa_plot <- function(df,
     c <- plot_and_table_comp(df, comp_ymin_annot, comp_ymax_annot, palette)
     a <- plot_and_table_abs(df, abs_ymin_annot, abs_ymax_annot, palette)
 
-    combined <- ggarrange(o$plot, c$plot, a$plot,
-                          labels = c("A", "B", "C"),
-                          ncol = 3, nrow = 1)
+    # Usar grid.arrange en lugar de ggarrange (para no depender de ggpubr)
+    combined <- gridExtra::grid.arrange(
+      o$plot, c$plot, a$plot,
+      ncol = 3,
+      top = grid::textGrob("Bootstrap CFA Results", gp = grid::gpar(fontsize = 16, fontface = "bold"))
+    )
 
     if (save) {
-      ggsave(filename = path,
-             plot     = combined,
-             height   = 16,
-             width    = 22,
-             dpi      = dpi,
-             units    = "cm",
-             ...)
+      # Guardar la figura completa usando ggsave sobre un objeto gtable
+      ggsave(
+        filename = path,
+        plot     = combined,
+        height   = 16,
+        width    = 22,
+        dpi      = dpi,
+        units    = "cm",
+        ...
+      )
     }
 
     combined
