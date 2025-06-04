@@ -11,46 +11,37 @@ boot_cfa_plot <- function(df,
                           palette = "grey",
                           ...) {
   suppressWarnings({
-    #------------------------------------------------------------
-    # 0. Cargar librerías necesarias (sin ggpubr; sí ggplot2 y patchwork)
-    #------------------------------------------------------------
+    # 0. Cargamos solo lo imprescindible (¡no wesanderson, no patchwork!)
     library(ggplot2)
     library(tidyr)
     library(dplyr)
-    library(wesanderson)
     library(purrr)
     library(reshape2)
-    if (!requireNamespace("patchwork", quietly = TRUE)) {
-      stop("Para combinar los paneles, instale el paquete 'patchwork'.")
-    }
-    library(patchwork)
+    library(gridExtra)
+    library(gtable)
 
     #------------------------------------------------------------
-    # 1. Paleta de colores
+    # 1. Paleta de colores: usa wesanderson si existe, sino gris o rep(pal, n)
     #------------------------------------------------------------
     get_palette <- function(pal, n) {
-      # Si wesanderson está instalado Y la paleta existe, úsalo:
       if (requireNamespace("wesanderson", quietly = TRUE) &&
           pal %in% names(wesanderson::wes_palettes)) {
         wesanderson::wes_palette(pal, n, type = "discrete")
-      }
-      # Si el usuario pidió "grey", entonces escala de grises:
-      else if (identical(pal, "grey")) {
+      } else if (identical(pal, "grey")) {
         gray.colors(n, start = 0.5, end = 0.9)
-      }
-      # En cualquier otro caso, devolvemos un vector repetido del valor 'pal':
-      else {
+      } else {
         rep(pal, n)
       }
     }
 
     #------------------------------------------------------------
-    # 2. Color encabezado de tablas
+    # 2. Color de encabezado de tablas
     #------------------------------------------------------------
     get_header_color <- function(pal) {
-      if (pal == "grey") {
+      if (identical(pal, "grey")) {
         "grey85"
-      } else if (pal %in% names(wesanderson::wes_palettes)) {
+      } else if (requireNamespace("wesanderson", quietly = TRUE) &&
+                 pal %in% names(wesanderson::wes_palettes)) {
         wesanderson::wes_palette(pal, 1, type = "discrete")
       } else {
         pal
@@ -58,10 +49,9 @@ boot_cfa_plot <- function(df,
     }
 
     #------------------------------------------------------------
-    # 3. Bordes horizontales en tablas
+    # 3. Función para agregar bordes horizontales a un gtable
     #------------------------------------------------------------
     add_horizontal_borders <- function(tbl) {
-      # superior
       tbl <- gtable::gtable_add_grob(tbl,
                                      grobs = grid::segmentsGrob(
                                        x0 = unit(0, "npc"), x1 = unit(1, "npc"),
@@ -69,7 +59,6 @@ boot_cfa_plot <- function(df,
                                        gp = grid::gpar(lwd = 2)
                                      ),
                                      t = 1, l = 1, r = ncol(tbl))
-      # inferior
       tbl <- gtable::gtable_add_grob(tbl,
                                      grobs = grid::segmentsGrob(
                                        x0 = unit(0, "npc"), x1 = unit(1, "npc"),
@@ -77,7 +66,6 @@ boot_cfa_plot <- function(df,
                                        gp = grid::gpar(lwd = 2)
                                      ),
                                      t = nrow(tbl), l = 1, r = ncol(tbl))
-      # tras encabezado
       if (nrow(tbl) > 1) {
         tbl <- gtable::gtable_add_grob(tbl,
                                        grobs = grid::segmentsGrob(
@@ -92,7 +80,7 @@ boot_cfa_plot <- function(df,
     }
 
     #------------------------------------------------------------
-    # 4. Tema de tabla
+    # 4. Tema de tabla para grid.arrange
     #------------------------------------------------------------
     make_table_theme <- function(pal) {
       gridExtra::ttheme_default(
@@ -245,21 +233,25 @@ boot_cfa_plot <- function(df,
     }
 
     #------------------------------------------------------------
-    # 8. Ensamblar y guardar
+    # 8. Ensamblar y dibujar con grid.arrange (sin patchwork)
     #------------------------------------------------------------
     o <- plot_and_table_omega(df, omega_ymin_annot, omega_ymax_annot, palette)
     c <- plot_and_table_comp(df, comp_ymin_annot, comp_ymax_annot, palette)
     a <- plot_and_table_abs(df, abs_ymin_annot, abs_ymax_annot, palette)
 
-    # Combinar con patchwork (devuelve un objeto ggplot)
-    combined <- (o$plot | c$plot | a$plot) +
-      plot_layout(ncol = 3) +
-      plot_annotation(title = "")
+    # grid.arrange dibuja directamente en el dispositivo gráfico
+    gridExtra::grid.arrange(
+      o$plot, c$plot, a$plot,
+      ncol = 3,
+      top = grid::textGrob("Bootstrap CFA Results",
+                           gp = grid::gpar(fontsize = 16, fontface = "bold"))
+    )
 
-    if (save) {
+    # Si el usuario pidió guardar en disco, lo hacemos aquí:
+    if (isTRUE(save)) {
       ggsave(
         filename = path,
-        plot     = combined,
+        plot     = gridExtra::arrangeGrob(o$plot, c$plot, a$plot, ncol = 3),
         height   = 16,
         width    = 22,
         dpi      = dpi,
@@ -267,7 +259,5 @@ boot_cfa_plot <- function(df,
         ...
       )
     }
-
-    combined
   })
 }
