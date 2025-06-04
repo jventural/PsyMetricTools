@@ -248,7 +248,7 @@ boot_cfa_plot <- function(df,
     # Combinar con patchwork (devuelve un objeto ggplot)
     combined <- (o$plot | c$plot | a$plot) +
       plot_layout(ncol = 3) +
-      plot_annotation(title = "Bootstrap CFA Results")
+      plot_annotation(title = "")
 
     if (save) {
       ggsave(
