@@ -29,11 +29,17 @@ boot_cfa_plot <- function(df,
     # 1. Paleta de colores
     #------------------------------------------------------------
     get_palette <- function(pal, n) {
-      if (pal %in% names(wesanderson::wes_palettes)) {
+      # Si wesanderson está instalado Y la paleta existe, úsalo:
+      if (requireNamespace("wesanderson", quietly = TRUE) &&
+          pal %in% names(wesanderson::wes_palettes)) {
         wesanderson::wes_palette(pal, n, type = "discrete")
-      } else if (pal == "grey") {
+      }
+      # Si el usuario pidió "grey", entonces escala de grises:
+      else if (identical(pal, "grey")) {
         gray.colors(n, start = 0.5, end = 0.9)
-      } else {
+      }
+      # En cualquier otro caso, devolvemos un vector repetido del valor 'pal':
+      else {
         rep(pal, n)
       }
     }
