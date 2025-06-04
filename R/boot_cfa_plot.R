@@ -11,7 +11,7 @@ boot_cfa_plot <- function(df,
                           palette = "grey",
                           ...) {
   suppressWarnings({
-    # 0. Cargamos solo lo imprescindible (¡no wesanderson, no patchwork!)
+    # Cargamos solo lo imprescindible
     library(ggplot2)
     library(tidyr)
     library(dplyr)
@@ -20,9 +20,7 @@ boot_cfa_plot <- function(df,
     library(gridExtra)
     library(gtable)
 
-    #------------------------------------------------------------
-    # 1. Paleta de colores: usa wesanderson si existe, sino gris o rep(pal, n)
-    #------------------------------------------------------------
+    # 1. Funcion auxiliar para paleta de colores
     get_palette <- function(pal, n) {
       if (requireNamespace("wesanderson", quietly = TRUE) &&
           pal %in% names(wesanderson::wes_palettes)) {
@@ -34,9 +32,7 @@ boot_cfa_plot <- function(df,
       }
     }
 
-    #------------------------------------------------------------
     # 2. Color de encabezado de tablas
-    #------------------------------------------------------------
     get_header_color <- function(pal) {
       if (identical(pal, "grey")) {
         "grey85"
@@ -48,9 +44,7 @@ boot_cfa_plot <- function(df,
       }
     }
 
-    #------------------------------------------------------------
-    # 3. Función para agregar bordes horizontales a un gtable
-    #------------------------------------------------------------
+    # 3. Bordes horizontales en tablas
     add_horizontal_borders <- function(tbl) {
       tbl <- gtable::gtable_add_grob(tbl,
                                      grobs = grid::segmentsGrob(
@@ -79,9 +73,7 @@ boot_cfa_plot <- function(df,
       tbl
     }
 
-    #------------------------------------------------------------
     # 4. Tema de tabla para grid.arrange
-    #------------------------------------------------------------
     make_table_theme <- function(pal) {
       gridExtra::ttheme_default(
         core = list(bg_params = list(fill = "white", col = NA),
@@ -93,9 +85,7 @@ boot_cfa_plot <- function(df,
       )
     }
 
-    #------------------------------------------------------------
-    # 5. Panel A: Omega (fiabilidad)
-    #------------------------------------------------------------
+    # 5. Panel A: Omega
     plot_and_table_omega <- function(df_repli, ymin_ann, ymax_ann, pal) {
       if ("fit_measures1" %in% names(df_repli)) {
         idx <- which(names(df_repli) == "fit_measures1")
@@ -141,9 +131,7 @@ boot_cfa_plot <- function(df,
       list(table = res_tbl, plot = p)
     }
 
-    #------------------------------------------------------------
     # 6. Panel B: CFI / TLI
-    #------------------------------------------------------------
     plot_and_table_comp <- function(df_repli, ymin_ann, ymax_ann, pal) {
       dfm <- map_dfr(df_repli$fit_measures1, as_tibble)
 
@@ -187,9 +175,7 @@ boot_cfa_plot <- function(df,
       list(table = res_tbl, plot = p)
     }
 
-    #------------------------------------------------------------
     # 7. Panel C: RMSEA / SRMR / CRMR
-    #------------------------------------------------------------
     plot_and_table_abs <- function(df_repli, ymin_ann, ymax_ann, pal) {
       dfm <- map_dfr(df_repli$fit_measures1, as_tibble)
 
@@ -232,22 +218,20 @@ boot_cfa_plot <- function(df,
       list(table = res_tbl, plot = p)
     }
 
-    #------------------------------------------------------------
     # 8. Ensamblar y dibujar con grid.arrange (sin patchwork)
-    #------------------------------------------------------------
     o <- plot_and_table_omega(df, omega_ymin_annot, omega_ymax_annot, palette)
     c <- plot_and_table_comp(df, comp_ymin_annot, comp_ymax_annot, palette)
     a <- plot_and_table_abs(df, abs_ymin_annot, abs_ymax_annot, palette)
 
-    # grid.arrange dibuja directamente en el dispositivo gráfico
+    # Dibujar en el dispositivo Shiny
     gridExtra::grid.arrange(
       o$plot, c$plot, a$plot,
       ncol = 3,
-      top = grid::textGrob("Bootstrap CFA Results",
+      top = grid::textGrob("",
                            gp = grid::gpar(fontsize = 16, fontface = "bold"))
     )
 
-    # Si el usuario pidió guardar en disco, lo hacemos aquí:
+    # Si se pide guardar en disco, volver a ensamblar con arrangeGrob
     if (isTRUE(save)) {
       ggsave(
         filename = path,
@@ -261,3 +245,4 @@ boot_cfa_plot <- function(df,
     }
   })
 }
+
