@@ -19,7 +19,7 @@ extract_fit_measures <- function(Specifications) {
   }
 
   Bondades_Original <- map_dfr(CD, bind_rows) %>% as.data.frame() %>% round(3) %>%
-    mutate(Modelos = rep(paste0("f", 1:length(Specifications)))) %>% relocate(Modelos, .before = chisq.scaled)
+    mutate(Factores = rep(paste0("f", 1:length(Specifications)))) %>% relocate(Factores, .before = chisq.scaled)
 
   return(Bondades_Original)
 }
