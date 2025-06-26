@@ -66,12 +66,16 @@ efa_with_bootstrap <- function(n_factors,
     }
 
     # Crear matriz solo con índices válidos
-    fit_matrix <- matrix(NA, nrow = length(bootstrap_bondades), ncol = length(valid_indices))
+    fit_matrix <- matrix(NA, nrow = length(bootstrap_bondades),
+                         ncol = length(valid_indices))
     colnames(fit_matrix) <- valid_indices
 
     for (i in seq_along(bootstrap_bondades)) {
+      df <- bootstrap_bondades[[i]]
+      target_row <- df[df$Factores == paste0("f", n_factors), ]
+      if (nrow(target_row) == 0) target_row <- df[min(n_factors, nrow(df)), ]
       for (j in seq_along(valid_indices)) {
-        fit_matrix[i, j] <- as.numeric(bootstrap_bondades[[i]][[valid_indices[j]]])
+        fit_matrix[i, j] <- as.numeric(target_row[[valid_indices[j]]])
       }
     }
 
@@ -367,7 +371,8 @@ efa_with_bootstrap <- function(n_factors,
 
     if (successful_iterations > 0) {
       # Procesar resultados de bondades de ajuste
-      bootstrap_fit_summary <- process_bootstrap_fit_indices(bootstrap_bondades)
+      bootstrap_fit_summary <- process_bootstrap_fit_indices(bootstrap_bondades,
+                                                             n_factors)
 
       # Procesar resultados de cargas factoriales usando los datos correctos
       bootstrap_loadings_summary <- process_bootstrap_loadings(bootstrap_loadings, name_items)
