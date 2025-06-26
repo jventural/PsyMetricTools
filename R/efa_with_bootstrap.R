@@ -50,8 +50,8 @@ efa_with_bootstrap <- function(n_factors,
   }
 
   # Función auxiliar interna para procesar índices de bondad de ajuste del bootstrap
-  process_bootstrap_fit_indices <- function(bootstrap_bondades) {
-    # Extraer índices de ajuste de cada iteración
+  process_bootstrap_fit_indices <- function(bootstrap_bondades, n_factors) {
+    # Extraer nombres de índices de ajuste
     fit_names <- names(bootstrap_bondades[[1]])
 
     # Filtrar columnas problemáticas (como "Factores" que genera NA)
