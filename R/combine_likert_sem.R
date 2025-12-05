@@ -64,13 +64,23 @@ combine_likert_sem <- function(
   real_tag_pos <- c(tag_pos[1], min(1, tag_pos[2] + tag_offset_y))
 
   # 5) Combina y etiqueta
-  combined <- plot_likert + sem_gg +
-    patchwork::plot_layout(ncol = ncol, widths = widths) +
-    patchwork::plot_annotation(tag_levels = tag_levels, tag_suffix = tag_suffix) &
+  # Primero aplicar el tema a cada plot individualmente
+  plot_likert_themed <- plot_likert +
     ggplot2::theme(
       plot.tag          = ggplot2::element_text(size = tag_size, face = tag_face),
       plot.tag.position = real_tag_pos
     )
+
+  sem_gg_themed <- sem_gg +
+    ggplot2::theme(
+      plot.tag          = ggplot2::element_text(size = tag_size, face = tag_face),
+      plot.tag.position = real_tag_pos
+    )
+
+  # Luego combinar con patchwork
+  combined <- plot_likert_themed + sem_gg_themed +
+    patchwork::plot_layout(ncol = ncol, widths = widths) +
+    patchwork::plot_annotation(tag_levels = tag_levels, tag_suffix = tag_suffix)
 
   return(combined)
 }

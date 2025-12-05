@@ -39,7 +39,7 @@ Standardized_solutions <- function(specification, name_items, apply_threshold = 
   # Ordenar por el índice del factor principal y luego por el valor absoluto de la carga
   result <- result %>%
     arrange(max_factor_index, desc(abs(max_factor_value))) %>%
-    select(-max_factor, -max_factor_index, -max_factor_value) # Limpiar las columnas temporales
+    dplyr::select(-max_factor, -max_factor_index, -max_factor_value) # Limpiar las columnas temporales
 
   # Renombrar para la salida final
   result <- result %>%
