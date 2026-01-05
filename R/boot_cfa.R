@@ -12,67 +12,60 @@
 boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replications = 1000, ordered = TRUE, estimator = "WLSMV") {
   # Funcion interna
   lavaan_estimator <- function(x) {
-    if (lavaan::lavInspect(x, "options")$estimator == "DWLS") {
-      if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
-          lavaan::lavInspect(x, "options")$test == "satorra.bentler") {
+    opts <- lavaan::lavInspect(x, "options")
+    test_val <- opts$test[1]
+    se_val <- opts$se
+    est_val <- opts$estimator
+
+    if (est_val == "DWLS") {
+      if (se_val == "robust.sem" && test_val == "satorra.bentler") {
         est <- "WLSM"
-      } else if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
-                 lavaan::lavInspect(x, "options")$test == "mean.var.adjusted") {
+      } else if (se_val == "robust.sem" && test_val == "mean.var.adjusted") {
         est <- "WLSMVS"
-      } else if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
-                 lavaan::lavInspect(x, "options")$test == "scaled.shifted") {
+      } else if (se_val == "robust.sem" && test_val == "scaled.shifted") {
         est <- "WLSMV"
-      } else if (lavaan::lavInspect(x, "options")$se == "standard" &
-                 lavaan::lavInspect(x, "options")$test == "standard") {
+      } else if (se_val == "standard" && test_val == "standard") {
         est <- "DWLS"
       } else {
         est <- "DWLS_variant"
       }
-    } else if (lavaan::lavInspect(x, "options")$estimator == "ULS") {
-      if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
-          lavaan::lavInspect(x, "options")$test == "satorra.bentler") {
+    } else if (est_val == "ULS") {
+      if (se_val == "robust.sem" &
+          test_val == "satorra.bentler") {
         est <- "ULSM"
-      } else if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
-                 lavaan::lavInspect(x, "options")$test == "mean.var.adjusted") {
+      } else if (se_val == "robust.sem" &
+                 test_val == "mean.var.adjusted") {
         est <- "ULSMVS"
-      } else if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
-                 lavaan::lavInspect(x, "options")$test == "scaled.shifted") {
+      } else if (se_val == "robust.sem" &
+                 test_val == "scaled.shifted") {
         est <- "ULSMV"
-      } else if (lavaan::lavInspect(x, "options")$se == "standard" &
-                 lavaan::lavInspect(x, "options")$test == "standard") {
+      } else if (se_val == "standard" &
+                 test_val == "standard") {
         est <- "ULS"
       } else {
         est <- "ULS_variant"
       }
-    } else if (lavaan::lavInspect(x, "options")$estimator == "ML") {
-      if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
-          lavaan::lavInspect(x, "options")$test == "satorra.bentler") {
+    } else if (est_val == "ML") {
+      if (se_val == "robust.sem" && test_val == "satorra.bentler") {
         est <- "MLM"
-      } else if (lavaan::lavInspect(x, "options")$se == "robust.huber.white" &
-                 lavaan::lavInspect(x, "options")$test %in% c(
-                   "yuan.bentler.mplus",
-                   "yuan.bentler"
-                 )) {
+      } else if (se_val == "robust.huber.white" &&
+                 test_val %in% c("yuan.bentler.mplus", "yuan.bentler")) {
         est <- "MLR"
-      } else if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
-                 lavaan::lavInspect(x, "options")$test == "mean.var.adjusted") {
+      } else if (se_val == "robust.sem" && test_val == "mean.var.adjusted") {
         est <- "MLMVS"
-      } else if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
-                 lavaan::lavInspect(x, "options")$test == "scaled.shifted") {
+      } else if (se_val == "robust.sem" && test_val == "scaled.shifted") {
         est <- "MLMV"
-      } else if (lavaan::lavInspect(x, "options")$se == "standard" &
-                 lavaan::lavInspect(x, "options")$test == "standard" &
-                 unique(lavaan::lavInspect(x, "options")$information) == "expected") {
+      } else if (se_val == "standard" && test_val == "standard" &&
+                 unique(opts$information)[1] == "expected") {
         est <- "ML"
-      } else if (lavaan::lavInspect(x, "options")$se == "standard" &
-                 lavaan::lavInspect(x, "options")$test == "standard" &
-                 unique(lavaan::lavInspect(x, "options")$information) == "first.order") {
+      } else if (se_val == "standard" && test_val == "standard" &&
+                 unique(opts$information)[1] == "first.order") {
         est <- "MLF"
       } else {
         est <- "ML_variant"
       }
     } else {
-      est <- lavaan::lavInspect(x, "options")$estimator
+      est <- est_val
     }
 
     return(est)
@@ -80,7 +73,8 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
 
   # Funcion interna
   is_robust_estimator_lavaan <- function(x) {
-    if (lavaan::lavInspect(x, "options")$test %in% c(
+    test_val <- lavaan::lavInspect(x, "options")[["test"]][1]
+    if (test_val %in% c(
       "satorra.bentler",
       "yuan.bentler",
       "yuan.bentler.mplus",
@@ -257,9 +251,35 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
   # Mensaje antes de calcular la fiabilidad
   message("\nCalculando la fiabilidad con bootstrapping")
 
-  omega2 <- pbapply::pblapply(Replicaciones$fit_cfa1, function(model) {
-    semTools::compRelSEM(model, tau.eq = FALSE, ord.scale = TRUE)
-  })
+  # Funcion interna para calcular omega sin depender de semTools
+  calc_omega_internal <- function(model) {
+    tryCatch({
+      # Obtener cargas estandarizadas
+      std_sol <- lavaan::standardizedSolution(model)
+      # Filtrar solo cargas factoriales (op == "=~")
+      loadings <- std_sol[std_sol$op == "=~", ]
+      # Obtener factores unicos
+      factors <- unique(loadings$lhs)
+      # Calcular omega para cada factor
+      omega_vals <- sapply(factors, function(f) {
+        lambda <- loadings$est.std[loadings$lhs == f]
+        sum_lambda <- sum(lambda)
+        sum_lambda_sq <- sum_lambda^2
+        error_var <- 1 - lambda^2
+        omega <- sum_lambda_sq / (sum_lambda_sq + sum(error_var))
+        return(omega)
+      })
+      names(omega_vals) <- paste0("F", seq_along(factors))
+      return(omega_vals)
+    }, error = function(e) {
+      n_factors <- length(lavaan::lavNames(model, type = "lv"))
+      result <- rep(NA_real_, n_factors)
+      names(result) <- paste0("F", seq_len(n_factors))
+      return(result)
+    })
+  }
+
+  omega2 <- pbapply::pblapply(Replicaciones$fit_cfa1, calc_omega_internal)
   omega2 <- purrr::map_dfr(omega2, ~ dplyr::bind_rows(.))
 
   # Agregar los resultados de omega2 a Replicaciones y renombrar columnas
