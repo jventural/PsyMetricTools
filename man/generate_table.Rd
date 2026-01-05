@@ -33,7 +33,11 @@ A dataframe with three columns: \code{"Variables sociodemográficas"}, \code{"n"
 summary_results <- list(
   Edad = data.frame(mean_Edad = 28.5, sd_Edad = 5.3),
   Sexo = data.frame(Sexo = c("M", "F"), n = c(4, 4), Porcentaje = c(50, 50)),
-  Facultad = data.frame(Facultad = c("Psychology", "Law", "Medicine"), n = c(3, 2, 3), Porcentaje = c(37.5, 25, 37.5))
+  Facultad = data.frame(
+    Facultad = c("Psychology", "Law", "Medicine"),
+    n = c(3, 2, 3),
+    Porcentaje = c(37.5, 25, 37.5)
+  )
 )
 
 # Generate formatted table

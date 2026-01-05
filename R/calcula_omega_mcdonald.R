@@ -1,15 +1,17 @@
+#' @name calcula_omega_mcdonald
+#' @export
 calcula_omega_mcdonald <- function(loadings_df,
                                    groups = NULL,
                                    item_col = NULL,
                                    method = c("comunalidad", "sum_loadings")) {
-  # loadings_df: data.frame con columna de ítems y cargas factoriales
-  # groups: NULL, vector de ítems, o lista de tales vectores
+  # loadings_df: data.frame con columna de items y cargas factoriales
+  # groups: NULL, vector de items, o lista de tales vectores
   # item_col: si NULL, se toma la primera columna como “Items”
   # method: "comunalidad" (h2 = (sum λ)^2) o "sum_loadings" (h2 = sum λ)
 
   method <- match.arg(method)
 
-  # 1) Determinar columna de ítems
+  # 1) Determinar columna de items
   if (is.null(item_col)) {
     item_col <- names(loadings_df)[1]
   }
@@ -31,18 +33,18 @@ calcula_omega_mcdonald <- function(loadings_df,
     stop("'groups' debe ser NULL, un vector de caracteres o una lista de ellos.")
   }
 
-  # 3) Función interna para un grupo
+  # 3) Funcion interna para un grupo
   calc_one <- function(items_vec) {
     sub_df <- loadings_df[loadings_df[[item_col]] %in% items_vec, , drop = FALSE]
     if (nrow(sub_df) == 0) {
-      stop("Ningún ítem coincide con: ", paste(items_vec, collapse = ", "))
+      stop("Ningun item coincide con: ", paste(items_vec, collapse = ", "))
     }
 
     # Matriz de cargas (todas las columnas excepto item_col)
     mat <- as.matrix(sub_df[ , setdiff(names(sub_df), item_col), drop = FALSE ])
     gen_loading <- rowSums(mat)
 
-    # 4) Comunalia o suma de cargas según método
+    # 4) Comunalia o suma de cargas segun metodo
     if (method == "comunalidad") {
       h2 <- gen_loading^2
     } else { # "sum_loadings"
@@ -53,7 +55,7 @@ calcula_omega_mcdonald <- function(loadings_df,
     # 5) Omega del grupo
     omega_total <- sum(h2) / ( sum(h2) + sum(theta) )
 
-    # 6) Stats por ítem
+    # 6) Stats por item
     item_stats <- data.frame(
       Item        = sub_df[[item_col]],
       gen_loading = gen_loading,

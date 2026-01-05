@@ -29,5 +29,5 @@ print(fit_results)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

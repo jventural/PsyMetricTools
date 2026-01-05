@@ -7,7 +7,7 @@
 }
 
 \usage{
-interFactorsDF <- extractAllInterFactors(res)
+extractAllInterFactors(res)
 }
 
 \arguments{
@@ -29,5 +29,5 @@ print(interFactorsDF)  # Display inter-factor correlations across all iterations
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

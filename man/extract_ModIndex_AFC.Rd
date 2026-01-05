@@ -31,5 +31,5 @@ head(mod_indices_df)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

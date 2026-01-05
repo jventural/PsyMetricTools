@@ -1,3 +1,5 @@
+#' @name generate_modelos
+#' @export
 generate_modelos <- function(n_factors, specific_items = NULL, name_items = NULL, n_items = NULL, exclude_items = NULL) {
   generate_models <- function(n_factors, specific_items, name_items, n_items, exclude_items) {
     # Si se proporcionan specific_items, se utilizan directamente. De lo contrario, se generan los nombres de los ítems.

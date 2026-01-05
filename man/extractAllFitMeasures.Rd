@@ -7,7 +7,7 @@
 }
 
 \usage{
-fitMeasuresDF <- extractAllFitMeasures(res)
+extractAllFitMeasures(res)
 }
 
 \arguments{
@@ -29,5 +29,5 @@ print(fitMeasuresDF)  # Display all fit measures collected across iterations
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

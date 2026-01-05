@@ -1,3 +1,5 @@
+#' @name count_excluded_items
+#' @export
 count_excluded_items <- function(res) {
   todos_items <- c()  # Vector para almacenar todos los elementos de excluded_items
 

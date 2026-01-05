@@ -7,7 +7,8 @@ This function is designed to integrate item phrasing with their corresponding fa
 }
 
 \usage{
-factors_data_items(summary_data, data_items, num_factors, apply_threshold = TRUE)
+factors_data_items(summary_data, data_items, num_factors,
+                   apply_threshold = TRUE)
 }
 
 \arguments{
@@ -35,6 +36,6 @@ print(factor_data)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }
 

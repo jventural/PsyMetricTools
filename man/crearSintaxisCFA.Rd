@@ -31,5 +31,5 @@ print(model_syntax)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

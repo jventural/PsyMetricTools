@@ -29,6 +29,6 @@ print(factor_items)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }
 

@@ -37,6 +37,6 @@ print(extracted_structure)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }
 

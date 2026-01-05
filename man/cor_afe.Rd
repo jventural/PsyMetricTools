@@ -1,22 +1,31 @@
 \name{cor_afe}
 \alias{cor_afe}
-\title{Correlation between factors in AFE}
+\title{Extract Factor Correlations from Factor Analysis}
 
 \description{
-This package provides a function to examine the correlations between the factors.
+Extracts the factor correlation matrix (Phi) from a factor analysis object.
 }
 
 \usage{
-cor_afe(factors_data)
+cor_afe(x)
 }
 
 \arguments{
-\item{factors_data}{It is the object of the psych library}
-
-
+  \item{x}{A factor analysis object containing a Phi matrix.}
 }
 
+\value{
+A correlation matrix of factors rounded to 2 decimal places.
+}
 
 \examples{
-cor_afe(factors_data)
+\dontrun{
+correlations <- cor_afe(fa_result)
+print(correlations)
 }
+}
+
+\author{
+Dr. Jose Ventura-Leon
+}
+

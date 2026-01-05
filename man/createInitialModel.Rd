@@ -27,13 +27,18 @@ createInitialModel(n_factors, n_items, name_items, exclude_items = NULL)
 }
 
 \examples{
-# Initialize a model configuration for a CFA with 2 factors, 10 items named 'IR', and no excluded items
-initialModel <- createInitialModel(n_factors = 2, n_items = 10, name_items = "IR")
+# Initialize a model configuration for a CFA
+# with 2 factors, 10 items named 'IR'
+initialModel <- createInitialModel(
+  n_factors = 2,
+  n_items = 10,
+  name_items = "IR"
+)
 
 # To inspect the initial model configuration
 print(initialModel)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

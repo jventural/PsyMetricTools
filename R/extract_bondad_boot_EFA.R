@@ -1,25 +1,24 @@
+#' @name extract_bondad_boot_EFA
+#' @export
 extract_bondad_boot_EFA <- function(resultados_bootstrap) {
   # Cargar las librerías necesarias
-  require(purrr)
-  require(dplyr)
-  require(tibble)
 
   # Función interna para convertir Bondades a list y añadir el número de muestra
   convertBondadesToList <- function(bondadesList, muestra) {
     bondadesList %>%
-      map_dfr(~as_tibble(.), .id = "ID") %>%
-      mutate(Muestra = muestra)
+      purrr::map_dfr(~tibble::as_tibble(.), .id = "ID") %>%
+      dplyr::mutate(Muestra = muestra)
   }
 
   # Función interna para aplicar convertBondadesToList a cada elemento de resultados_bootstrap
   applyConvertBondadesToList <- function(bootstrapResults) {
-    allBondadesDf <- map_dfr(seq_along(bootstrapResults$Results), function(muestra) {
+    allBondadesDf <- purrr::map_dfr(seq_along(bootstrapResults$Results), function(muestra) {
       convertBondadesToList(bootstrapResults$Results[[muestra]]$CombinedResults$Bondades, muestra)
     }, .id = "MuestraID")
 
     # Opcional: Convertir MuestraID a un número si es necesario
     allBondadesDf <- allBondadesDf %>%
-      mutate(MuestraID = as.integer(MuestraID))
+      dplyr::mutate(MuestraID = as.integer(MuestraID))
 
     return(allBondadesDf)
   }

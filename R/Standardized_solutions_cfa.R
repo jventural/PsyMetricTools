@@ -1,31 +1,37 @@
+#' @title Standardized Factor Solutions for CFA
+#' @description Extracts and formats standardized factor loadings from lavaan CFA.
+#' @param specification A lavaan model object.
+#' @param name_items Prefix for item names.
+#' @param apply_threshold Logical, whether to apply 0.30 threshold (default TRUE).
+#' @return A data frame with items and factor loadings.
+#' @export
 Standardized_solutions_cfa <- function (specification, name_items, apply_threshold = TRUE)
 {
-  # Función para instalar y cargar librerías
-  install_and_load <- function(package) {
-    if (!requireNamespace(package, quietly = TRUE)) {
-      install.packages(package)
-    }
-    library(package, character.only = TRUE)
+  # Check for required packages
+  if (!requireNamespace("tidyr", quietly = TRUE)) {
+    stop("Package 'tidyr' is required but not installed.")
+  }
+  if (!requireNamespace("dplyr", quietly = TRUE)) {
+    stop("Package 'dplyr' is required but not installed.")
+  }
+  if (!requireNamespace("stringr", quietly = TRUE)) {
+    stop("Package 'stringr' is required but not installed.")
   }
 
-  # Instalar y cargar la librería requerida
-  install_and_load("tidyr")
-  install_and_load("dplyr")
-  install_and_load("stringr")
-  result <- standardizedsolution(specification) %>% filter(op ==
-                                                             "=~") %>% mutate(item = str_remove(rhs, name_items) %>%
-                                                                                as.double(), factor = str_remove(lhs, "f")) %>% dplyr::select(lhs,
-                                                                                                                                       rhs, est.std) %>% pivot_wider(names_from = lhs, values_from = c(est.std))
+  result <- lavaan::standardizedsolution(specification) %>% dplyr::filter(op ==
+                                                             "=~") %>% dplyr::mutate(item = stringr::str_remove(rhs, name_items) %>%
+                                                                                as.double(), factor = stringr::str_remove(lhs, "f")) %>% dplyr::select(lhs,
+                                                                                                                                       rhs, est.std) %>% tidyr::pivot_wider(names_from = lhs, values_from = c(est.std))
 
   # obtener los nombres de las columnas que comienzan con "f"
   factor_names <- colnames(result)[startsWith(colnames(result), "f")]
 
   if (apply_threshold) {
-    result <- result %>% mutate(across(factor_names,
-                                       ~case_when(. <= 0.3 ~ 0, TRUE ~ .)))
+    result <- result %>% dplyr::mutate(dplyr::across(dplyr::all_of(factor_names),
+                                       ~dplyr::case_when(. <= 0.3 ~ 0, TRUE ~ .)))
   }
 
-  result <- result %>% arrange_at(vars(factor_names), .funs = list(desc)) %>%
-    rename(Items = rhs)
+  result <- result %>% dplyr::arrange(dplyr::across(dplyr::all_of(factor_names), desc)) %>%
+    dplyr::rename(Items = rhs)
   return(result)
 }

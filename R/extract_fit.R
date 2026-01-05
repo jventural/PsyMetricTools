@@ -1,14 +1,10 @@
+#' @name extract_fit
+#' @export
 extract_fit <- function(factors_data) {
-  # Función para instalar y cargar librerías
-  install_and_load <- function(package) {
-    if (!requireNamespace(package, quietly = TRUE)) {
-      install.packages(package)
-    }
-    library(package, character.only = TRUE)
+  # Verificar que el paquete requerido esté instalado
+  if (!requireNamespace("psych", quietly = TRUE)) {
+    stop("Package 'psych' is required but not installed. Please install it with install.packages('psych')")
   }
-
-  # Instalar y cargar la librería requerida
-  install_and_load("psych")
 
   fa.CFI <- function(x) {
     nombre <- paste(x, "CFI", sep = ".")

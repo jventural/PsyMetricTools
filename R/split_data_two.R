@@ -1,3 +1,11 @@
+#' @title Split Data into Two Subsets
+#' @description Splits a data frame into exploratory and confirmatory subsets.
+#' @param df Data frame to split.
+#' @param perc_exploratorio Proportion for exploratory subset (default 0.5).
+#' @param perc_confirmatorio Proportion for confirmatory subset (default 0.5).
+#' @param seed Random seed for reproducibility (default NULL).
+#' @return A list with exploratorio and confirmatorio data frames.
+#' @export
 split_data_two <- function(df, perc_exploratorio = 0.5, perc_confirmatorio = 0.5, seed = NULL) {
   # Asegurarse de que los porcentajes suman 1 (o 100%)
   if ((perc_exploratorio + perc_confirmatorio) != 1) {

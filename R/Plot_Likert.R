@@ -1,17 +1,23 @@
+#' @title Plot Likert Scale Items
+#' @description Creates a visualization for Likert scale items.
+#' @param Data Data frame containing the survey data.
+#' @param name_items Prefix for item names.
+#' @param ranges Range of item numbers to include.
+#' @param exclude Items to exclude (default NULL).
+#' @param text_size Text size for labels (default 3).
+#' @return A ggplot object.
+#' @export
 Plot_Likert <- function(Data, name_items, ranges, exclude = NULL, text_size = 3) {
-  # Carga los paquetes necesarios
+  # Verificar que los paquetes necesarios esten disponibles
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    install.packages("ggplot2")
+    stop("El paquete 'ggplot2' es necesario. Instalalo con: install.packages('ggplot2')")
   }
   if (!requireNamespace("dplyr", quietly = TRUE)) {
-    install.packages("dplyr")
+    stop("El paquete 'dplyr' es necesario. Instalalo con: install.packages('dplyr')")
   }
   if (!requireNamespace("tidyr", quietly = TRUE)) {
-    install.packages("tidyr")
+    stop("El paquete 'tidyr' es necesario. Instalalo con: install.packages('tidyr')")
   }
-  library(ggplot2)
-  library(dplyr)
-  library(tidyr)
 
   # Construir nombres de columnas basados en los rangos especificados
   cols <- paste0(name_items, ranges)
@@ -27,20 +33,20 @@ Plot_Likert <- function(Data, name_items, ranges, exclude = NULL, text_size = 3)
     stop("Algunas columnas especificadas no existen en el dataframe.")
   }
 
-  # Transformar datos para el gráfico
+  # Transformar datos para el grafico
   df_pivot <- Data %>%
-    pivot_longer(cols = all_of(cols), names_to = "Variables", values_to = "Var_Ptjes") %>%
-    mutate(Variables = factor(Variables, levels = select(Data, all_of(cols)) %>% names())) %>%
-    select(Variables, Var_Ptjes)
+    tidyr::pivot_longer(cols = dplyr::all_of(cols), names_to = "Variables", values_to = "Var_Ptjes") %>%
+    dplyr::mutate(Variables = factor(Variables, levels = dplyr::select(Data, dplyr::all_of(cols)) %>% names())) %>%
+    dplyr::select(Variables, Var_Ptjes)
 
-  # Generar el gráfico
-  ggplot(df_pivot, aes(x = as.factor(Var_Ptjes))) +
-    geom_bar(fill = "#CCD1D1", colour = "black") +
-    geom_text(stat = "count", aes(label = scales::percent(..count../nrow(Data), accuracy = 0.01)),
-              vjust = -0.1, size = text_size) + # Usar el parámetro text_size aquí
-    scale_y_continuous(limits = c(0, nrow(Data))) +
-    facet_wrap(~ Variables, scale = "free_x") +
-    theme_bw() +
-    labs(x = "Tasas de respuesta", y = "") +
-    theme(axis.text.y = element_blank())
+  # Generar el grafico
+  ggplot2::ggplot(df_pivot, ggplot2::aes(x = as.factor(Var_Ptjes))) +
+    ggplot2::geom_bar(fill = "#CCD1D1", colour = "black") +
+    ggplot2::geom_text(stat = "count", ggplot2::aes(label = scales::percent(ggplot2::after_stat(count)/nrow(Data), accuracy = 0.01)),
+              vjust = -0.1, size = text_size) +
+    ggplot2::scale_y_continuous(limits = c(0, nrow(Data))) +
+    ggplot2::facet_wrap(~ Variables, scale = "free_x") +
+    ggplot2::theme_bw() +
+    ggplot2::labs(x = "Tasas de respuesta", y = "") +
+    ggplot2::theme(axis.text.y = ggplot2::element_blank())
 }

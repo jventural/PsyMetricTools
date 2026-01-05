@@ -7,7 +7,8 @@ This function generates a centered Likert scale plot for visualizing the distrib
 }
 
 \usage{
-Plot_Likert2(data, prefix, labels, palette, text_size, threshold, show_text, item_range)
+Plot_Likert2(data, prefix, labels, palette, text_size,
+             threshold, show_text, item_range)
 }
 
 \arguments{
@@ -58,7 +59,9 @@ df_filtered <- data.frame(
 # Generate the Likert plot
 figure1 <- Plot_Likert2(df_filtered,
                         prefix = "IS",
-                        labels = c("NO! Not at all like me", "2", "Something similar to my", "4", "Yes! very much like me"),
+                        labels = c("NO! Not at all like me", "2",
+                   "Something similar to my", "4",
+                   "Yes! very much like me"),
                         palette = "Blues",
                         text_size = 2.5,
                         threshold = 10,

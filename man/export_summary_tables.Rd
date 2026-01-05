@@ -7,7 +7,9 @@ The `export_summary_tables` function exports multiple summary tables (e.g., `sum
 }
 
 \usage{
-export_summary_tables(summary_Tabla_Total, summary_Tabla_EFA, summary_Tabla_CFA, file_name = "Tablas_Resumenes.xlsx")
+export_summary_tables(summary_Tabla_Total, summary_Tabla_EFA,
+                      summary_Tabla_CFA,
+                      file_name = "Tablas_Resumenes.xlsx")
 }
 
 \arguments{

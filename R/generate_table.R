@@ -1,3 +1,8 @@
+#' @title Generate Summary Table
+#' @description Converts summary results into a formatted table.
+#' @param summary_results List of summary results from generate_summary.
+#' @return A data frame formatted as a summary table.
+#' @export
 generate_table <- function(summary_results) {
   rows <- list()
   ordered_vars <- c("Sexo", "Edad", setdiff(names(summary_results), c("Sexo", "Edad")))
@@ -20,11 +25,11 @@ generate_table <- function(summary_results) {
   }
 
   table_matrix <- do.call(rbind, rows)
-  colnames(table_matrix) <- c("Variables sociodemográficas", "n", "%")
+  colnames(table_matrix) <- c("Variables sociodemograficas", "n", "%")
   df_table <- as.data.frame(table_matrix, stringsAsFactors = FALSE)
 
-  # IMPORTANTE: no convertir 'n' a numérico para no perder "mean (sd)"
-  # Si quieres, puedes convertir SOLO la columna '%' a numérica:
+  # IMPORTANTE: no convertir 'n' a numerico para no perder "mean (sd)"
+  # Si quieres, puedes convertir SOLO la columna '%' a numerica:
   # suppressWarnings(df_table[["%"]] <- as.numeric(df_table[["%"]]))
 
   df_table

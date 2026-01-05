@@ -3,11 +3,13 @@
 \title{Generation of CFA Stability Panels with Confidence Intervals}
 
 \description{
-This function creates three panels of plots to visualize the stability of fit indices and reliability in Confirmatory Factor Analysis (CFA). Given a data frame of results (percentages of cases and index values), it computes the 2.5 % and 97.5 % percentiles and the mean for each index, and displays confidence ribbons around lines and points. It supports renaming factors and adjusting ribbon transparency.
+This function creates three panels of plots to visualize the stability of fit indices and reliability in Confirmatory Factor Analysis (CFA). Given a data frame of results (percentages of cases and index values), it computes the 2.5 % and 97.5 % percentiles and the mean for each index, and displays confidence ribbons around lines and points. It supports renaming factors and adjusting ribbon transparency.
 }
 
 \usage{
-plot_cfa_stability_intervals2(resultados, num_factors = 1, alpha_ribbon = 0.2, rename_factors = NULL, ...)
+plot_cfa_stability_intervals2(resultados, num_factors = 1,
+                              alpha_ribbon = 0.2,
+                              rename_factors = NULL, ...)
 }
 
 \arguments{
@@ -28,7 +30,7 @@ Converts \code{Porcentaje} to numeric and reshapes data to long format.
 
 Applies factor renaming if \code{rename_factors} is provided and sets factor levels.
 
-Groups by \code{Porcentaje} and each index to compute the 2.5 % and 97.5 % percentiles and the mean.
+Groups by \code{Porcentaje} and each index to compute the 2.5 % and 97.5 % percentiles and the mean.
 
 Splits indices into three groups by value range:
 

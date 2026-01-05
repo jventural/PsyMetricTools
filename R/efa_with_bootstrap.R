@@ -1,3 +1,5 @@
+#' @name efa_with_bootstrap
+#' @export
 efa_with_bootstrap <- function(n_factors,
                                n_items,
                                name_items,
@@ -10,21 +12,18 @@ efa_with_bootstrap <- function(n_factors,
                                n_bootstrap = 1000,
                                bootstrap_seed = 123) {
 
-  library(lavaan)
-  library(dplyr)
-
-  # Función auxiliar interna para realizar un análisis EFA individual
+  # Funcion auxiliar interna para realizar un analisis EFA individual
   run_single_efa <- function(data_sample) {
     tryCatch({
       # Generar modelo para lavaan exploratorio
       modelos <- generate_modelos(n_factors = n_factors, n_items = n_items,
                                   name_items = name_items, exclude_items = exclude_items)
-      # Especificación para lavaan exploratorio con rotación
+      # Especificacion para lavaan exploratorio con rotacion
       specifications <- specification_models(modelos, data = data_sample,
                                              estimator = estimator, rotation = rotation)
       # Bondades de ajuste
       bondades <- extract_fit_measures(specifications)
-      # Matriz patrón
+      # Matriz patron
       loadings <- Standardized_solutions(specifications[[n_factors]],
                                          name_items = name_items,
                                          apply_threshold = apply_threshold)
@@ -34,7 +33,7 @@ efa_with_bootstrap <- function(n_factors,
         dplyr::filter(op == "=~") %>%
         dplyr::select(lhs, rhs, est.std)
 
-      # Correlación entre factores
+      # Correlacion entre factores
       interfactor <- lavaan::inspect(specifications[[n_factors]], what = "std")$psi
 
       return(list(
@@ -49,23 +48,23 @@ efa_with_bootstrap <- function(n_factors,
     })
   }
 
-  # Función auxiliar interna para procesar índices de bondad de ajuste del bootstrap
+  # Funcion auxiliar interna para procesar indices de bondad de ajuste del bootstrap
   process_bootstrap_fit_indices <- function(bootstrap_bondades, n_factors) {
-    # Extraer nombres de índices de ajuste
+    # Extraer nombres de indices de ajuste
     fit_names <- names(bootstrap_bondades[[1]])
 
-    # Filtrar columnas problemáticas (como "Factores" que genera NA)
-    # Excluir columnas que no son numéricas o que generan todos NA
+    # Filtrar columnas problematicas (como "Factores" que genera NA)
+    # Excluir columnas que no son numericas o que generan todos NA
     valid_indices <- c()
     for (name in fit_names) {
-      # Verificar si la columna contiene valores numéricos válidos
+      # Verificar si la columna contiene valores numericos validos
       test_values <- sapply(bootstrap_bondades[1:min(5, length(bootstrap_bondades))], function(x) x[[name]])
       if (!all(is.na(test_values)) && is.numeric(test_values)) {
         valid_indices <- c(valid_indices, name)
       }
     }
 
-    # Crear matriz solo con índices válidos
+    # Crear matriz solo con indices validos
     fit_matrix <- matrix(NA, nrow = length(bootstrap_bondades),
                          ncol = length(valid_indices))
     colnames(fit_matrix) <- valid_indices
@@ -79,7 +78,7 @@ efa_with_bootstrap <- function(n_factors,
       }
     }
 
-    # Calcular estadísticas descriptivas solo para índices válidos
+    # Calcular estadisticas descriptivas solo para indices validos
     fit_summary <- data.frame(
       Indice = valid_indices,
       Media = apply(fit_matrix, 2, mean, na.rm = TRUE),
@@ -100,9 +99,9 @@ efa_with_bootstrap <- function(n_factors,
     ))
   }
 
-  # Función auxiliar interna para procesar cargas factoriales del bootstrap
+  # Funcion auxiliar interna para procesar cargas factoriales del bootstrap
   process_bootstrap_loadings <- function(bootstrap_loadings, name_items) {
-    # Identificar estructura común de cargas
+    # Identificar estructura comun de cargas
     example_loadings <- bootstrap_loadings[[1]]
     factor_names <- unique(example_loadings$Factor)
 
@@ -123,7 +122,7 @@ efa_with_bootstrap <- function(n_factors,
         }
       }
 
-      # Calcular estadísticas para este factor
+      # Calcular estadisticas para este factor
       factor_summary <- data.frame(
         Item = name_items,
         Factor = factor,
@@ -145,12 +144,8 @@ efa_with_bootstrap <- function(n_factors,
     return(loadings_list)
   }
 
-  # Función auxiliar interna para crear resumen global de cargas factoriales
+  # Funcion auxiliar interna para crear resumen global de cargas factoriales
   create_global_loadings_summary <- function(results_bootstrap) {
-    # Requiere: dplyr, purrr
-    library(dplyr)
-    library(purrr)
-
     # Extrae todos los remuestreos
     loadings_list <- results_bootstrap$raw_bootstrap_data$loadings
 
@@ -158,8 +153,8 @@ efa_with_bootstrap <- function(n_factors,
       return(NULL)
     }
 
-    # Combínalos en un solo data.frame, agregando .id = "bootstrap"
-    boot_df <- bind_rows(loadings_list, .id = "bootstrap")
+    # Combinalos en un solo data.frame, agregando .id = "bootstrap"
+    boot_df <- dplyr::bind_rows(loadings_list, .id = "bootstrap")
 
     # Obtener nombres de columnas de factores (excluyendo Items y bootstrap)
     factor_cols <- setdiff(names(boot_df), c("Items", "bootstrap"))
@@ -169,21 +164,21 @@ efa_with_bootstrap <- function(n_factors,
       return(NULL)
     }
 
-    # Calcular estadísticos descriptivos por ítem para cada factor
+    # Calcular estadisticos descriptivos por item para cada factor
     results_list <- list()
 
     for (factor_col in factor_cols) {
       stats_items <- boot_df %>%
-        group_by(Items) %>%
-        summarise(
+        dplyr::group_by(Items) %>%
+        dplyr::summarise(
           Factor = factor_col,
-          n_boot   = n(),
+          n_boot   = dplyr::n(),
           media    = mean(.data[[factor_col]], na.rm = TRUE),
           sd       = sd(.data[[factor_col]], na.rm = TRUE),
           minimo   = min(.data[[factor_col]], na.rm = TRUE),
-          p25      = quantile(.data[[factor_col]], 0.25, na.rm = TRUE),
-          mediana  = median(.data[[factor_col]], na.rm = TRUE),
-          p75      = quantile(.data[[factor_col]], 0.75, na.rm = TRUE),
+          p25      = stats::quantile(.data[[factor_col]], 0.25, na.rm = TRUE),
+          mediana  = stats::median(.data[[factor_col]], na.rm = TRUE),
+          p75      = stats::quantile(.data[[factor_col]], 0.75, na.rm = TRUE),
           maximo   = max(.data[[factor_col]], na.rm = TRUE),
           .groups = "drop"
         )
@@ -192,19 +187,13 @@ efa_with_bootstrap <- function(n_factors,
     }
 
     # Combinar todos los factores en un solo data.frame
-    global_summary <- bind_rows(results_list)
+    global_summary <- dplyr::bind_rows(results_list)
 
     return(global_summary)
   }
 
-  # Función auxiliar interna para crear resumen global de correlaciones interfactoriales
+  # Funcion auxiliar interna para crear resumen global de correlaciones interfactoriales
   create_global_interfactor_summary <- function(results_bootstrap) {
-    # Requiere: dplyr, purrr, tidyr, tibble
-    library(dplyr)
-    library(purrr)
-    library(tidyr)
-    library(tibble)
-
     # Extrae todos los remuestreos de interfactor
     inter_list <- results_bootstrap$raw_bootstrap_data$interfactor
 
@@ -212,8 +201,8 @@ efa_with_bootstrap <- function(n_factors,
       return(NULL)
     }
 
-    # Verificar si hay matrices válidas
-    valid_matrices <- map_lgl(inter_list, ~ {
+    # Verificar si hay matrices validas
+    valid_matrices <- purrr::map_lgl(inter_list, ~ {
       is.matrix(.x) && nrow(.x) >= 1 && ncol(.x) >= 1
     })
 
@@ -221,17 +210,17 @@ efa_with_bootstrap <- function(n_factors,
       return(NULL)
     }
 
-    # Filtrar solo matrices válidas
+    # Filtrar solo matrices validas
     inter_list_valid <- inter_list[valid_matrices]
 
     # Convierte cada matriz en un data.frame largo con columnas: factor1, factor2, corr
-    inter_df <- map2_dfr(inter_list_valid, seq_along(inter_list_valid), ~ {
+    inter_df <- purrr::map2_dfr(inter_list_valid, seq_along(inter_list_valid), ~ {
       mat   <- .x
       boot  <- .y
       as.data.frame(mat) %>%
-        rownames_to_column("factor1") %>%
-        pivot_longer(-factor1, names_to = "factor2", values_to = "corr") %>%
-        mutate(bootstrap = boot)
+        tibble::rownames_to_column("factor1") %>%
+        tidyr::pivot_longer(-factor1, names_to = "factor2", values_to = "corr") %>%
+        dplyr::mutate(bootstrap = boot)
       # NO filtrar diagonal - incluir todas las correlaciones
     })
 
@@ -239,21 +228,21 @@ efa_with_bootstrap <- function(n_factors,
       return(NULL)
     }
 
-    # Agrupa por par único de factores (ordena factor1/factor2) y resume
+    # Agrupa por par unico de factores (ordena factor1/factor2) y resume
     stats_interfactor <- inter_df %>%
-      mutate(
+      dplyr::mutate(
         pair1 = pmin(factor1, factor2),
         pair2 = pmax(factor1, factor2)
       ) %>%
-      group_by(pair1, pair2) %>%
-      summarise(
-        n_boot   = n(),
+      dplyr::group_by(pair1, pair2) %>%
+      dplyr::summarise(
+        n_boot   = dplyr::n(),
         media    = mean(corr, na.rm = TRUE),
         sd       = sd(corr, na.rm = TRUE),
         minimo   = min(corr, na.rm = TRUE),
-        p25      = quantile(corr, 0.25, na.rm = TRUE),
-        mediana  = median(corr, na.rm = TRUE),
-        p75      = quantile(corr, 0.75, na.rm = TRUE),
+        p25      = stats::quantile(corr, 0.25, na.rm = TRUE),
+        mediana  = stats::median(corr, na.rm = TRUE),
+        p75      = stats::quantile(corr, 0.75, na.rm = TRUE),
         maximo   = max(corr, na.rm = TRUE),
         .groups  = "drop"
       )
@@ -265,7 +254,7 @@ efa_with_bootstrap <- function(n_factors,
       return(NULL)
     }
 
-    # Crear array para almacenar todas las matrices de correlación
+    # Crear array para almacenar todas las matrices de correlacion
     n_iterations <- length(bootstrap_interfactor)
     correlation_array <- array(NA, dim = c(n_factors, n_factors, n_iterations))
 
@@ -277,7 +266,7 @@ efa_with_bootstrap <- function(n_factors,
       }
     }
 
-    # Calcular estadísticas descriptivas para cada correlación
+    # Calcular estadisticas descriptivas para cada correlacion
     correlation_summary <- array(NA, dim = c(n_factors, n_factors, 6))
     dimnames(correlation_summary)[[3]] <- c("Media", "Mediana", "SD", "Q25", "Q75", "IC_95_Amplitud")
 
@@ -289,11 +278,11 @@ efa_with_bootstrap <- function(n_factors,
 
           if (length(correlations) > 0) {
             correlation_summary[i, j, "Media"] <- mean(correlations)
-            correlation_summary[i, j, "Mediana"] <- median(correlations)
-            correlation_summary[i, j, "SD"] <- sd(correlations)
-            correlation_summary[i, j, "Q25"] <- quantile(correlations, 0.25)
-            correlation_summary[i, j, "Q75"] <- quantile(correlations, 0.75)
-            ic_range <- quantile(correlations, 0.975) - quantile(correlations, 0.025)
+            correlation_summary[i, j, "Mediana"] <- stats::median(correlations)
+            correlation_summary[i, j, "SD"] <- stats::sd(correlations)
+            correlation_summary[i, j, "Q25"] <- stats::quantile(correlations, 0.25)
+            correlation_summary[i, j, "Q75"] <- stats::quantile(correlations, 0.75)
+            ic_range <- stats::quantile(correlations, 0.975) - stats::quantile(correlations, 0.025)
             correlation_summary[i, j, "IC_95_Amplitud"] <- ic_range
           }
         }
@@ -306,12 +295,12 @@ efa_with_bootstrap <- function(n_factors,
     ))
   }
 
-  # Análisis original con datos completos
-  cat("Realizando análisis factorial exploratorio original...\n")
+  # Analisis original con datos completos
+  cat("Realizando analisis factorial exploratorio original...\n")
   original_results <- run_single_efa(data)
 
   if (!original_results$success) {
-    stop("Error en el análisis original: ", original_results$error)
+    stop("Error en el analisis original: ", original_results$error)
   }
 
   # Generar especificaciones originales para retornar
@@ -330,7 +319,7 @@ efa_with_bootstrap <- function(n_factors,
 
   # Realizar bootstrap si se solicita
   if (bootstrap) {
-    cat("Iniciando análisis de bootstrap con", n_bootstrap, "muestras...\n")
+    cat("Iniciando analisis de bootstrap con", n_bootstrap, "muestras...\n")
 
     # Configurar semilla para reproducibilidad
     if (!is.null(bootstrap_seed)) {
@@ -345,14 +334,14 @@ efa_with_bootstrap <- function(n_factors,
     successful_iterations <- 0
 
     # Realizar bootstrap
-    pb <- txtProgressBar(min = 0, max = n_bootstrap, style = 3)
+    pb <- utils::txtProgressBar(min = 0, max = n_bootstrap, style = 3)
 
     for (i in 1:n_bootstrap) {
       # Generar muestra bootstrap
       bootstrap_indices <- sample(nrow(data), nrow(data), replace = TRUE)
       bootstrap_data <- data[bootstrap_indices, ]
 
-      # Realizar análisis en muestra bootstrap
+      # Realizar analisis en muestra bootstrap
       bootstrap_result <- run_single_efa(bootstrap_data)
 
       if (bootstrap_result$success) {
@@ -363,7 +352,7 @@ efa_with_bootstrap <- function(n_factors,
         bootstrap_interfactor[[successful_iterations]] <- bootstrap_result$interfactor
       }
 
-      setTxtProgressBar(pb, i)
+      utils::setTxtProgressBar(pb, i)
     }
     close(pb)
 
@@ -380,7 +369,7 @@ efa_with_bootstrap <- function(n_factors,
       # Procesar correlaciones entre factores
       bootstrap_interfactor_summary <- process_bootstrap_interfactor(bootstrap_interfactor, n_factors)
 
-      # Crear resúmenes globales usando las nuevas funciones eficientes
+      # Crear resumenes globales usando las nuevas funciones eficientes
       global_loadings_summary <- create_global_loadings_summary(results)
       global_interfactor_summary <- create_global_interfactor_summary(results)
 
@@ -399,7 +388,7 @@ efa_with_bootstrap <- function(n_factors,
         )
       )
 
-      # Crear resúmenes globales después de que Bootstrap esté completo
+      # Crear resumenes globales despues de que Bootstrap este completo
       results$Bootstrap$global_loadings_summary <- create_global_loadings_summary(results$Bootstrap)
       results$Bootstrap$global_interfactor_summary <- create_global_interfactor_summary(results$Bootstrap)
     } else {

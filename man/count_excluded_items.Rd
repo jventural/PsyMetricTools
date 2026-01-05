@@ -7,7 +7,7 @@
 }
 
 \usage{
-resultCount <- count_excluded_items(res)
+count_excluded_items(res)
 }
 
 \arguments{
@@ -29,5 +29,5 @@ print(resultCount)  # Display the count of excluded items
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

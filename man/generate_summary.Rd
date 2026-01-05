@@ -34,9 +34,12 @@ A list containing summary tables for each variable specified in the \code{variab
 data <- data.frame(
   Edad = c(25, 30, 22, 40, 35, NA, 28, 26),
   Sexo = c("M", "F", "F", "M", "M", "F", "M", "M"),
-  Facultad = c("Psychology", "Law", "Medicine", "Engineering", "Psychology", "Law", "Medicine", "Psychology"),
-  Residencia = c("Urban", "Rural", "Urban", "Urban", "Rural", "Rural", "Urban", "Urban"),
-  Tipo_Universidad = c("Public", "Private", "Public", "Private", "Public", "Public", "Private", "Public")
+  Facultad = c("Psychology", "Law", "Medicine", "Engineering",
+               "Psychology", "Law", "Medicine", "Psychology"),
+  Residencia = c("Urban", "Rural", "Urban", "Urban",
+                 "Rural", "Rural", "Urban", "Urban"),
+  Tipo_Universidad = c("Public", "Private", "Public", "Private",
+                       "Public", "Public", "Private", "Public")
 )
 
 # Specify variables to summarize

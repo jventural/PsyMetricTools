@@ -1,3 +1,5 @@
+#' @name summarise_column
+#' @export
 summarise_column <- function(data, col_name) {
   data %>%
     filter(!!sym(col_name) != 0) %>%

@@ -1,5 +1,7 @@
+#' @name fit_index_Table
+#' @export
 fit_index_Table <- function(resultados) {
-  # Capturar y suprimir mensajes temporales durante la ejecución del código
+  # Capturar y suprimir mensajes temporales durante la ejecucion del codigo
   suppressMessages({
     suppressWarnings({
       # Convertir los resultados de bondades de ajuste en un tibble
@@ -12,7 +14,7 @@ fit_index_Table <- function(resultados) {
       fiabilidad <- resultados$fiabilidad %>%
         map_dfr(~ as_tibble(as.data.frame(t(as.numeric(.)))), .id = "Model") %>%
         rename_with(~ gsub("^V", "F", .x)) %>%
-        rename_with(~ paste0("ω_", .), -Model) %>%
+        rename_with(~ paste0("omega_", .), -Model) %>%
         mutate(Model = row_number()) %>% mutate(Model = as.character(Model))
 
       # Unir los dos tibbles por la columna "Model"

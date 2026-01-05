@@ -1,19 +1,15 @@
+#' @name specification_models
+#' @export
 specification_models <- function(modelos, data, estimator, rotation = "oblimin", verbose = FALSE) {
-  # Función para instalar y cargar librerías
-  install_and_load <- function(package) {
-    if (!requireNamespace(package, quietly = TRUE)) {
-      install.packages(package)
-    }
-    library(package, character.only = TRUE)
+  # Check for required package
+  if (!requireNamespace("lavaan", quietly = TRUE)) {
+    stop("Package 'lavaan' is required but not installed.")
   }
-
-  # Instalar y cargar la librería requerida
-  install_and_load("lavaan")
 
   specification <- list()
 
   for (i in 1:length(modelos)) {
-    fit.original = cfa(paste0(modelos[i]),
+    fit.original = lavaan::cfa(paste0(modelos[i]),
                        data = data,
                        estimator = estimator,
                        rotation = rotation,

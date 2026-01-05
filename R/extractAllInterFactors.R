@@ -1,3 +1,5 @@
+#' @name extractAllInterFactors
+#' @export
 extractAllInterFactors <- function(res) {
   # Verificar si 'res' contiene 'processed_results'
   if (!"processed_results" %in% names(res)) {

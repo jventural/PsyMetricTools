@@ -1,45 +1,43 @@
-\name{filtrar_aberrantes}
-\alias{filtrar_aberrantes}
-\title{Outlier Detection and Data Filtering Tool}
+\name{generate_modelos}
+\alias{generate_modelos}
+\title{Generate EFA Model Specifications}
 
 \description{
-This function identifies and removes outliers from a dataset based on the Mahalanobis distance, specifically tailored for use in psychometric and behavioral data analysis. It utilizes the `mahad` function from the `careless` package to detect outliers and filters them out from the dataset, ensuring a cleaner data set for subsequent analysis. The function is designed to work with datasets where specific items (variables) need to be analyzed for outlier detection.
+This function generates lavaan model specifications for exploratory factor analysis (EFA) with varying numbers of factors. It creates model formulas that can be used with lavaan's EFA functionality.
 }
 
 \usage{
-filtrar_aberrantes(data, items)
+generate_modelos(n_factors, specific_items = NULL, name_items = NULL,
+                 n_items = NULL, exclude_items = NULL)
 }
 
 \arguments{
-  \item{data}{A dataframe containing the dataset from which outliers will be identified and removed.}
-  \item{items}{A character vector specifying the column names in `data` that should be used for outlier detection based on the Mahalanobis distance.}
+  \item{n_factors}{Integer specifying the maximum number of factors to generate models for.}
+  \item{specific_items}{Optional character vector of specific item names to use.}
+  \item{name_items}{Prefix for item names (e.g., "IS" for IS1, IS2, etc.).}
+  \item{n_items}{Number of items when using name_items prefix.}
+  \item{exclude_items}{Character vector of item names to exclude from the model.}
 }
 
 \details{
-The function first checks if the dataset contains a column named `ID`; if not, it automatically generates this column based on rownames. It then proceeds to calculate the Mahalanobis distance for the specified items, flags outliers based on a confidence threshold of 0.999, and filters these from the dataset. The function returns a list containing the filtered dataset and a dataframe of flagged outliers, including their Mahalanobis distance (`d_sq`), flagged status, and values for the specified items.
+The function generates a list of lavaan model specifications for 1 to n_factors. Each model uses the efa() modifier for exploratory factor analysis. If specific_items is provided, those items are used directly. Otherwise, items are generated using name_items prefix and n_items count.
 }
 
 \value{
-A list with two elements:
-\itemize{
-  \item \code{data_filtrada}: The filtered dataset with outliers removed.
-  \item \code{tabla_aberrantes}: A dataframe showing the outliers, including their ID, the specified items' values, Mahalanobis distance (`d_sq`), and flagged status.
-}
+A list of character strings, each containing a lavaan model specification for the corresponding number of factors.
 }
 
 \examples{
-# Assuming 'df_final' is your dataset and 'RP1:RP16' are the items of interest
-resultado <- filtrar_aberrantes(df_final, paste0("RP", 1:16))
-df_filtered <- resultado$data_filtrada
-tabla_aberrantes <- resultado$tabla_aberrantes
+\dontrun{
+# Generate models for 1 to 3 factors with items IS1 to IS12
+models <- generate_modelos(n_factors = 3, name_items = "IS", n_items = 12)
 
-# To view the filtered dataset
-print(df_filtered)
-
-# To view the dataframe of flagged outliers
-print(tabla_aberrantes)
+# Generate models with specific items
+models <- generate_modelos(n_factors = 2,
+                           specific_items = c("item1", "item2", "item3", "item4"))
+}
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

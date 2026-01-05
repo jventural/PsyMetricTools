@@ -7,7 +7,7 @@
 }
 
 \usage{
-summaryStats <- summarise_column(data, col_name)
+summarise_column(data, col_name)
 }
 
 \arguments{
@@ -33,5 +33,5 @@ print(summaryStatsF2)  # Display summary statistics for column 'f2'
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

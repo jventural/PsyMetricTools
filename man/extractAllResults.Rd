@@ -7,7 +7,7 @@
 }
 
 \usage{
-allResultsDF <- extractAllResults(res)
+extractAllResults(res)
 }
 
 \arguments{
@@ -29,5 +29,5 @@ print(allResultsDF)  # Display detailed results across all iterations
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

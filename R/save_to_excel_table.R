@@ -1,25 +1,29 @@
+#' @name save_to_excel_table
+#' @export
 save_to_excel_table <- function(file_name, ..., na.string = "") {
-  if (!require(openxlsx)) install.packages("openxlsx")
-  # Crear un objeto Workbook
-  wb <- createWorkbook()
+  if (!requireNamespace("openxlsx", quietly = TRUE)) {
+    stop("Package 'openxlsx' is required. Please install it.")
+  }
+  # Create Workbook object
+  wb <- openxlsx::createWorkbook()
 
-  # Extraer los argumentos adicionales (las tablas de resumen)
+  # Extract additional arguments (summary tables)
   tables <- list(...)
 
-  # Extraer los nombres de las tablas proporcionadas como argumentos
+  # Extract table names from arguments
   table_names <- names(tables)
 
-  # Si no se proporcionaron nombres, asignar nombres predeterminados a las hojas
+  # If no names provided, assign default sheet names
   if (is.null(table_names) || any(table_names == "")) {
     table_names <- paste0("Sheet", seq_along(tables))
   }
 
-  # Añadir cada tabla como una hoja diferente
+  # Add each table as a different sheet
   for (i in seq_along(tables)) {
-    addWorksheet(wb, table_names[i])
-    writeData(wb, sheet = table_names[i], tables[[i]], na.string = na.string)
+    openxlsx::addWorksheet(wb, table_names[i])
+    openxlsx::writeData(wb, sheet = table_names[i], tables[[i]], na.string = na.string)
   }
 
-  # Guardar el workbook en un archivo Excel
-  saveWorkbook(wb, file = file_name, overwrite = TRUE)
+  # Save workbook to Excel file
+  openxlsx::saveWorkbook(wb, file = file_name, overwrite = TRUE)
 }

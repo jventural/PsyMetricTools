@@ -1,5 +1,10 @@
+#' @title Generate Summary Statistics
+#' @description Generates summary statistics for sociodemographic variables.
+#' @param data Data frame containing the variables.
+#' @param variables Character vector of variable names to summarize.
+#' @return A list of summary tables for each variable.
+#' @export
 generate_summary <- function(data, variables) {
-  library(dplyr); library(rlang)
   round_pct_sum_100 <- function(counts) {
     counts <- as.numeric(counts)
     tot <- sum(counts, na.rm = TRUE)
@@ -21,7 +26,7 @@ generate_summary <- function(data, variables) {
   for (var in variables) {
     if (var != "Edad") {
       summary_table <- data %>%
-        dplyr::count(!!sym(var), name = "n")
+        dplyr::count(!!rlang::sym(var), name = "n")
 
       summary_table$Porcentaje <- round_pct_sum_100(summary_table$n)
       results[[var]] <- summary_table

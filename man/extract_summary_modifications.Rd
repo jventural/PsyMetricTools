@@ -25,12 +25,15 @@ A dataframe summarizing modification indices for modifications that meet or exce
 
 \examples{
 # Assuming 'combined_results' is a dataframe of modification indices from CFA analyses
-summary_modifications <- extract_summary_modifications(combined_results, min_count = 15)
+summary_modifications <- extract_summary_modifications(
+  combined_results,
+  min_count = 15
+)
 
 # To view the summarized modification indices
 head(summary_modifications)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

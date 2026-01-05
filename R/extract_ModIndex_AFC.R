@@ -1,3 +1,5 @@
+#' @name extract_ModIndex_AFC
+#' @export
 extract_ModIndex_AFC <- function(results) {
   # Inicializa una lista para almacenar los dataframes modificados
   modified_dfs <- list()

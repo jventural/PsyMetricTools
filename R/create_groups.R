@@ -1,3 +1,5 @@
+#' @name create_groups
+#' @export
 create_groups <- function(names, values) {
   if(length(names) != length(values)) {
     stop("The length of names and values must be the same.")

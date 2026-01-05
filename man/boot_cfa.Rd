@@ -7,7 +7,9 @@
 }
 
 \usage{
-  boot_cfa(new_df, model_string, item_prefix, seed = 2023, n_replications = 1000, ordered = TRUE, estimator = "WLSMV")
+boot_cfa(new_df, model_string, item_prefix, seed = 2023,
+         n_replications = 1000, ordered = TRUE,
+         estimator = "WLSMV")
 }
 
 \arguments{
@@ -45,6 +47,6 @@
 }
 
 \author{
-  Professor José Ventura León
+  Dr. José Ventura-León
 }
 

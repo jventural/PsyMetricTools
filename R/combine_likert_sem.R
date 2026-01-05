@@ -1,3 +1,5 @@
+#' @name combine_likert_sem
+#' @export
 combine_likert_sem <- function(
     plot_likert,       # un objeto ggplot
     fit_sem,           # tu objeto lavaan para semPaths()
@@ -18,12 +20,11 @@ combine_likert_sem <- function(
     tag_size     = 16,
     tag_face     = "bold"
 ) {
-  # 1) Instalar/cargar paquetes
+  # 1) Verificar paquetes requeridos
   pkgs <- c("ggplotify", "patchwork", "semPlot")
   for(pkg in pkgs){
     if (!requireNamespace(pkg, quietly = TRUE))
-      install.packages(pkg, dependencies = TRUE)
-    library(pkg, character.only = TRUE)
+      stop(paste0("Package '", pkg, "' is required but not installed. Please install it with install.packages('", pkg, "')"))
   }
 
   # 2) Prepara args para semPaths()

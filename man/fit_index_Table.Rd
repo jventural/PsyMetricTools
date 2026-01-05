@@ -33,7 +33,7 @@ A \code{tibble} containing the following columns:
   \item \code{TLI} - The Tucker-Lewis Index.
   \item \code{RMSEA} - The Root Mean Square Error of Approximation.
   \item \code{CRMR} - The Coefficient of Residual Mean Square.
-  \item \code{ω} - The omega reliability coefficient.
+  \item \code{omega} - The omega reliability coefficient.
 }
 }
 

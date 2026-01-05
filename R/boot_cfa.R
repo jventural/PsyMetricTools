@@ -1,70 +1,81 @@
+#' @title Bootstrap Confirmatory Factor Analysis
+#' @description Performs bootstrap CFA with reliability estimation.
+#' @param new_df Data frame with the data.
+#' @param model_string Lavaan model specification string.
+#' @param item_prefix Prefix for item column names.
+#' @param seed Random seed (default 2023).
+#' @param n_replications Number of bootstrap replications (default 1000).
+#' @param ordered Logical indicating if variables are ordinal (default TRUE).
+#' @param estimator Estimator to use (default "WLSMV").
+#' @return Data frame with bootstrap results including fit measures and reliability.
+#' @export
 boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replications = 1000, ordered = TRUE, estimator = "WLSMV") {
-  # Función interna
+  # Funcion interna
   lavaan_estimator <- function(x) {
     if (lavaan::lavInspect(x, "options")$estimator == "DWLS") {
       if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
           lavaan::lavInspect(x, "options")$test == "satorra.bentler") {
-        estimator <- "WLSM"
+        est <- "WLSM"
       } else if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
                  lavaan::lavInspect(x, "options")$test == "mean.var.adjusted") {
-        estimator <- "WLSMVS"
+        est <- "WLSMVS"
       } else if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
                  lavaan::lavInspect(x, "options")$test == "scaled.shifted") {
-        estimator <- "WLSMV"
+        est <- "WLSMV"
       } else if (lavaan::lavInspect(x, "options")$se == "standard" &
                  lavaan::lavInspect(x, "options")$test == "standard") {
-        estimator <- "DWLS"
+        est <- "DWLS"
       } else {
-        estimator <- "DWLS_variant"
+        est <- "DWLS_variant"
       }
     } else if (lavaan::lavInspect(x, "options")$estimator == "ULS") {
       if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
           lavaan::lavInspect(x, "options")$test == "satorra.bentler") {
-        estimator <- "ULSM"
+        est <- "ULSM"
       } else if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
                  lavaan::lavInspect(x, "options")$test == "mean.var.adjusted") {
-        estimator <- "ULSMVS"
+        est <- "ULSMVS"
       } else if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
                  lavaan::lavInspect(x, "options")$test == "scaled.shifted") {
-        estimator <- "ULSMV"
+        est <- "ULSMV"
       } else if (lavaan::lavInspect(x, "options")$se == "standard" &
                  lavaan::lavInspect(x, "options")$test == "standard") {
-        estimator <- "ULS"
+        est <- "ULS"
       } else {
-        estimator <- "ULS_variant"
+        est <- "ULS_variant"
       }
     } else if (lavaan::lavInspect(x, "options")$estimator == "ML") {
       if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
           lavaan::lavInspect(x, "options")$test == "satorra.bentler") {
-        estimator <- "MLM"
+        est <- "MLM"
       } else if (lavaan::lavInspect(x, "options")$se == "robust.huber.white" &
                  lavaan::lavInspect(x, "options")$test %in% c(
                    "yuan.bentler.mplus",
                    "yuan.bentler"
                  )) {
-        estimator <- "MLR"
+        est <- "MLR"
       } else if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
                  lavaan::lavInspect(x, "options")$test == "mean.var.adjusted") {
-        estimator <- "MLMVS"
+        est <- "MLMVS"
       } else if (lavaan::lavInspect(x, "options")$se == "robust.sem" &
                  lavaan::lavInspect(x, "options")$test == "scaled.shifted") {
-        estimator <- "MLMV"
+        est <- "MLMV"
       } else if (lavaan::lavInspect(x, "options")$se == "standard" &
                  lavaan::lavInspect(x, "options")$test == "standard" &
                  unique(lavaan::lavInspect(x, "options")$information) == "expected") {
-        estimator <- "ML"
+        est <- "ML"
       } else if (lavaan::lavInspect(x, "options")$se == "standard" &
                  lavaan::lavInspect(x, "options")$test == "standard" &
                  unique(lavaan::lavInspect(x, "options")$information) == "first.order") {
-        estimator <- "MLF"
+        est <- "MLF"
       } else {
-        estimator <- "ML_variant"
+        est <- "ML_variant"
       }
     } else {
-      estimator <- lavaan::lavInspect(x, "options")$estimator
+      est <- lavaan::lavInspect(x, "options")$estimator
     }
 
-    return(estimator)
+    return(est)
   }
 
   # Funcion interna
@@ -82,14 +93,14 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
     }
     return(type)
   }
-  # Función interna
+
+  # Funcion interna
   fit_lavaan <- function(x) {
     type <- is_robust_estimator_lavaan(x)
 
     if (lavaan::lavInspect(x, "converged")) {
       if (type == "robust") {
-        fit_measure <- x %>%
-          lavaan::fitmeasures(
+        fit_measure <- lavaan::fitmeasures(x,
             fit.measures =
               c(
                 "npar",
@@ -105,35 +116,34 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
                 "tli.scaled",
                 "cfi.scaled"
               )
-          ) %>%
-          tibble::enframe(name = "term") %>%
-          tidyr::pivot_wider(
+          )
+        fit_measure <- tibble::enframe(fit_measure, name = "term")
+        fit_measure <- tidyr::pivot_wider(fit_measure,
             names_from = term,
             values_from = value
-          ) %>%
-          dplyr::mutate(
+          )
+        fit_measure <- dplyr::mutate(fit_measure,
             dplyr::across(dplyr::everything(), as.numeric)
-          ) %>%
-          dplyr::bind_cols(
+          )
+        fit_measure <- dplyr::bind_cols(fit_measure,
             tibble::tibble(
               converged = lavaan::lavInspect(x, "converged"),
               estimator = lavaan_estimator(x),
               ngroups = lavaan::lavInspect(x, "ngroups"),
               nobs = sum(lavaan::lavInspect(x, "nobs"))
             )
-          ) %>%
-          dplyr::select(
+          )
+        fit_measure <- dplyr::select(fit_measure,
             nobs, estimator, ngroups, converged, chisq.scaled,
             df.scaled, pvalue.scaled, npar, cfi.scaled, tli.scaled,
             rmsea.scaled, rmsea.ci.lower.scaled, rmsea.ci.upper.scaled,
-            srmr, wrmr,crmr
-          ) %>%
-          dplyr::rename_with(
+            srmr, wrmr, crmr
+          )
+        fit_measure <- dplyr::rename_with(fit_measure,
             ~ stringr::str_remove(., ".scaled")
           )
       } else {
-        fit_measure <- x %>%
-          lavaan::fitmeasures(
+        fit_measure <- lavaan::fitmeasures(x,
             fit.measures =
               c(
                 "npar",
@@ -151,17 +161,17 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
                 "tli",
                 "cfi"
               )
-          ) %>%
-          tibble::enframe(name = "term") %>%
-          tidyr::pivot_wider(
+          )
+        fit_measure <- tibble::enframe(fit_measure, name = "term")
+        fit_measure <- tidyr::pivot_wider(fit_measure,
             id_cols = term,
             names_from = term,
             values_from = value
-          ) %>%
-          dplyr::mutate(
+          )
+        fit_measure <- dplyr::mutate(fit_measure,
             dplyr::across(dplyr::everything(), as.numeric)
-          ) %>%
-          dplyr::bind_cols(
+          )
+        fit_measure <- dplyr::bind_cols(fit_measure,
             tibble::tibble(
               converged = lavaan::lavInspect(x, "converged"),
               estimator = lavaan::lavInspect(x, "options")$estimator,
@@ -169,14 +179,14 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
               missing_method = lavaan::lavInspect(x, "options")$missing,
               nobs = sum(lavaan::lavInspect(x, "nobs"))
             )
-          ) %>%
-          dplyr::relocate(
+          )
+        fit_measure <- dplyr::relocate(fit_measure,
             nobs, estimator, ngroups, converged,
             chisq, df, pvalue, npar, cfi, tli, rmsea,
-            rmsea.ci.lower, rmsea.ci.upper, srmr, wrmr,crmr,
+            rmsea.ci.lower, rmsea.ci.upper, srmr, wrmr, crmr,
             aic, bic
-          ) %>%
-          dplyr::rename(
+          )
+        fit_measure <- dplyr::rename(fit_measure,
             AIC = aic,
             BIC = bic
           )
@@ -202,10 +212,9 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
       )
     }
 
-    fit_measure <- fit_measure %>%
-      dplyr::rename_with(
+    fit_measure <- dplyr::rename_with(fit_measure,
         .fn = ~ stringr::str_to_upper(.),
-        .cols = c(cfi:crmr)
+        .cols = dplyr::any_of(c("cfi", "tli", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper", "srmr", "wrmr", "crmr"))
       )
 
     return(fit_measure)
@@ -213,46 +222,51 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
 
   set.seed(seed)
 
-  # Cargar las bibliotecas necesarias
-  library(purrr)
-  library(dplyr)
-  library(lavaan)
-  library(pbapply) # Usar pbapply en lugar de progress
-
   # Replicar el dataframe con reemplazo
-  new_df <- purrr::map_dfr(integer(n_replications), ~ new_df %>% sample_n(size = nrow(new_df), replace = TRUE), .id = "obs")
+  new_df <- purrr::map_dfr(integer(n_replications), ~ dplyr::sample_n(new_df, size = nrow(new_df), replace = TRUE), .id = "obs")
 
   # Mensaje antes de calcular CFA
   message("Calculando el CFA con bootstrapping")
 
-  Replicaciones <- new_df %>%
-    select(starts_with(item_prefix) | ends_with("obs")) %>%
-    group_nest(obs) %>%
-    mutate(
-      data = map(data, ~ select(., tidyselect:::where(~ !all(is.na(.))))),
-      model_cfa1 = map_chr(data, ~ paste0(model_string)),
-      fit_cfa1 = pblapply(seq_along(data), function(i) {
-        cfa(model = model_cfa1[[i]],
-            data = data[[i]],
-            ordered = ordered,
-            estimator = estimator)
-      }, cl = 1),  # Usar pblapply para aplicar cfa con barra de progreso
-      converged1 = map_lgl(fit_cfa1, ~ lavInspect(.x, "converged")),
-      validity1 = map_lgl(fit_cfa1, ~ suppressWarnings(lavInspect(.x, "post.check"))),
-      fit_measures1 = map(fit_cfa1, ~ fit_lavaan(.x))
-    ) %>%
-    collect()
+  # Seleccionar columnas
+  item_cols <- grep(paste0("^", item_prefix), names(new_df), value = TRUE)
+  selected_df <- new_df[, c(item_cols, "obs")]
+
+  # Agrupar por obs
+  Replicaciones <- tidyr::nest(selected_df, data = -obs)
+
+  # Procesar cada replica
+  Replicaciones$data <- lapply(Replicaciones$data, function(d) {
+    d[, colSums(!is.na(d)) > 0]
+  })
+
+  Replicaciones$model_cfa1 <- rep(model_string, nrow(Replicaciones))
+
+  # Ajustar modelos CFA con barra de progreso
+  Replicaciones$fit_cfa1 <- pbapply::pblapply(seq_along(Replicaciones$data), function(i) {
+    lavaan::cfa(model = Replicaciones$model_cfa1[[i]],
+        data = Replicaciones$data[[i]],
+        ordered = ordered,
+        estimator = estimator)
+  }, cl = 1)
+
+  Replicaciones$converged1 <- sapply(Replicaciones$fit_cfa1, function(x) lavaan::lavInspect(x, "converged"))
+  Replicaciones$validity1 <- sapply(Replicaciones$fit_cfa1, function(x) suppressWarnings(lavaan::lavInspect(x, "post.check")))
+  Replicaciones$fit_measures1 <- lapply(Replicaciones$fit_cfa1, fit_lavaan)
 
   # Mensaje antes de calcular la fiabilidad
   message("\nCalculando la fiabilidad con bootstrapping")
 
   omega2 <- pbapply::pblapply(Replicaciones$fit_cfa1, function(model) {
     semTools::compRelSEM(model, tau.eq = FALSE, ord.scale = TRUE)
-  }) %>%  map_dfr(~ bind_rows(.))
+  })
+  omega2 <- purrr::map_dfr(omega2, ~ dplyr::bind_rows(.))
 
   # Agregar los resultados de omega2 a Replicaciones y renombrar columnas
-  Replicaciones <- Replicaciones %>% bind_cols(omega2)  %>%
-    rename_with(~ gsub("^F(\\d+)$", "Rel\\1", .), .cols = starts_with("F"))
+  Replicaciones <- dplyr::bind_cols(Replicaciones, omega2)
+  omega_cols <- grep("^F\\d+$", names(Replicaciones), value = TRUE)
+  new_names <- gsub("^F(\\d+)$", "Rel\\1", omega_cols)
+  names(Replicaciones)[names(Replicaciones) %in% omega_cols] <- new_names
 
   return(Replicaciones)
 }

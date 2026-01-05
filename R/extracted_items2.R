@@ -1,3 +1,5 @@
+#' @name extracted_items2
+#' @export
 extracted_items2 <- function(data){
   # Excluir columnas no numéricas
   df_numerics_only <- data[sapply(data, is.numeric)]

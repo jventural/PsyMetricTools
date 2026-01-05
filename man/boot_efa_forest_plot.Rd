@@ -36,7 +36,7 @@ boot_efa_forest_plot(
 Invisibly returns a list with the plot and summary data.
 }
 \description{
-Creates a forest plot showing factor loadings with 95\% confidence intervals
+Creates a forest plot showing factor loadings with 95% confidence intervals
 from bootstrap EFA results. Style inspired by Solomon Kurz.
 }
 \examples{

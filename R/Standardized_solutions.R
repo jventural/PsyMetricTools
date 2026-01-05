@@ -1,51 +1,56 @@
+﻿#' @title Standardized Factor Solutions for EFA
+#' @description Extracts and formats standardized factor loadings from lavaan EFA.
+#' @param specification A lavaan model object.
+#' @param name_items Prefix for item names.
+#' @param apply_threshold Logical, whether to apply 0.30 threshold (default TRUE).
+#' @return A data frame with items and factor loadings.
+#' @export
 Standardized_solutions <- function(specification, name_items, apply_threshold = TRUE) {
-  # Función para instalar y cargar librerías
-  install_and_load <- function(package) {
-    if (!requireNamespace(package, quietly = TRUE)) {
-      install.packages(package)
-    }
-    library(package, character.only = TRUE)
+  # Check for required packages
+  if (!requireNamespace("tidyr", quietly = TRUE)) {
+    stop("Package 'tidyr' is required but not installed.")
+  }
+  if (!requireNamespace("dplyr", quietly = TRUE)) {
+    stop("Package 'dplyr' is required but not installed.")
+  }
+  if (!requireNamespace("stringr", quietly = TRUE)) {
+    stop("Package 'stringr' is required but not installed.")
   }
 
-  # Instalar y cargar las librerías requeridas
-  install_and_load("tidyr")
-  install_and_load("dplyr")
-  install_and_load("stringr")
-
   # Procesamiento de los datos
-  result <- standardizedsolution(specification) %>%
-    filter(op == "=~") %>%
-    mutate(item = str_remove(rhs, name_items) %>% as.double(),
-           factor = str_remove(lhs, "f")) %>%
+  result <- lavaan::standardizedsolution(specification) %>%
+    dplyr::filter(op == "=~") %>%
+    dplyr::mutate(item = stringr::str_remove(rhs, name_items) %>% as.double(),
+           factor = stringr::str_remove(lhs, "f")) %>%
     dplyr::select(lhs, rhs, est.std) %>%
-    pivot_wider(names_from = lhs, values_from = c(est.std))
+    tidyr::pivot_wider(names_from = lhs, values_from = c(est.std))
 
   # Aplicar el umbral
   if (apply_threshold) {
     result <- result %>%
-      mutate(across(starts_with("f"), ~ ifelse(abs(.) > 0.30, ., 0)))
+      dplyr::mutate(dplyr::across(dplyr::starts_with("f"), ~ ifelse(abs(.) > 0.30, ., 0)))
   }
 
-  # Identificar el factor principal para cada ítem
+  # Identificar el factor principal para cada item
+  # FIX: Usar which.max() en lugar de which(..., arr.ind=TRUE) para soportar 1 factor
+  # El problema anterior: which() con arr.ind=TRUE retorna vector (no matriz) cuando hay 1 sola columna
   result <- result %>%
-    rowwise() %>%
-    mutate(max_factor = list(which(abs(c_across(starts_with("f"))) == max(abs(c_across(starts_with("f"))), na.rm = TRUE), arr.ind = TRUE))) %>%
-    ungroup()
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      max_factor_index = which.max(abs(dplyr::c_across(dplyr::starts_with("f")))),
+      max_factor_value = max(abs(dplyr::c_across(dplyr::starts_with("f"))), na.rm = TRUE)
+    ) %>%
+    dplyr::ungroup()
 
-  # Extraer el índice del factor principal y su valor
-  result$max_factor_index <- sapply(result$max_factor, function(x) if (length(x) > 0) x[1] else NA)
-  result$max_factor_value <- sapply(result$max_factor, function(x) if (length(x) > 0) x[2] else NA)
-
-  # Ordenar por el índice del factor principal y luego por el valor absoluto de la carga
+  # Ordenar por el indice del factor principal y luego por el valor absoluto de la carga
   result <- result %>%
-    arrange(max_factor_index, desc(abs(max_factor_value))) %>%
-    dplyr::select(-max_factor, -max_factor_index, -max_factor_value) # Limpiar las columnas temporales
+    dplyr::arrange(max_factor_index, desc(abs(max_factor_value))) %>%
+    dplyr::select(-max_factor_index, -max_factor_value) # Limpiar las columnas temporales
 
   # Renombrar para la salida final
   result <- result %>%
-    rename(Items = rhs)
+    dplyr::rename(Items = rhs)
 
   return(result)
 }
-
 

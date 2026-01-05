@@ -1,17 +1,22 @@
+#' @title Interpret Modification Index Decisions
+#' @description Interprets modification indices and power decisions from SEM analysis.
+#' @param MI_Saris Data frame with modification indices and decision.pow column.
+#' @return A data frame with interpretations of each decision.
+#' @export
 interpret_decision_SSV <- function(MI_Saris) {
   interpretation <- sapply(MI_Saris$decision.pow, function(dec) {
     if(dec == "EPC:M") {
-      "MI significativo, alta potencia y EPC suficientemente grande; se recomienda liberar el parámetro para ajustar el modelo."
+      "MI significativo, alta potencia y EPC suficientemente grande; se recomienda liberar el parametro para ajustar el modelo."
     } else if(dec == "EPC:NM") {
-      "MI significativo y alta potencia, pero EPC pequeño; la modificación no es sustantivamente relevante, se mantiene la especificación."
+      "MI significativo y alta potencia, pero EPC pequeno; la modificacion no es sustantivamente relevante, se mantiene la especificacion."
     } else if(dec == "M") {
-      "MI significativo, pero la potencia es baja; se concluye que hay mala especificación, aunque la información no es suficiente para evaluar su magnitud con precisión."
+      "MI significativo, pero la potencia es baja; se concluye que hay mala especificacion, aunque la informacion no es suficiente para evaluar su magnitud con precision."
     } else if(dec == "NM") {
-      "No hay mala especificación: o el MI no es significativo o, pese a serlo, la alta potencia indica que el EPC es pequeño; se mantiene la restricción."
+      "No hay mala especificacion: o el MI no es significativo o, pese a serlo, la alta potencia indica que el EPC es pequeno; se mantiene la restriccion."
     } else if(dec == "I") {
-      "Información insuficiente (baja potencia) para tomar una decisión clara sobre la mala especificación; el resultado es inconcluso."
+      "Informacion insuficiente (baja potencia) para tomar una decision clara sobre la mala especificacion; el resultado es inconcluso."
     } else {
-      "Decisión no reconocida."
+      "Decision no reconocida."
     }
   })
 

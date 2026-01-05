@@ -1,3 +1,5 @@
+#' @name generate_model_lavaan
+#' @export
 generate_model_lavaan <- function(num_items,
                           item_value,
                           t_values,

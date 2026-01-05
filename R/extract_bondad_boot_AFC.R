@@ -1,3 +1,5 @@
+#' @name extract_bondad_boot_AFC
+#' @export
 extract_bondad_boot_AFC <- function(results) {
   modified_dfs <- list()
 

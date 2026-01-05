@@ -29,10 +29,16 @@ A data frame with an improved class balance. The original data is augmented with
 \examples{
 # Assuming 'df' is a DataFrame with class labels in the 'class_col' column
 # To balance minority classes to the level of the majority class
-balanced_data <- smote_multiclass(df, outcome = "class_col", perc_maj = 100, k = 5, seed = 123)
+balanced_data <- smote_multiclass(
+  df,
+  outcome = "class_col",
+  perc_maj = 100,
+  k = 5,
+  seed = 123
+)
 print(balanced_data)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

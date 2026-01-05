@@ -24,10 +24,14 @@ A string representing the lavaan model syntax. This string can be directly used 
 }
 
 \examples{
-model_syntax <- crear_modelo_lavaan(nombre = "CCOV", F1 = c(3, 6, 2), F2 = c(1, 4, 5))
+model_syntax <- crear_modelo_lavaan(
+  nombre = "CCOV",
+  F1 = c(3, 6, 2),
+  F2 = c(1, 4, 5)
+)
 print(model_syntax)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

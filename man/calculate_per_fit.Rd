@@ -32,5 +32,5 @@ print(result_table)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

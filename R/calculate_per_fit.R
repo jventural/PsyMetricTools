@@ -1,7 +1,6 @@
+#' @name calculate_per_fit
+#' @export
 calculate_per_fit <- function(df_repli, thresholds_str) {
-  library(dplyr)
-  library(purrr)
-  library(tidyr)
   #función interna
   convert_thresholds_str_to_df <- function(thresholds_str) {
     # Separar el string por comas
@@ -21,7 +20,7 @@ calculate_per_fit <- function(df_repli, thresholds_str) {
   measure_thresholds <- convert_thresholds_str_to_df(thresholds_str)
 
   # Convertir los datos a un data frame
-  fit_measures1_df <- map_dfr(df_repli$fit_measures1, ~as_tibble(.))
+  fit_measures1_df <- purrr::map_dfr(df_repli$fit_measures1, ~tibble::as_tibble(.))
 
   # Inicializar una lista vacía para guardar los resultados
   result_list <- vector("list", length = nrow(measure_thresholds))
@@ -35,9 +34,9 @@ calculate_per_fit <- function(df_repli, thresholds_str) {
 
     # Filtrar los datos
     if (direction == "<") {
-      filtered_data <- fit_measures1_df %>% filter(!!sym(measure) < threshold)
+      filtered_data <- fit_measures1_df %>% dplyr::filter(!!rlang::sym(measure) < threshold)
     } else {
-      filtered_data <- fit_measures1_df %>% filter(!!sym(measure) > threshold)
+      filtered_data <- fit_measures1_df %>% dplyr::filter(!!rlang::sym(measure) > threshold)
     }
 
     # Calcular el porcentaje

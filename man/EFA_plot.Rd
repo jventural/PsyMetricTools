@@ -26,7 +26,7 @@ The function returns the plot as a ggplot object, which can be further customize
 \value{
 A \code{ggplot} object representing the EFA plot with complexity indication for each item. The plot includes:
 \itemize{
-  \item Standardized factor loadings (\(\lambda\)) on the x-axis.
+  \item Standardized factor loadings (lambda) on the x-axis.
   \item Item numbers on the y-axis.
   \item Complex items highlighted with a red outline.
   \item Confidence intervals for factor loadings.

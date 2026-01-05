@@ -1,3 +1,5 @@
+#' @name extract_ExcludedItems_boot
+#' @export
 extract_ExcludedItems_boot <- function(resultados_bootstrap) {
   allExcludedItemsDf <- do.call(rbind, lapply(seq_along(resultados_bootstrap$Results), function(muestra) {
     convertExcludedItemsToList <- function(excludedItems, muestra) {

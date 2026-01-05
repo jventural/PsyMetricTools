@@ -40,6 +40,6 @@ print(results$correlaciones_factores[["Modelo2"]])
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }
 

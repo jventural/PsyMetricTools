@@ -1,3 +1,5 @@
+#' @name extract_summary_modifications
+#' @export
 extract_summary_modifications <- function(combined_results, min_count = 10) {
   summary_df <- combined_results %>%
     group_by(Modification) %>%

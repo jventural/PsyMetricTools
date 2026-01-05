@@ -1,3 +1,5 @@
+#' @name smote_multiclass
+#' @export
 smote_multiclass <- function(data, outcome, perc_maj = 100, k = 5, seed = NULL) {
 
   # Función SMOTE para una clase específica

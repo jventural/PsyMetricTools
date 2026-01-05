@@ -33,5 +33,5 @@ print(plot)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

@@ -7,7 +7,8 @@ The `boot_cfa_stability` function performs a bootstrap-based stability analysis 
 }
 
 \usage{
-boot_cfa_stability(modelo, data, num_replicas, estimator, seed = 2023, n_cores = 4)
+boot_cfa_stability(modelo, data, num_replicas, estimator,
+                   seed = 2023, n_cores = 4)
 }
 
 \arguments{
@@ -61,7 +62,13 @@ library(future.apply)
 data <- data.frame(item1 = rnorm(100), item2 = rnorm(100), item3 = rnorm(100))
 
 # Perform bootstrap stability analysis
-resultados <- boot_cfa_stability(modelo, data, num_replicas = 100, estimator = "MLR", seed = 2023, n_cores = 4)
+resultados <- boot_cfa_stability(
+  modelo, data,
+  num_replicas = 100,
+  estimator = "MLR",
+  seed = 2023,
+  n_cores = 4
+)
 
 # View the results
 head(resultados)

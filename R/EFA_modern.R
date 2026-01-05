@@ -1,3 +1,15 @@
+#' @title Modern Exploratory Factor Analysis
+#' @description Performs exploratory factor analysis using lavaan with rotation.
+#' @param n_factors Number of factors to extract.
+#' @param n_items Number of items.
+#' @param name_items Prefix for item names.
+#' @param data Data frame containing the items.
+#' @param apply_threshold Logical, whether to apply threshold to factor loadings.
+#' @param estimator Estimator to use (default "WLSMV").
+#' @param rotation Rotation method (default "oblimin").
+#' @param exclude_items Items to exclude (default NULL).
+#' @return A list containing fit indices, specifications, interfactor correlations, and pattern matrix.
+#' @export
 EFA_modern <- function(n_factors,
                        n_items,
                        name_items,
@@ -6,9 +18,6 @@ EFA_modern <- function(n_factors,
                        estimator = "WLSMV",
                        rotation = "oblimin",
                        exclude_items = NULL) {
-  library(lavaan)
-  library(dplyr)
-
   # Generar modelo para lavaan exploratorio
   modelos <- generate_modelos(n_factors = n_factors, n_items = n_items, name_items = name_items, exclude_items = exclude_items)
 

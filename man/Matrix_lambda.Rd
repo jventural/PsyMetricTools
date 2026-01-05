@@ -3,7 +3,7 @@
 \title{Factor Loadings Matrix Creation Tool}
 
 \description{
-This function generates a factor loadings matrix (\(\Lambda\)) based on the specified number of items, factors, and block sizes. It is designed to facilitate the creation of structured matrices commonly used in factor analysis and structural equation modeling (SEM). This tool is particularly useful for defining the relationships between observed variables and latent factors in a clear, organized manner.
+This function generates a factor loadings matrix (Lambda) based on the specified number of items, factors, and block sizes. It is designed to facilitate the creation of structured matrices commonly used in factor analysis and structural equation modeling (SEM). This tool is particularly useful for defining the relationships between observed variables and latent factors in a clear, organized manner.
 }
 
 \usage{

@@ -37,22 +37,21 @@ A dataframe with the original parameter relationships (\code{lhs}, \code{op}, \c
 }
 
 \examples{
-
-Example dataframe with MI and power decisions
-
+\dontrun{
+# Example dataframe with MI and power decisions
 MI_Saris <- data.frame(
-lhs = c("F1", "F2", "F3"),
-op = c("", "", "~"),
-rhs = c("X1", "X2", "X3"),
-decision.pow = c("EPC:M", "M", "NM")
+  lhs = c("F1", "F2", "F3"),
+  op = c("", "", "~"),
+  rhs = c("X1", "X2", "X3"),
+  decision.pow = c("EPC:M", "M", "NM")
 )
 
-Running the interpretation function
-
+# Running the interpretation function
 interpret_results <- interpret_decision_SSV(MI_Saris)
 print(interpret_results)
 }
+}
 
 \author{
-Dr. José Ventura-León
+Dr. Jose Ventura-Leon
 }

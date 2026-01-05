@@ -32,18 +32,11 @@ A named \code{list} of character vectors. Each element’s name is one factor co
 }
 \examples{
 \dontrun{
-
 # Example data.frame of loadings:
-
 resultado <- agrupar_por_factor(Patron1, item_col = "Items")
-
-# resultado will be:
-$f1
-[1] "EAF1" "EAF2" "EAF4" "EAF8"
-$f2
-[1] "EAF3" "EAF5" "EAF6"
-
+# resultado will be a list with factors as elements
+}
 }
 \author{
-Autor: Professor José Ventura-León
+Dr. José Ventura-León
 }

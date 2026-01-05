@@ -26,10 +26,14 @@ A data frame where each row corresponds to an item, and columns represent the st
 
 \examples{
 # Assuming 'Specifications' is a list of fitted CFA models and 'CCOV' is the item prefix
-result_df <- Standardized_solutions(Specifications[[5]], name_items = "CCOV", apply_threshold = TRUE)
+result_df <- Standardized_solutions(
+  Specifications[[5]],
+  name_items = "CCOV",
+  apply_threshold = TRUE
+)
 print(result_df)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

@@ -1,3 +1,5 @@
+#' @name multi_cfa
+#' @export
 multi_cfa <- function(modelos, data, estimator, ordered = TRUE, orthogonal_indices = NULL) {
   ajustar_modelo <- function(modelo, index, data, estimator, ordered, orthogonal_indices) {
     resultado <- tryCatch({

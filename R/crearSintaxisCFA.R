@@ -1,3 +1,5 @@
+#' @name crearSintaxisCFA
+#' @export
 crearSintaxisCFA <- function(df) {
   sintaxis_modelo <- ""
 

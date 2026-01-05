@@ -27,10 +27,14 @@ A string representing the Lavaan syntax for the specified CFA model. This can be
 
 \examples{
 # To generate a model with 5 items, loadings of 1, and threshold values at 1 and 2
-model_spec <- generate_model_lavaan(num_items = 5, item_value = rep(1, 5), t_values = c(1, 2))
+model_spec <- generate_model_lavaan(
+  num_items = 5,
+  item_value = rep(1, 5),
+  t_values = c(1, 2)
+)
 print(model_spec)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

@@ -31,5 +31,5 @@ head(fit_measures_df)
 }
 
 \author{
-Professor José Ventura León
+Dr. José Ventura-León
 }

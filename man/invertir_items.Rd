@@ -26,13 +26,18 @@ invertir_items(df, items, num_respuestas, comienza_con_cero = TRUE)
 }
 
 \examples{
-# Assuming df_survey is your dataframe and you wish to invert the items 'q1' and 'q4' with a 5-point scale starting at 1
+# Assuming df_survey is your dataframe
+# Invert items 'q1' and 'q4' with a 5-point scale
 items <- c("q1", "q4")
-df_survey_modified <- invertir_items(df_survey, items, num_respuestas = 5, comienza_con_cero = FALSE)
+df_survey_modified <- invertir_items(
+  df_survey, items,
+  num_respuestas = 5,
+  comienza_con_cero = FALSE
+)
 print(df_survey_modified)
-# This will print the dataframe with the values of 'q1' and 'q4' inverted according to the function's logic.
+# Print the dataframe with inverted values
 }
 
 \author{
-  Professor José Ventura León
+  Dr. José Ventura-León
 }

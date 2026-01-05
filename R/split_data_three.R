@@ -1,3 +1,12 @@
+#' @title Split Data into Three Subsets
+#' @description Splits a data frame into pilot, exploratory and confirmatory subsets.
+#' @param df Data frame to split.
+#' @param perc_piloto Proportion for pilot subset (default 0.10).
+#' @param perc_exploratorio Proportion for exploratory subset (default 0.45).
+#' @param perc_confirmatorio Proportion for confirmatory subset (default 0.45).
+#' @param seed Random seed for reproducibility (default NULL).
+#' @return A list with piloto, exploratorio and confirmatorio data frames.
+#' @export
 split_data_three <- function(df, perc_piloto = 0.10, perc_exploratorio = 0.45, perc_confirmatorio = 0.45, seed = NULL) {
   # Asegurarse de que los porcentajes suman 1 (o 100%)
   if ((perc_piloto + perc_exploratorio + perc_confirmatorio) != 1) {

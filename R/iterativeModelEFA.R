@@ -1,3 +1,5 @@
+#' @name iterativeModelEFA
+#' @export
 iterativeModelEFA <- function(data, n_factors,
                                       estimator = "WLSMV",
                                       name_items = "RAS",
@@ -34,20 +36,20 @@ iterativeModelEFA <- function(data, n_factors,
       fit_measures <- extract_fit_measures(Specifications)
       interFactor <- lavaan::inspect(Specifications[[length(Specifications)]], what = "std")$psi
 
-      TRUE  # Si se llega hasta aquí, no hubo errores.
+      TRUE  # Si se llega hasta aqui, no hubo errores.
     }, silent = TRUE)
 
     if (inherits(operationResult, "try-error")) {
-      message("Se detectó un error durante la ejecución. Revisando posibles causas...")
-      break  # Puedes decidir qué acción tomar en caso de error.
+      message("Se detecto un error durante la ejecucion. Revisando posibles causas...")
+      break  # Puedes decidir que accion tomar en caso de error.
     }
 
-    # Comprobar advertencias después de la operación crítica.
+    # Comprobar advertencias despues de la operacion critica.
     if (!is.null(last.warning)) {
       warnings <- sapply(last.warning, function(w) w$message)
       if (any(grepl("could not compute standard errors", warnings, ignore.case = TRUE))) {
-        message("Advertencia detectada sobre errores estándar. Considerando acciones...")
-        # Aquí decides qué hacer en caso de esta advertencia específica.
+        message("Advertencia detectada sobre errores estandar. Considerando acciones...")
+        # Aqui decides que hacer en caso de esta advertencia especifica.
       }
     }
 

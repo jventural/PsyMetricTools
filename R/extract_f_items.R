@@ -1,3 +1,5 @@
+#' @name extract_f_items
+#' @export
 extract_f_items <- function(data, prefixes) {
   results <- character(length(prefixes))
 

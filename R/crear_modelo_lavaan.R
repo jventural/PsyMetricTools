@@ -1,3 +1,5 @@
+#' @name crear_modelo_lavaan
+#' @export
 crear_modelo_lavaan <- function(nombre, ...) {
   argumentos <- list(...)
 
