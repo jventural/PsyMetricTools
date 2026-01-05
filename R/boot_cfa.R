@@ -158,7 +158,7 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
           )
         fit_measure <- tibble::enframe(fit_measure, name = "term")
         fit_measure <- tidyr::pivot_wider(fit_measure,
-            id_cols = term,
+            
             names_from = term,
             values_from = value
           )
