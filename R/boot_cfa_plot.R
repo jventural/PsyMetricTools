@@ -108,7 +108,6 @@ boot_cfa_plot <- function(df,
 
       dat_long <- tidyr::pivot_longer(dat, tidyselect::everything(),
                                        names_to = "Variable", values_to = "Value")
-      dat_long$Variable <- substr(dat_long$Variable, 1, 3)
 
       res_tbl <- dat_long %>%
         dplyr::group_by(Variable) %>%
