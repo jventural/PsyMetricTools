@@ -251,35 +251,9 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
   # Mensaje antes de calcular la fiabilidad
   message("\nCalculando la fiabilidad con bootstrapping")
 
-  # Funcion interna para calcular omega sin depender de semTools
-  calc_omega_internal <- function(model) {
-    tryCatch({
-      # Obtener cargas estandarizadas
-      std_sol <- lavaan::standardizedSolution(model)
-      # Filtrar solo cargas factoriales (op == "=~")
-      loadings <- std_sol[std_sol$op == "=~", ]
-      # Obtener factores unicos
-      factors <- unique(loadings$lhs)
-      # Calcular omega para cada factor
-      omega_vals <- sapply(factors, function(f) {
-        lambda <- loadings$est.std[loadings$lhs == f]
-        sum_lambda <- sum(lambda)
-        sum_lambda_sq <- sum_lambda^2
-        error_var <- 1 - lambda^2
-        omega <- sum_lambda_sq / (sum_lambda_sq + sum(error_var))
-        return(omega)
-      })
-      names(omega_vals) <- paste0("F", seq_along(factors))
-      return(omega_vals)
-    }, error = function(e) {
-      n_factors <- length(lavaan::lavNames(model, type = "lv"))
-      result <- rep(NA_real_, n_factors)
-      names(result) <- paste0("F", seq_len(n_factors))
-      return(result)
-    })
-  }
-
-  omega2 <- pbapply::pblapply(Replicaciones$fit_cfa1, calc_omega_internal)
+  omega2 <- pbapply::pblapply(Replicaciones$fit_cfa1, function(model) {
+    semTools::compRelSEM(model, tau.eq = FALSE, ord.scale = TRUE)
+  })
   omega2 <- purrr::map_dfr(omega2, ~ dplyr::bind_rows(.))
 
   # Agregar los resultados de omega2 a Replicaciones y renombrar columnas
