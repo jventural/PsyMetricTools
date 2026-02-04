@@ -1,37 +1,43 @@
-# PsyMetricTools 1.1.1
-
-## New Features
-* Added `boot_cfa_raincloud()` for modern raincloud plot visualizations
-* Added `boot_cfa_density()` for bootstrap distribution density plots
-* Added `plot_cfa_stability()` family of functions for CFA stability analysis
-* Added `EFA_plot()` now accepts data.frames and lists in addition to lavaan objects
-
-## Bug Fixes
-* Fixed `boot_cfa_density()` error when combining lavaan.vector with double types
-* Fixed `EFA_plot()` to support arbitrary factor names (not just f1, f2, etc.)
-* Fixed `filtrar_aberrantes()` ID type mismatch when data has numeric ID column
-* Fixed `boot_cfa_plot()` to display automatically when printed
-
-## Improvements
-* `boot_cfa_plot()` now returns an object with custom print method
-* Improved input validation across all functions
-* Better error messages for invalid inputs
-
-# PsyMetricTools 1.1.0
-
-## New Features
-* Added `easy_invariance()` for measurement invariance analysis with ordinal data
-* Added `boot_cfa()` for bootstrap CFA analysis
-* Added `boot_efa()` for bootstrap EFA analysis
-* Added `smote_multiclass()` for multi-class data balancing
-
-## Improvements
-* Updated documentation with examples
-* Improved compatibility with lavaan 0.6+
-
 # PsyMetricTools 1.0.0
 
 * Initial CRAN submission
-* Core functions for psychometric analysis
-* EFA and CFA utilities
-* Likert scale visualization tools
+
+## Features
+
+### Data Preprocessing
+* `filtrar_aberrantes()` - Filter aberrant response patterns using Mahalanobis distance
+* `invertir_items()` - Reverse score items
+* `split_data_two()` / `split_data_three()` - Split data for cross-validation
+* `smote_multiclass()` - SMOTE oversampling for imbalanced multiclass data
+
+### Exploratory Factor Analysis (EFA)
+* `EFA_modern()` - Modern EFA with multiple rotation options
+* `EFA_plot()` - Visualize factor loadings
+* `Standardized_solutions()` - Extract standardized EFA solutions
+* `boot_efa()` - Bootstrap EFA for stability analysis
+* `efa_with_bootstrap()` - EFA with bootstrap resampling
+
+### Confirmatory Factor Analysis (CFA)
+* `multi_cfa()` - Fit multiple CFA models
+* `Standardized_solutions_cfa()` - Extract standardized CFA solutions
+* `boot_cfa()` - Bootstrap CFA for stability analysis
+* `boot_cfa_stability()` - CFA stability across sample sizes
+
+### Measurement Invariance
+* `easy_invariance()` - Measurement invariance analysis with ordinal data following Wu and Estabrook (2016)
+
+### Visualization
+* `Plot_Likert()` / `Plot_Likert2()` - Likert scale visualizations
+* `boot_cfa_plot()` - Bootstrap CFA results visualization
+* `boot_cfa_density()` - Bootstrap distribution density plots
+* `boot_cfa_raincloud()` - Raincloud plot visualizations
+* `boot_efa_plot()` / `boot_efa_forest_plot()` - Bootstrap EFA visualizations
+* `plot_cfa_stability()` family - CFA stability visualizations
+
+### Reliability
+* `calcula_omega_mcdonald()` - McDonald's omega coefficient
+
+### Utilities
+* `save_to_excel_table()` - Export results to Excel
+* `create_groups()` - Create item groups for factor definitions
+* Model syntax generators for lavaan
