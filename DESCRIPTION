@@ -1,0 +1,65 @@
+Package: PsyMetricTools
+Version: 1.1.1
+Title: Psychometric and Statistical Analysis Tools
+Description: A comprehensive package designed for psychometric and statistical
+    analysis in social sciences. It includes functions for data preprocessing,
+    factor analysis, reliability testing, descriptive statistics, visualization
+    of Likert-scale items, measurement invariance analysis, and handling
+    multi-class imbalances. The package facilitates advanced data analysis
+    tasks commonly encountered in psychological and educational research.
+    Includes an updated easy_invariance() function for ordinal data following
+    Wu and Estabrook (2016) <doi:10.1037/met0000051>.
+Authors@R: person("Jose", "Ventura-Leon",
+                  email = "jventuraleon@gmail.com",
+                  role = c("aut", "cre"),
+                  comment = c(ORCID = "0000-0003-2996-4244"))
+License: GPL (>= 3)
+URL: https://github.com/jventuraleon/PsyMetricTools
+BugReports: https://github.com/jventuraleon/PsyMetricTools/issues
+Encoding: UTF-8
+Depends: R (>= 3.6.0)
+Imports:
+    lavaan,
+    semTools,
+    psych,
+    dplyr,
+    tidyr,
+    ggplot2,
+    purrr,
+    tibble,
+    stringr,
+    gridExtra,
+    gtable,
+    grid,
+    pbapply,
+    tidyselect,
+    rlang,
+    grDevices,
+    stats,
+    utils
+Suggests:
+    testthat (>= 3.0.0),
+    EGAnet,
+    bootnet,
+    future,
+    future.apply,
+    progressr,
+    progress,
+    careless,
+    qgraph,
+    semPlot,
+    ggridges,
+    ggpubr,
+    forcats,
+    RColorBrewer,
+    scales,
+    openxlsx,
+    lavaan.mi,
+    blavaan,
+    HDInterval,
+    ggplotify,
+    patchwork,
+    wesanderson
+Config/testthat/edition: 3
+RoxygenNote: 7.3.2
+NeedsCompilation: no

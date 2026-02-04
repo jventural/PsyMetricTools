@@ -1,0 +1,14 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.RData$
+^\.Rhistory$
+^Logo.*\.png$
+^.*\.txt$
+^fix_standardized\.R$
+^README\.md$
+^\.git$
+^\.gitignore$
+^test_.*\.R$
+^test_.*\.png$
+^find_unicode\.R$
+^nul$

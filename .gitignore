@@ -1,0 +1,28 @@
+# R specific
+.Rhistory
+.Rdata
+.RData
+.Ruserdata
+.Rproj.user/
+
+# Package build
+*.tar.gz
+*.Rcheck/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*~
+*.tmp
+*.bak
+tmpclaude-*
+
+# Local config
+.Renviron
+.Rprofile
