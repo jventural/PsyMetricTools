@@ -10,7 +10,45 @@ utils::globalVariables(c("row_idx", "d_sq", "flagged"))
 #' @param plot Logical, whether to plot the Mahalanobis distances (default FALSE).
 #'
 #' @return A list with filtered data and a table of aberrant cases.
+#' @examples
+#' \dontrun{
+#' # Create sample data with some aberrant response patterns
+#' set.seed(123)
+#' n <- 200
+#' data <- data.frame(
+#'   ID = 1:n,
+#'   Item1 = sample(1:5, n, replace = TRUE),
+#'   Item2 = sample(1:5, n, replace = TRUE),
+#'   Item3 = sample(1:5, n, replace = TRUE),
+#'   Item4 = sample(1:5, n, replace = TRUE),
+#'   Item5 = sample(1:5, n, replace = TRUE)
+#' )
 #'
+#' # Add some aberrant patterns (all same responses)
+#' data[1, 2:6] <- rep(1, 5)
+#' data[2, 2:6] <- rep(5, 5)
+#'
+#' # Filter aberrant cases
+#' result <- filtrar_aberrantes(
+#'   data = data,
+#'   items = c("Item1", "Item2", "Item3", "Item4", "Item5"),
+#'   plot = FALSE
+#' )
+#'
+#' # Access filtered data (without aberrant cases)
+#' clean_data <- result$data_filtrada
+#' nrow(clean_data)
+#'
+#' # View table of aberrant cases with Mahalanobis distances
+#' result$tabla_aberrantes
+#'
+#' # With visualization of Mahalanobis distances
+#' result_plot <- filtrar_aberrantes(
+#'   data = data,
+#'   items = c("Item1", "Item2", "Item3", "Item4", "Item5"),
+#'   plot = TRUE
+#' )
+#' }
 #' @export
 filtrar_aberrantes <- function(data, items, plot = FALSE) {
   # Asegurarse de que la data tenga una columna de ID

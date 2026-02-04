@@ -5,7 +5,32 @@
 #' @param results A list of CFA results containing FitMeasuresDf.
 #'
 #' @return A combined data frame of fit measures with sample and iteration identifiers.
+#' @examples
+#' \dontrun{
+#' # Assuming you have bootstrap CFA results with FitMeasuresDf elements
+#' # This function extracts and combines fit measures across all bootstrap samples
 #'
+#' # results_list structure:
+#' # list(
+#' #   list(FitMeasuresDf = data.frame(...)),
+#' #   list(FitMeasuresDf = data.frame(...)),
+#' #   ...
+#' # )
+#'
+#' # Extract all fit measures
+#' all_fit_measures <- extract_bondad_boot_AFC(results_list)
+#'
+#' # View combined results
+#' head(all_fit_measures)
+#'
+#' # Summarize by sample
+#' all_fit_measures %>%
+#'   group_by(muestra) %>%
+#'   summarise(
+#'     mean_CFI = mean(CFI, na.rm = TRUE),
+#'     mean_RMSEA = mean(RMSEA, na.rm = TRUE)
+#'   )
+#' }
 #' @export
 extract_bondad_boot_AFC <- function(results) {
   modified_dfs <- list()

@@ -6,6 +6,45 @@
 #' @param perc_exploratorio Proportion for exploratory subset (default 0.5).
 #' @param seed Random seed for reproducibility (default NULL).
 #' @return A list with exploratorio and confirmatorio data frames.
+#' @examples
+#' \dontrun{
+#' # Create sample data with stratification and clustering variables
+#' set.seed(123)
+#' data <- data.frame(
+#'   ID = 1:500,
+#'   Item1 = sample(1:5, 500, replace = TRUE),
+#'   Item2 = sample(1:5, 500, replace = TRUE),
+#'   Item3 = sample(1:5, 500, replace = TRUE),
+#'   Region_reside = sample(c("Norte", "Sur", "Centro"), 500, replace = TRUE),
+#'   Facultad = sample(c("Ingenieria", "Medicina", "Derecho"), 500, replace = TRUE)
+#' )
+#'
+#' # Split with stratification by Region and clustering by Facultad
+#' splits <- split_data_stratified_clustered(
+#'   df = data,
+#'   strat_var = "Region_reside",
+#'   cluster_var = "Facultad",
+#'   perc_exploratorio = 0.5,
+#'   seed = 123
+#' )
+#'
+#' # Access subsets
+#' efa_data <- splits$exploratorio
+#' cfa_data <- splits$confirmatorio
+#'
+#' # Verify stratification is maintained
+#' table(efa_data$Region_reside, efa_data$Facultad)
+#' table(cfa_data$Region_reside, cfa_data$Facultad)
+#'
+#' # Different proportions
+#' splits2 <- split_data_stratified_clustered(
+#'   df = data,
+#'   strat_var = "Region_reside",
+#'   cluster_var = "Facultad",
+#'   perc_exploratorio = 0.6,
+#'   seed = 456
+#' )
+#' }
 #' @export
 split_data_stratified_clustered <- function(df,
                                             strat_var = "Region_reside",

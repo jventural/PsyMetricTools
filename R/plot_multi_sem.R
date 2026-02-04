@@ -32,6 +32,50 @@
 #' @param dpi Resolution.
 #' @param units Units for dimensions.
 #' @return NULL (plots are drawn to device).
+#' @examples
+#' \dontrun{
+#' library(lavaan)
+#'
+#' # Create sample data
+#' set.seed(123)
+#' n <- 300
+#' data <- data.frame(
+#'   Item1 = sample(1:5, n, replace = TRUE),
+#'   Item2 = sample(1:5, n, replace = TRUE),
+#'   Item3 = sample(1:5, n, replace = TRUE),
+#'   Item4 = sample(1:5, n, replace = TRUE),
+#'   Item5 = sample(1:5, n, replace = TRUE),
+#'   Item6 = sample(1:5, n, replace = TRUE)
+#' )
+#'
+#' # Fit multiple models
+#' model1 <- "F1 =~ Item1 + Item2 + Item3 + Item4 + Item5 + Item6"
+#' model2 <- "F1 =~ Item1 + Item2 + Item3\nF2 =~ Item4 + Item5 + Item6"
+#'
+#' fit1 <- cfa(model1, data = data, ordered = TRUE, estimator = "WLSMV")
+#' fit2 <- cfa(model2, data = data, ordered = TRUE, estimator = "WLSMV")
+#'
+#' # Plot multiple models side by side
+#' plot_multi_sem(
+#'   models = list(fit1, fit2),
+#'   model_descriptions = c("1-Factor Model", "2-Factor Model"),
+#'   show_fit_indices = TRUE,
+#'   fit_indices = c("cfi", "tli", "rmsea", "srmr"),
+#'   use_scaled = TRUE
+#' )
+#'
+#' # Save to file
+#' plot_multi_sem(
+#'   models = list(fit1, fit2),
+#'   model_descriptions = c("Model 1", "Model 2"),
+#'   save_plot = TRUE,
+#'   filename = "sem_comparison",
+#'   file_format = "png",
+#'   width_per = 5,
+#'   height = 5,
+#'   dpi = 300
+#' )
+#' }
 #' @export
 plot_multi_sem <- function(models,
                            titles = NULL,

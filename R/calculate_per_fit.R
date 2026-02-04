@@ -6,7 +6,43 @@
 #' @param thresholds_str String specifying thresholds (e.g., "CFI > 0.90, RMSEA < 0.08").
 #'
 #' @return A data frame with percentages for each fit measure.
+#' @examples
+#' \dontrun{
+#' # First run boot_cfa to get bootstrap results
+#' set.seed(123)
+#' n <- 300
+#' data <- data.frame(
+#'   Item1 = sample(1:5, n, replace = TRUE),
+#'   Item2 = sample(1:5, n, replace = TRUE),
+#'   Item3 = sample(1:5, n, replace = TRUE),
+#'   Item4 = sample(1:5, n, replace = TRUE),
+#'   Item5 = sample(1:5, n, replace = TRUE),
+#'   Item6 = sample(1:5, n, replace = TRUE)
+#' )
 #'
+#' model <- "
+#'   F1 =~ Item1 + Item2 + Item3
+#'   F2 =~ Item4 + Item5 + Item6
+#' "
+#'
+#' boot_results <- boot_cfa(
+#'   new_df = data,
+#'   model_string = model,
+#'   item_prefix = "Item",
+#'   n_replications = 100
+#' )
+#'
+#' # Define threshold string
+#' thresholds <- "CFI > 0.95, TLI > 0.95, RMSEA < 0.06, SRMR < 0.08"
+#'
+#' # Calculate percentage of bootstrap replications meeting thresholds
+#' fit_percentages <- calculate_per_fit(boot_results, thresholds)
+#' print(fit_percentages)
+#'
+#' # Different thresholds (more lenient)
+#' thresholds2 <- "CFI > 0.90, TLI > 0.90, RMSEA < 0.08"
+#' calculate_per_fit(boot_results, thresholds2)
+#' }
 #' @export
 calculate_per_fit <- function(df_repli, thresholds_str) {
   #función interna

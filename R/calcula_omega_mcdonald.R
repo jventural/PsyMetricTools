@@ -8,7 +8,43 @@
 #' @param method Either "comunalidad" (h2 = sum of loadings squared) or "sum_loadings".
 #'
 #' @return A list with omega values and item statistics.
+#' @examples
+#' \dontrun{
+#' # Create a sample loadings data frame (from EFA or CFA)
+#' loadings_df <- data.frame(
+#'   Items = c("Item1", "Item2", "Item3", "Item4", "Item5", "Item6"),
+#'   f1 = c(0.75, 0.68, 0.72, 0.10, 0.05, 0.08),
+#'   f2 = c(0.08, 0.12, 0.05, 0.70, 0.65, 0.78)
+#' )
 #'
+#' # Calculate omega for all items
+#' result <- calcula_omega_mcdonald(
+#'   loadings_df = loadings_df,
+#'   groups = NULL,
+#'   method = "comunalidad"
+#' )
+#' result$omegas
+#'
+#' # Calculate omega for specific groups of items
+#' result2 <- calcula_omega_mcdonald(
+#'   loadings_df = loadings_df,
+#'   groups = list(
+#'     Factor1 = c("Item1", "Item2", "Item3"),
+#'     Factor2 = c("Item4", "Item5", "Item6")
+#'   ),
+#'   method = "comunalidad"
+#' )
+#' result2$omegas
+#'
+#' # View item-level statistics
+#' result2$item_stats$Factor1
+#'
+#' # Using with EFA_modern output
+#' efa_result <- EFA_modern(n_factors = 2, n_items = 6,
+#'                          name_items = "Item", data = my_data,
+#'                          apply_threshold = FALSE)
+#' omega_result <- calcula_omega_mcdonald(efa_result$result_df)
+#' }
 #' @export
 calcula_omega_mcdonald <- function(loadings_df,
                                    groups = NULL,

@@ -4,6 +4,50 @@
 #'   est.std, ci.lower, ci.upper, lhs, rhs, op.
 #' @param item_prefix Prefix for item names.
 #' @return A ggplot object showing factor loadings.
+#' @examples
+#' \dontrun{
+#' # Example 1: Using with EFA_modern() result
+#' set.seed(123)
+#' n <- 300
+#' data_efa <- data.frame(
+#'   Item1 = sample(1:5, n, replace = TRUE),
+#'   Item2 = sample(1:5, n, replace = TRUE),
+#'   Item3 = sample(1:5, n, replace = TRUE),
+#'   Item4 = sample(1:5, n, replace = TRUE),
+#'   Item5 = sample(1:5, n, replace = TRUE),
+#'   Item6 = sample(1:5, n, replace = TRUE),
+#'   Item7 = sample(1:5, n, replace = TRUE),
+#'   Item8 = sample(1:5, n, replace = TRUE),
+#'   Item9 = sample(1:5, n, replace = TRUE)
+#' )
+#'
+#' # First run EFA
+#' efa_result <- EFA_modern(
+#'   n_factors = 3,
+#'   n_items = 9,
+#'   name_items = "Item",
+#'   data = data_efa,
+#'   apply_threshold = TRUE
+#' )
+#'
+#' # Plot factor loadings using the lavaan specification
+#' plot <- EFA_plot(
+#'   specifications = efa_result$Specifications[[3]],
+#'   item_prefix = "Item"
+#' )
+#' print(plot)
+#'
+#' # Example 2: Using with a lavaan object directly
+#' library(lavaan)
+#' model <- "
+#'   efa('efa')*f1 +
+#'   efa('efa')*f2 +
+#'   efa('efa')*f3 =~ Item1 + Item2 + Item3 + Item4 + Item5 +
+#'                    Item6 + Item7 + Item8 + Item9
+#' "
+#' fit <- sem(model, data = data_efa, rotation = "oblimin")
+#' EFA_plot(fit, item_prefix = "Item")
+#' }
 #' @export
 EFA_plot <- function(specifications, item_prefix) {
   # Verificar tipo de input y preparar datos

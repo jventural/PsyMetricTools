@@ -5,7 +5,32 @@
 #' @param factors_data A psych factor analysis result object.
 #'
 #' @return A data frame with fit index names and values.
+#' @examples
+#' \dontrun{
+#' library(psych)
 #'
+#' # Create sample data
+#' set.seed(123)
+#' n <- 300
+#' data <- data.frame(
+#'   Item1 = sample(1:5, n, replace = TRUE),
+#'   Item2 = sample(1:5, n, replace = TRUE),
+#'   Item3 = sample(1:5, n, replace = TRUE),
+#'   Item4 = sample(1:5, n, replace = TRUE),
+#'   Item5 = sample(1:5, n, replace = TRUE),
+#'   Item6 = sample(1:5, n, replace = TRUE)
+#' )
+#'
+#' # Run factor analysis with psych package
+#' fa_result <- fa(data, nfactors = 2, rotate = "oblimin", fm = "pa")
+#'
+#' # Extract fit indices
+#' fit_indices <- extract_fit(fa_result)
+#' print(fit_indices)
+#'
+#' # The result contains: RMSEA, lower_RMSEA, upper_RMSEA,
+#' # confidence, TLI, CFI, null.chisq, objective, BIC
+#' }
 #' @export
 extract_fit <- function(factors_data) {
   # Verificar que el paquete requerido esté instalado

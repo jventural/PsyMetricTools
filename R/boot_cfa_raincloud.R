@@ -10,6 +10,48 @@
 #' @param theme_style Estilo: "modern", "minimal", "dark" (default "modern").
 #' @param ... Argumentos adicionales para ggsave.
 #' @return Un objeto ggplot.
+#' @examples
+#' \dontrun{
+#' # First run boot_cfa to get bootstrap results
+#' set.seed(123)
+#' n <- 300
+#' data <- data.frame(
+#'   Item1 = sample(1:5, n, replace = TRUE),
+#'   Item2 = sample(1:5, n, replace = TRUE),
+#'   Item3 = sample(1:5, n, replace = TRUE),
+#'   Item4 = sample(1:5, n, replace = TRUE),
+#'   Item5 = sample(1:5, n, replace = TRUE),
+#'   Item6 = sample(1:5, n, replace = TRUE)
+#' )
+#'
+#' model <- "
+#'   F1 =~ Item1 + Item2 + Item3
+#'   F2 =~ Item4 + Item5 + Item6
+#' "
+#'
+#' boot_results <- boot_cfa(
+#'   new_df = data,
+#'   model_string = model,
+#'   item_prefix = "Item",
+#'   n_replications = 100
+#' )
+#'
+#' # Create raincloud plot with ocean color scheme
+#' boot_cfa_raincloud(boot_results,
+#'                    save = TRUE,
+#'                    path = "bootstrap_raincloud.jpg",
+#'                    color_scheme = "ocean",
+#'                    show_stats = TRUE,
+#'                    theme_style = "modern")
+#'
+#' # Dark theme with sunset colors
+#' boot_cfa_raincloud(boot_results,
+#'                    save = FALSE,
+#'                    color_scheme = "sunset",
+#'                    theme_style = "dark")
+#'
+#' # Available color schemes: "ocean", "sunset", "forest", "lavender", "monochrome", "elegant"
+#' }
 #' @export
 boot_cfa_raincloud <- function(df,
                                 save = TRUE,

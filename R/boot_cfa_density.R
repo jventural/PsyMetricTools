@@ -13,6 +13,46 @@
 #' @param ci_color Color del area de IC (default "#e74c3c").
 #' @param ... Argumentos adicionales para ggsave.
 #' @return Un objeto ggplot.
+#' @examples
+#' \dontrun{
+#' # First run boot_cfa to get bootstrap results
+#' set.seed(123)
+#' n <- 300
+#' data <- data.frame(
+#'   Item1 = sample(1:5, n, replace = TRUE),
+#'   Item2 = sample(1:5, n, replace = TRUE),
+#'   Item3 = sample(1:5, n, replace = TRUE),
+#'   Item4 = sample(1:5, n, replace = TRUE),
+#'   Item5 = sample(1:5, n, replace = TRUE),
+#'   Item6 = sample(1:5, n, replace = TRUE)
+#' )
+#'
+#' model <- "
+#'   F1 =~ Item1 + Item2 + Item3
+#'   F2 =~ Item4 + Item5 + Item6
+#' "
+#'
+#' boot_results <- boot_cfa(
+#'   new_df = data,
+#'   model_string = model,
+#'   item_prefix = "Item",
+#'   n_replications = 100
+#' )
+#'
+#' # Create density plot with confidence intervals
+#' boot_cfa_density(boot_results,
+#'                  save = TRUE,
+#'                  path = "bootstrap_density.jpg",
+#'                  show_ci = TRUE,
+#'                  ci_level = 0.95,
+#'                  show_reference = TRUE)
+#'
+#' # Custom colors
+#' boot_cfa_density(boot_results,
+#'                  save = FALSE,
+#'                  fill_color = "#2ecc71",
+#'                  ci_color = "#e74c3c")
+#' }
 #' @export
 boot_cfa_density <- function(df,
                               save = TRUE,

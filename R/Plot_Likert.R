@@ -6,6 +6,38 @@
 #' @param exclude Items to exclude (default NULL).
 #' @param text_size Text size for labels (default 3).
 #' @return A ggplot object.
+#' @examples
+#' \dontrun{
+#' # Create sample survey data with Likert items (1-5 scale)
+#' set.seed(123)
+#' n <- 200
+#' survey_data <- data.frame(
+#'   Q1 = sample(1:5, n, replace = TRUE),
+#'   Q2 = sample(1:5, n, replace = TRUE),
+#'   Q3 = sample(1:5, n, replace = TRUE),
+#'   Q4 = sample(1:5, n, replace = TRUE),
+#'   Q5 = sample(1:5, n, replace = TRUE),
+#'   Q6 = sample(1:5, n, replace = TRUE)
+#' )
+#'
+#' # Plot all items Q1 to Q6
+#' plot <- Plot_Likert(
+#'   Data = survey_data,
+#'   name_items = "Q",
+#'   ranges = 1:6
+#' )
+#' print(plot)
+#'
+#' # Plot items Q1 to Q4, excluding Q2
+#' plot2 <- Plot_Likert(
+#'   Data = survey_data,
+#'   name_items = "Q",
+#'   ranges = 1:4,
+#'   exclude = 2,
+#'   text_size = 4
+#' )
+#' print(plot2)
+#' }
 #' @export
 Plot_Likert <- function(Data, name_items, ranges, exclude = NULL, text_size = 3) {
   # Verificar que los paquetes necesarios esten disponibles
