@@ -151,7 +151,7 @@ invariance <- easy_invariance(
 
 ```
 Ventura-Leon, J. (2024). PsyMetricTools: Psychometric Analysis Tools
-for R (Version 1.1.1) [Software].
+for R (Version 1.0.0) [Software].
 https://github.com/jventural/PsyMetricTools
 ```
 
