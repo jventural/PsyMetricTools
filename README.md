@@ -42,8 +42,6 @@ devtools::install_github("jventural/PsyMetricTools")
 | `boot_cfa()` | CFA with bootstrap for stability |
 | `boot_efa()` | EFA with bootstrap |
 | `easy_invariance()` | Measurement invariance analysis |
-| `iterativeModelCFA()` | Iterative CFA with modification indices |
-| `iterativeModelEFA()` | Iterative EFA |
 
 ### Visualization
 
