@@ -1,4 +1,13 @@
-#' @name save_to_excel_table
+#' Save Tables to Excel File
+#'
+#' Saves multiple data frames to an Excel file with separate sheets.
+#'
+#' @param file_name Path to the output Excel file.
+#' @param ... Named data frames to save as sheets.
+#' @param na.string String to use for NA values (default: "").
+#'
+#' @return Invisibly returns NULL. Writes Excel file to disk.
+#'
 #' @export
 save_to_excel_table <- function(file_name, ..., na.string = "") {
   if (!requireNamespace("openxlsx", quietly = TRUE)) {

@@ -1,4 +1,11 @@
-#' @name extraer_metricas
+#' Extract Fit Metrics from Model
+#'
+#' Extracts and formats common fit metrics (AIC, BIC, CFI, TLI, RMSEA) from a model.
+#'
+#' @param modelo_fit A model fit object with Measure and Value columns.
+#'
+#' @return A data frame with formatted fit metrics.
+#'
 #' @export
 extraer_metricas <- function(modelo_fit) {
   metricas <- tibble::tibble(Measure = modelo_fit$Measure, Value = modelo_fit$Value)

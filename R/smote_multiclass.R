@@ -1,4 +1,15 @@
-#' @name smote_multiclass
+#' SMOTE Oversampling for Multiclass Data
+#'
+#' Applies SMOTE (Synthetic Minority Over-sampling Technique) for multiclass imbalanced data.
+#'
+#' @param data Data frame with features and outcome variable.
+#' @param outcome Name or index of the outcome variable.
+#' @param perc_maj Percentage of majority class size to target (default: 100).
+#' @param k Number of nearest neighbors for SMOTE (default: 5).
+#' @param seed Random seed for reproducibility.
+#'
+#' @return A data frame with oversampled minority classes.
+#'
 #' @export
 smote_multiclass <- function(data, outcome, perc_maj = 100, k = 5, seed = NULL) {
 

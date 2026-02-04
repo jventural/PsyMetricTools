@@ -1,9 +1,16 @@
-#' @title Filter Aberrant Response Patterns
-#' @description Identifies and filters cases with aberrant response patterns using Mahalanobis distance.
+# Declare global variables for R CMD check
+utils::globalVariables(c("row_idx", "d_sq", "flagged"))
+
+#' Filter Aberrant Response Patterns
+#'
+#' Identifies and filters cases with aberrant response patterns using Mahalanobis distance.
+#'
 #' @param data Data frame containing the items.
 #' @param items Character vector of item names to analyze.
 #' @param plot Logical, whether to plot the Mahalanobis distances (default FALSE).
+#'
 #' @return A list with filtered data and a table of aberrant cases.
+#'
 #' @export
 filtrar_aberrantes <- function(data, items, plot = FALSE) {
   # Asegurarse de que la data tenga una columna de ID

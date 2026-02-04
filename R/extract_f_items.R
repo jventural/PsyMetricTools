@@ -1,4 +1,12 @@
-#' @name extract_f_items
+#' Extract Factor Items for Lavaan Syntax
+#'
+#' Creates lavaan model syntax by extracting items with non-zero loadings per factor.
+#'
+#' @param data Data frame with Items column and factor loading columns.
+#' @param prefixes Vector of factor prefixes (e.g., c("f1", "f2")).
+#'
+#' @return A character string with lavaan model syntax.
+#'
 #' @export
 extract_f_items <- function(data, prefixes) {
   results <- character(length(prefixes))

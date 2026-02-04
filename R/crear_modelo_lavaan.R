@@ -1,4 +1,12 @@
-#' @name crear_modelo_lavaan
+#' Create Lavaan Model Syntax
+#'
+#' Creates lavaan model syntax from item prefix and factor specifications.
+#'
+#' @param nombre Prefix for item names.
+#' @param ... Named numeric vectors specifying item indices for each factor.
+#'
+#' @return A character string with lavaan model syntax.
+#'
 #' @export
 crear_modelo_lavaan <- function(nombre, ...) {
   argumentos <- list(...)

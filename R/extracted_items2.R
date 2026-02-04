@@ -1,4 +1,11 @@
-#' @name extracted_items2
+#' Extract Items by Maximum Loading
+#'
+#' Assigns items to factors based on their highest loading value.
+#'
+#' @param data Data frame with Items column and factor loading columns.
+#'
+#' @return A list with items assigned to each factor.
+#'
 #' @export
 extracted_items2 <- function(data){
   # Excluir columnas no numéricas

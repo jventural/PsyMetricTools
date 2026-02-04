@@ -1,4 +1,15 @@
-#' @name multi_cfa
+#' Run Multiple CFA Models
+#'
+#' Fits multiple CFA models and extracts fit indices, modification indices, and reliability.
+#'
+#' @param modelos List of lavaan model syntax strings.
+#' @param data Data frame with item responses.
+#' @param estimator Estimation method (e.g., "WLSMV").
+#' @param ordered Logical, whether variables are ordered/categorical (default: TRUE).
+#' @param orthogonal_indices Optional vector of model indices to fit with orthogonal factors.
+#'
+#' @return A list with fits, fit indices, modification indices, correlations, and reliability.
+#'
 #' @export
 multi_cfa <- function(modelos, data, estimator, ordered = TRUE, orthogonal_indices = NULL) {
   ajustar_modelo <- function(modelo, index, data, estimator, ordered, orthogonal_indices) {

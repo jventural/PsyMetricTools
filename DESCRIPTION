@@ -14,8 +14,8 @@ Authors@R: person("Jose", "Ventura-Leon",
                   role = c("aut", "cre"),
                   comment = c(ORCID = "0000-0003-2996-4244"))
 License: GPL (>= 3)
-URL: https://github.com/jventuraleon/PsyMetricTools
-BugReports: https://github.com/jventuraleon/PsyMetricTools/issues
+URL: https://github.com/jventural/PsyMetricTools
+BugReports: https://github.com/jventural/PsyMetricTools/issues
 Encoding: UTF-8
 Depends: R (>= 3.6.0)
 Imports:

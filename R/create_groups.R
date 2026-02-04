@@ -1,4 +1,12 @@
-#' @name create_groups
+#' Create Item Groups for Factor Analysis
+#'
+#' Creates a list of item index groups for factor definitions.
+#'
+#' @param names Character vector of group/factor names.
+#' @param values Numeric vector with number of items per group.
+#'
+#' @return A named list with item indices for each group.
+#'
 #' @export
 create_groups <- function(names, values) {
   if(length(names) != length(values)) {

@@ -1,4 +1,11 @@
-#' @name extract_bondad_boot_AFC
+#' Extract Fit Measures from Bootstrap CFA Results
+#'
+#' Extracts and combines fit measures from bootstrap CFA analyses.
+#'
+#' @param results A list of CFA results containing FitMeasuresDf.
+#'
+#' @return A combined data frame of fit measures with sample and iteration identifiers.
+#'
 #' @export
 extract_bondad_boot_AFC <- function(results) {
   modified_dfs <- list()

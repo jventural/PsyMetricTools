@@ -1,4 +1,12 @@
-#' @name summarise_column
+#' Summarize Column Statistics
+#'
+#' Calculates descriptive statistics for a column, excluding zero values.
+#'
+#' @param data Data frame containing the column.
+#' @param col_name Name of the column to summarize.
+#'
+#' @return A data frame with mean, SD, min, and max values.
+#'
 #' @export
 summarise_column <- function(data, col_name) {
   data %>%

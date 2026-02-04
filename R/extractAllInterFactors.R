@@ -1,4 +1,11 @@
-#' @name extractAllInterFactors
+#' Extract All Inter-Factor Correlations from Bootstrap Results
+#'
+#' Extracts and combines inter-factor correlations from all bootstrap replications.
+#'
+#' @param res A bootstrap result object containing processed_results.
+#'
+#' @return A data frame with factor correlations from all replications and iterations.
+#'
 #' @export
 extractAllInterFactors <- function(res) {
   # Verificar si 'res' contiene 'processed_results'

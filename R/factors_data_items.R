@@ -1,4 +1,14 @@
-#' @name factors_data_items
+#' Combine Factor Data with Item Information
+#'
+#' Combines factor loadings with item descriptors and applies loading thresholds.
+#'
+#' @param summary_data Factor summary data frame with Items column.
+#' @param data_items Item descriptor data frame with Items column.
+#' @param num_factors Number of factors in the analysis.
+#' @param apply_threshold Logical, whether to apply 0.30 threshold (default: TRUE).
+#'
+#' @return A tibble with items, loadings, and descriptors.
+#'
 #' @export
 factors_data_items <- function(summary_data, data_items, num_factors, apply_threshold = TRUE) {
   # Nombre de los items

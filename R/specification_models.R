@@ -1,4 +1,16 @@
-#' @name specification_models
+#' Fit Multiple Lavaan Model Specifications
+#'
+#' Fits multiple lavaan EFA/CFA models and returns fitted model objects.
+#'
+#' @param modelos List of model syntax strings.
+#' @param data Data frame with item responses.
+#' @param estimator Estimation method (e.g., "WLSMV").
+#' @param rotation Rotation method for EFA (default: "oblimin").
+#' @param ordered Logical, whether variables are ordered (default: TRUE).
+#' @param verbose Logical, whether to print model output (default: FALSE).
+#'
+#' @return A list of fitted lavaan model objects.
+#'
 #' @export
 specification_models <- function(modelos, data, estimator, rotation = "oblimin",
                                   ordered = TRUE, verbose = FALSE) {

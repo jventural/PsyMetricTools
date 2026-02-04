@@ -1,4 +1,11 @@
-#' @name extract_fit_measures
+#' Extract Fit Measures from Lavaan Specifications
+#'
+#' Extracts fit measures (chi-square, SRMR, WRMR, CFI, TLI, RMSEA) from lavaan models.
+#'
+#' @param Specifications A list of lavaan model objects.
+#'
+#' @return A data frame with fit measures for each factor solution.
+#'
 #' @export
 extract_fit_measures <- function(Specifications) {
   # Verificar que los paquetes requeridos estén instalados

@@ -1,4 +1,11 @@
-#' @name fit_index_Table
+#' Create Fit Index Table
+#'
+#' Creates a comprehensive table combining fit indices and reliability measures.
+#'
+#' @param resultados A results object with bondades_ajuste and fiabilidad components.
+#'
+#' @return A data frame with model fit indices and omega reliability values.
+#'
 #' @export
 fit_index_Table <- function(resultados) {
   # Capturar y suprimir mensajes temporales durante la ejecucion del codigo

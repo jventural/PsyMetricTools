@@ -1,4 +1,13 @@
-#' @name Matrix_lambda
+#' Create Lambda Matrix for CFA
+#'
+#' Creates a binary lambda matrix specifying item-factor relationships for CFA models.
+#'
+#' @param n_items Total number of items.
+#' @param factores Number of factors.
+#' @param n_tamanos Vector specifying the number of items per factor.
+#'
+#' @return A matrix with 1s indicating item-factor loadings.
+#'
 #' @export
 Matrix_lambda <- function(n_items, factores, n_tamanos) {
   if (length(n_tamanos) != factores) {

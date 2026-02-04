@@ -1,4 +1,14 @@
-#' @name calcula_omega_mcdonald
+#' Calculate McDonald's Omega Coefficient
+#'
+#' Calculates McDonald's omega reliability coefficient from factor loadings.
+#'
+#' @param loadings_df Data frame with items and factor loadings.
+#' @param groups NULL for all items, vector of items, or list of item vectors for groups.
+#' @param item_col Name of the column containing item names (default: first column).
+#' @param method Either "comunalidad" (h2 = sum of loadings squared) or "sum_loadings".
+#'
+#' @return A list with omega values and item statistics.
+#'
 #' @export
 calcula_omega_mcdonald <- function(loadings_df,
                                    groups = NULL,

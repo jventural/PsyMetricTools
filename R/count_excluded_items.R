@@ -1,4 +1,11 @@
-#' @name count_excluded_items
+#' Count Excluded Items from Bootstrap Analysis
+#'
+#' Counts how many times each item was excluded across bootstrap iterations.
+#'
+#' @param res A bootstrap result object containing processed_results.
+#'
+#' @return A tibble with item names and exclusion counts, sorted by frequency.
+#'
 #' @export
 count_excluded_items <- function(res) {
   todos_items <- c()  # Vector para almacenar todos los elementos de excluded_items

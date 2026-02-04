@@ -1,4 +1,11 @@
-#' @name extract_ExcludedItems_boot
+#' Extract Excluded Items from Bootstrap Results
+#'
+#' Extracts all excluded items across bootstrap samples.
+#'
+#' @param resultados_bootstrap A bootstrap result object with Results list.
+#'
+#' @return A data frame with excluded items and sample IDs.
+#'
 #' @export
 extract_ExcludedItems_boot <- function(resultados_bootstrap) {
   allExcludedItemsDf <- do.call(rbind, lapply(seq_along(resultados_bootstrap$Results), function(muestra) {

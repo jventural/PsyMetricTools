@@ -1,4 +1,11 @@
-#' @name crearSintaxisCFA
+#' Create CFA Syntax from Data Frame
+#'
+#' Generates lavaan CFA model syntax from a data frame with items and factors.
+#'
+#' @param df A data frame with Items and Factores columns, or factor loading columns (f1, f2, etc.).
+#'
+#' @return A character string with lavaan model syntax.
+#'
 #' @export
 crearSintaxisCFA <- function(df) {
   sintaxis_modelo <- ""

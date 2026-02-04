@@ -1,4 +1,21 @@
-#' @name efa_with_bootstrap
+#' Exploratory Factor Analysis with Bootstrap
+#'
+#' Performs EFA with optional bootstrap resampling for stability analysis.
+#'
+#' @param n_factors Number of factors to extract.
+#' @param n_items Number of items in the analysis.
+#' @param name_items Vector of item names or prefix.
+#' @param data Data frame with item responses.
+#' @param apply_threshold Logical, whether to apply loading threshold.
+#' @param estimator Estimation method (default: "WLSMV").
+#' @param rotation Rotation method (default: "oblimin").
+#' @param exclude_items Optional vector of items to exclude.
+#' @param bootstrap Logical, whether to perform bootstrap (default: FALSE).
+#' @param n_bootstrap Number of bootstrap samples (default: 1000).
+#' @param bootstrap_seed Seed for reproducibility (default: 123).
+#'
+#' @return A list with EFA results and optional bootstrap statistics.
+#'
 #' @export
 efa_with_bootstrap <- function(n_factors,
                                n_items,

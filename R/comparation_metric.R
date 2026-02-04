@@ -1,4 +1,11 @@
-#' @name comparation_metric
+#' Compare Fit Metrics Across Models
+#'
+#' Compares fit metrics (AIC, BIC, CFI, TLI, RMSEA, etc.) across multiple models.
+#'
+#' @param ... Named lavaan fit objects to compare.
+#'
+#' @return A data frame with fit metrics for each model.
+#'
 #' @export
 comparation_metric <- function(...) {
   # Capturar los modelos y sus nombres

@@ -1,4 +1,14 @@
-#' @name generate_model_lavaan
+#' Generate Lavaan Model with Thresholds
+#'
+#' Generates complete lavaan model syntax including factor loadings and item thresholds.
+#'
+#' @param num_items Number of items in the model.
+#' @param item_value Vector of loading values for each item.
+#' @param t_values Vector of threshold values.
+#' @param excluded_items Items to exclude (commented out), or "none".
+#'
+#' @return A character string with complete lavaan model syntax.
+#'
 #' @export
 generate_model_lavaan <- function(num_items,
                           item_value,

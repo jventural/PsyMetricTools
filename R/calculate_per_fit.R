@@ -1,4 +1,12 @@
-#' @name calculate_per_fit
+#' Calculate Percentage of Fit Indices Meeting Thresholds
+#'
+#' Calculates the percentage of bootstrap replications meeting specified fit thresholds.
+#'
+#' @param df_repli Data frame with bootstrap replications containing fit_measures1.
+#' @param thresholds_str String specifying thresholds (e.g., "CFI > 0.90, RMSEA < 0.08").
+#'
+#' @return A data frame with percentages for each fit measure.
+#'
 #' @export
 calculate_per_fit <- function(df_repli, thresholds_str) {
   #función interna

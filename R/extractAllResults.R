@@ -1,4 +1,11 @@
-#' @name extractAllResults
+#' Extract All Results from Bootstrap Analysis
+#'
+#' Extracts and combines all results from bootstrap replications.
+#'
+#' @param res A bootstrap result object containing processed_results.
+#'
+#' @return A data frame with results from all replications and iterations.
+#'
 #' @export
 extractAllResults <- function(res) {
   # Verificar si 'res' contiene 'processed_results'

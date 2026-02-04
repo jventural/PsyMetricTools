@@ -1,4 +1,22 @@
-#' @name combine_likert_sem
+#' Combine Likert Plot with SEM Path Diagram
+#'
+#' Creates a combined visualization with a Likert plot and SEM path diagram.
+#'
+#' @param plot_likert A ggplot object with Likert plot.
+#' @param fit_sem A lavaan model object for semPaths.
+#' @param sem_args List of additional arguments for semPaths.
+#' @param nodeLabels Custom node labels for the SEM diagram.
+#' @param ncol Number of columns in layout (default: 2).
+#' @param widths Relative widths of columns.
+#' @param tag_levels Tag levels for plot annotation (default: "A").
+#' @param tag_suffix Suffix for tags.
+#' @param tag_pos Position of tags as c(x, y).
+#' @param tag_offset_y Vertical offset for tags.
+#' @param tag_size Font size for tags.
+#' @param tag_face Font face for tags.
+#'
+#' @return A combined patchwork plot.
+#'
 #' @export
 combine_likert_sem <- function(
     plot_likert,       # un objeto ggplot

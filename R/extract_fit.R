@@ -1,4 +1,11 @@
-#' @name extract_fit
+#' Extract Fit Indices from Factor Analysis
+#'
+#' Extracts fit indices (RMSEA, TLI, CFI, BIC) from psych factor analysis results.
+#'
+#' @param factors_data A psych factor analysis result object.
+#'
+#' @return A data frame with fit index names and values.
+#'
 #' @export
 extract_fit <- function(factors_data) {
   # Verificar que el paquete requerido esté instalado

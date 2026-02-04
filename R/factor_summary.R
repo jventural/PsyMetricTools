@@ -1,4 +1,13 @@
-#' @name factor_summary
+#' Create Factor Analysis Summary
+#'
+#' Creates a summary table with loadings, communalities, and uniquenesses.
+#'
+#' @param factors_data A factor analysis result object with loadings.
+#' @param num_items Number of items in the analysis.
+#' @param num_factors Number of factors extracted.
+#'
+#' @return A data frame with items, factor loadings, h2, and u2.
+#'
 #' @export
 factor_summary <- function(factors_data, num_items, num_factors) {
   factor_names <- paste0("F", 1:num_factors)

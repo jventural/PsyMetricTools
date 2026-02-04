@@ -1,4 +1,11 @@
-#' @name extractAllFitMeasures
+#' Extract All Fit Measures from Bootstrap Results
+#'
+#' Extracts and combines fit measures from all bootstrap replications.
+#'
+#' @param res A bootstrap result object containing processed_results.
+#'
+#' @return A data frame with fit measures from all replications and iterations.
+#'
 #' @export
 extractAllFitMeasures <- function(res) {
   # Verificar si 'res' contiene 'processed_results'

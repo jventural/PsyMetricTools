@@ -1,4 +1,11 @@
-#' @name extract_bondad_boot_EFA
+#' Extract Fit Measures from Bootstrap EFA Results
+#'
+#' Extracts and combines fit measures from bootstrap EFA analyses.
+#'
+#' @param resultados_bootstrap A bootstrap result object with Results list.
+#'
+#' @return A data frame of fit measures with sample identifiers.
+#'
 #' @export
 extract_bondad_boot_EFA <- function(resultados_bootstrap) {
   # Cargar las librerías necesarias

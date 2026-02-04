@@ -1,4 +1,11 @@
-#' @name extract_ModIndex_AFC
+#' Extract Modification Indices from CFA Results
+#'
+#' Extracts and combines modification indices from multiple CFA analyses.
+#'
+#' @param results A list of CFA results containing ModificationsDf.
+#'
+#' @return A combined data frame of modification indices with sample identifiers.
+#'
 #' @export
 extract_ModIndex_AFC <- function(results) {
   # Inicializa una lista para almacenar los dataframes modificados
