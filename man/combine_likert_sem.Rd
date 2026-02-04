@@ -50,3 +50,52 @@ A combined patchwork plot.
 \description{
 Creates a combined visualization with a Likert plot and SEM path diagram.
 }
+\examples{
+\dontrun{
+library(lavaan)
+library(ggplot2)
+
+# Create sample data
+set.seed(123)
+n <- 300
+data <- data.frame(
+  Item1 = sample(1:5, n, replace = TRUE),
+  Item2 = sample(1:5, n, replace = TRUE),
+  Item3 = sample(1:5, n, replace = TRUE),
+  Item4 = sample(1:5, n, replace = TRUE),
+  Item5 = sample(1:5, n, replace = TRUE),
+  Item6 = sample(1:5, n, replace = TRUE)
+)
+
+# Create Likert plot
+likert_plot <- Plot_Likert(
+  Data = data,
+  name_items = "Item",
+  ranges = 1:6
+)
+
+# Fit CFA model
+model <- "
+  F1 =~ Item1 + Item2 + Item3
+  F2 =~ Item4 + Item5 + Item6
+"
+fit <- cfa(model, data = data, ordered = TRUE, estimator = "WLSMV")
+
+# Combine Likert plot with SEM path diagram
+combined_plot <- combine_likert_sem(
+  plot_likert = likert_plot,
+  fit_sem = fit,
+  ncol = 2,
+  widths = c(1, 1),
+  tag_levels = "A",
+  tag_size = 14
+)
+
+# Display combined plot
+print(combined_plot)
+
+# Save combined plot
+ggsave("combined_likert_sem.jpg", combined_plot,
+       width = 14, height = 8, dpi = 300)
+}
+}

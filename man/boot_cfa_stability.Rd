@@ -32,3 +32,40 @@ Data frame with fit measures and reliability across sample sizes.
 \description{
 Performs bootstrap CFA stability analysis across different sample sizes.
 }
+\examples{
+\dontrun{
+# Create sample data
+set.seed(123)
+n <- 500
+data <- data.frame(
+  Item1 = sample(1:5, n, replace = TRUE),
+  Item2 = sample(1:5, n, replace = TRUE),
+  Item3 = sample(1:5, n, replace = TRUE),
+  Item4 = sample(1:5, n, replace = TRUE),
+  Item5 = sample(1:5, n, replace = TRUE),
+  Item6 = sample(1:5, n, replace = TRUE)
+)
+
+# Define CFA model
+model <- "
+  F1 =~ Item1 + Item2 + Item3
+  F2 =~ Item4 + Item5 + Item6
+"
+
+# Run stability analysis (testing 90\% to 30\% of sample sizes)
+stability_results <- boot_cfa_stability(
+  modelo = model,
+  data = data,
+  num_replicas = 50,
+  estimator = "WLSMV",
+  seed = 2023,
+  n_cores = 4
+)
+
+# View results - fit indices and reliability at different sample sizes
+head(stability_results)
+
+# Plot stability results
+plot_cfa_stability(stability_results)
+}
+}

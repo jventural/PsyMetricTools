@@ -19,3 +19,46 @@ A data frame with items and factor loadings.
 \description{
 Extracts and formats standardized factor loadings from lavaan EFA.
 }
+\examples{
+\dontrun{
+# First run EFA_modern to get the specification object
+set.seed(123)
+n <- 300
+data_efa <- data.frame(
+  Item1 = sample(1:5, n, replace = TRUE),
+  Item2 = sample(1:5, n, replace = TRUE),
+  Item3 = sample(1:5, n, replace = TRUE),
+  Item4 = sample(1:5, n, replace = TRUE),
+  Item5 = sample(1:5, n, replace = TRUE),
+  Item6 = sample(1:5, n, replace = TRUE),
+  Item7 = sample(1:5, n, replace = TRUE),
+  Item8 = sample(1:5, n, replace = TRUE),
+  Item9 = sample(1:5, n, replace = TRUE)
+)
+
+# Run EFA
+efa_result <- EFA_modern(
+  n_factors = 3,
+  n_items = 9,
+  name_items = "Item",
+  data = data_efa,
+  apply_threshold = TRUE
+)
+
+# Extract standardized solutions from the 3-factor model
+loadings <- Standardized_solutions(
+  specification = efa_result$Specifications[[3]],
+  name_items = "Item",
+  apply_threshold = TRUE
+)
+print(loadings)
+
+# Without threshold (show all loadings)
+loadings_full <- Standardized_solutions(
+  specification = efa_result$Specifications[[3]],
+  name_items = "Item",
+  apply_threshold = FALSE
+)
+print(loadings_full)
+}
+}

@@ -23,3 +23,66 @@ A list with fits, fit indices, modification indices, correlations, and reliabili
 \description{
 Fits multiple CFA models and extracts fit indices, modification indices, and reliability.
 }
+\examples{
+\dontrun{
+# Create sample data
+set.seed(123)
+n <- 300
+data <- data.frame(
+  Item1 = sample(1:5, n, replace = TRUE),
+  Item2 = sample(1:5, n, replace = TRUE),
+  Item3 = sample(1:5, n, replace = TRUE),
+  Item4 = sample(1:5, n, replace = TRUE),
+  Item5 = sample(1:5, n, replace = TRUE),
+  Item6 = sample(1:5, n, replace = TRUE),
+  Item7 = sample(1:5, n, replace = TRUE),
+  Item8 = sample(1:5, n, replace = TRUE),
+  Item9 = sample(1:5, n, replace = TRUE)
+)
+
+# Define multiple CFA models to compare
+model1 <- "F1 =~ Item1 + Item2 + Item3 + Item4 + Item5 + Item6 + Item7 + Item8 + Item9"
+
+model2 <- "
+  F1 =~ Item1 + Item2 + Item3
+  F2 =~ Item4 + Item5 + Item6
+  F3 =~ Item7 + Item8 + Item9
+"
+
+model3 <- "
+  F1 =~ Item1 + Item2 + Item3 + Item4 + Item5
+  F2 =~ Item6 + Item7 + Item8 + Item9
+"
+
+modelos <- list(model1, model2, model3)
+
+# Run multiple CFAs
+results <- multi_cfa(
+  modelos = modelos,
+  data = data,
+  estimator = "WLSMV",
+  ordered = TRUE
+)
+
+# Compare fit indices across models
+results$bondades_ajuste
+
+# Check modification indices for Model 2
+results$indices_modificacion[[2]]
+
+# View factor correlations for Model 2
+results$correlaciones_factores$Modelo2
+
+# Check reliability (omega) for each model
+results$fiabilidad
+
+# Fit model 3 with orthogonal factors
+results_orth <- multi_cfa(
+  modelos = modelos,
+  data = data,
+  estimator = "WLSMV",
+  ordered = TRUE,
+  orthogonal_indices = 3
+)
+}
+}

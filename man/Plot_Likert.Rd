@@ -23,3 +23,36 @@ A ggplot object.
 \description{
 Creates a visualization for Likert scale items.
 }
+\examples{
+\dontrun{
+# Create sample survey data with Likert items (1-5 scale)
+set.seed(123)
+n <- 200
+survey_data <- data.frame(
+  Q1 = sample(1:5, n, replace = TRUE),
+  Q2 = sample(1:5, n, replace = TRUE),
+  Q3 = sample(1:5, n, replace = TRUE),
+  Q4 = sample(1:5, n, replace = TRUE),
+  Q5 = sample(1:5, n, replace = TRUE),
+  Q6 = sample(1:5, n, replace = TRUE)
+)
+
+# Plot all items Q1 to Q6
+plot <- Plot_Likert(
+  Data = survey_data,
+  name_items = "Q",
+  ranges = 1:6
+)
+print(plot)
+
+# Plot items Q1 to Q4, excluding Q2
+plot2 <- Plot_Likert(
+  Data = survey_data,
+  name_items = "Q",
+  ranges = 1:4,
+  exclude = 2,
+  text_size = 4
+)
+print(plot2)
+}
+}

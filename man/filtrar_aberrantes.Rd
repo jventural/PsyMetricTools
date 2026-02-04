@@ -19,3 +19,43 @@ A list with filtered data and a table of aberrant cases.
 \description{
 Identifies and filters cases with aberrant response patterns using Mahalanobis distance.
 }
+\examples{
+\dontrun{
+# Create sample data with some aberrant response patterns
+set.seed(123)
+n <- 200
+data <- data.frame(
+  ID = 1:n,
+  Item1 = sample(1:5, n, replace = TRUE),
+  Item2 = sample(1:5, n, replace = TRUE),
+  Item3 = sample(1:5, n, replace = TRUE),
+  Item4 = sample(1:5, n, replace = TRUE),
+  Item5 = sample(1:5, n, replace = TRUE)
+)
+
+# Add some aberrant patterns (all same responses)
+data[1, 2:6] <- rep(1, 5)
+data[2, 2:6] <- rep(5, 5)
+
+# Filter aberrant cases
+result <- filtrar_aberrantes(
+  data = data,
+  items = c("Item1", "Item2", "Item3", "Item4", "Item5"),
+  plot = FALSE
+)
+
+# Access filtered data (without aberrant cases)
+clean_data <- result$data_filtrada
+nrow(clean_data)
+
+# View table of aberrant cases with Mahalanobis distances
+result$tabla_aberrantes
+
+# With visualization of Mahalanobis distances
+result_plot <- filtrar_aberrantes(
+  data = data,
+  items = c("Item1", "Item2", "Item3", "Item4", "Item5"),
+  plot = TRUE
+)
+}
+}

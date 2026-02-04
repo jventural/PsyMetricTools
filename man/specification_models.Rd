@@ -32,3 +32,41 @@ A list of fitted lavaan model objects.
 \description{
 Fits multiple lavaan EFA/CFA models and returns fitted model objects.
 }
+\examples{
+\dontrun{
+# Create sample data
+set.seed(123)
+n <- 300
+data <- data.frame(
+  Item1 = sample(1:5, n, replace = TRUE),
+  Item2 = sample(1:5, n, replace = TRUE),
+  Item3 = sample(1:5, n, replace = TRUE),
+  Item4 = sample(1:5, n, replace = TRUE),
+  Item5 = sample(1:5, n, replace = TRUE),
+  Item6 = sample(1:5, n, replace = TRUE)
+)
+
+# Generate EFA models for 1 to 3 factors
+models <- generate_modelos(
+  n_factors = 3,
+  name_items = "Item",
+  n_items = 6
+)
+
+# Fit all models
+specifications <- specification_models(
+  modelos = models,
+  data = data,
+  estimator = "WLSMV",
+  rotation = "oblimin",
+  ordered = TRUE
+)
+
+# Access fitted model for 2-factor solution
+summary(specifications[[2]])
+
+# Extract fit indices
+fit_table <- extract_fit_measures(specifications)
+print(fit_table)
+}
+}

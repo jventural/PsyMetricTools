@@ -19,3 +19,45 @@ A data frame with items and factor loadings.
 \description{
 Extracts and formats standardized factor loadings from lavaan CFA.
 }
+\examples{
+\dontrun{
+library(lavaan)
+
+# Create sample data
+set.seed(123)
+n <- 300
+data_cfa <- data.frame(
+  Item1 = sample(1:5, n, replace = TRUE),
+  Item2 = sample(1:5, n, replace = TRUE),
+  Item3 = sample(1:5, n, replace = TRUE),
+  Item4 = sample(1:5, n, replace = TRUE),
+  Item5 = sample(1:5, n, replace = TRUE),
+  Item6 = sample(1:5, n, replace = TRUE)
+)
+
+# Define CFA model
+model <- "
+  f1 =~ Item1 + Item2 + Item3
+  f2 =~ Item4 + Item5 + Item6
+"
+
+# Fit the model
+fit <- cfa(model, data = data_cfa, ordered = TRUE, estimator = "WLSMV")
+
+# Extract standardized solutions with threshold
+loadings <- Standardized_solutions_cfa(
+  specification = fit,
+  name_items = "Item",
+  apply_threshold = TRUE
+)
+print(loadings)
+
+# Without threshold (show all loadings)
+loadings_full <- Standardized_solutions_cfa(
+  specification = fit,
+  name_items = "Item",
+  apply_threshold = FALSE
+)
+print(loadings_full)
+}
+}

@@ -15,3 +15,34 @@ A data frame with model fit indices and omega reliability values.
 \description{
 Creates a comprehensive table combining fit indices and reliability measures.
 }
+\examples{
+\dontrun{
+# First run multi_cfa to get results
+set.seed(123)
+n <- 300
+data <- data.frame(
+  Item1 = sample(1:5, n, replace = TRUE),
+  Item2 = sample(1:5, n, replace = TRUE),
+  Item3 = sample(1:5, n, replace = TRUE),
+  Item4 = sample(1:5, n, replace = TRUE),
+  Item5 = sample(1:5, n, replace = TRUE),
+  Item6 = sample(1:5, n, replace = TRUE)
+)
+
+models <- list(
+  "F1 =~ Item1 + Item2 + Item3 + Item4 + Item5 + Item6",
+  "F1 =~ Item1 + Item2 + Item3\nF2 =~ Item4 + Item5 + Item6"
+)
+
+results <- multi_cfa(modelos = models, data = data,
+                     estimator = "WLSMV", ordered = TRUE)
+
+# Create fit index table combining fit measures and reliability
+fit_table <- fit_index_Table(results)
+print(fit_table)
+# Output:
+# Model   x2   df  SRMR   CFI   TLI  RMSEA  CRMR omega_F1 omega_F2
+# 1      ...  ...  ...   ...   ...   ...    ...   0.78     NA
+# 2      ...  ...  ...   ...   ...   ...    ...   0.75     0.80
+}
+}

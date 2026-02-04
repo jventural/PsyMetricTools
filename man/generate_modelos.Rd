@@ -29,3 +29,32 @@ A list of model syntax strings for each factor solution.
 \description{
 Generates lavaan EFA model syntax for 1 to n_factors solutions.
 }
+\examples{
+\dontrun{
+# Generate models for 1 to 4 factor solutions using item prefix
+models <- generate_modelos(
+  n_factors = 4,
+  name_items = "Item",
+  n_items = 12
+)
+
+# View the 3-factor model syntax
+cat(models[[3]])
+
+# Generate models excluding specific items
+models2 <- generate_modelos(
+  n_factors = 3,
+  name_items = "Q",
+  n_items = 10,
+  exclude_items = c("Q3", "Q7")
+)
+
+# Generate models using specific item names
+models3 <- generate_modelos(
+  n_factors = 2,
+  specific_items = c("Anxiety1", "Anxiety2", "Anxiety3",
+                     "Depression1", "Depression2", "Depression3")
+)
+cat(models3[[2]])
+}
+}

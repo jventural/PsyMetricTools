@@ -80,3 +80,45 @@ A combined ggplot figure.
 \description{
 Creates line plots showing CFA fit indices across sample sizes.
 }
+\examples{
+\dontrun{
+# First run boot_cfa_stability to get stability results
+set.seed(123)
+n <- 500
+data <- data.frame(
+  Item1 = sample(1:5, n, replace = TRUE),
+  Item2 = sample(1:5, n, replace = TRUE),
+  Item3 = sample(1:5, n, replace = TRUE),
+  Item4 = sample(1:5, n, replace = TRUE),
+  Item5 = sample(1:5, n, replace = TRUE),
+  Item6 = sample(1:5, n, replace = TRUE)
+)
+
+model <- "
+  F1 =~ Item1 + Item2 + Item3
+  F2 =~ Item4 + Item5 + Item6
+"
+
+stability_results <- boot_cfa_stability(
+  modelo = model,
+  data = data,
+  num_replicas = 50,
+  estimator = "WLSMV"
+)
+
+# Create stability plots
+figure <- plot_cfa_stability(
+  resultados = stability_results,
+  num_factors = 2,
+  y_min_omega = 0.6,
+  y_max_omega = 1,
+  y_min_cfi = 0.85,
+  y_max_cfi = 1,
+  hline_color = "red"
+)
+
+# Save the figure
+ggplot2::ggsave("stability_analysis.jpg", figure,
+                width = 12, height = 8, dpi = 300)
+}
+}

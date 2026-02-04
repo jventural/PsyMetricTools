@@ -23,3 +23,41 @@ A data frame with oversampled minority classes.
 \description{
 Applies SMOTE (Synthetic Minority Over-sampling Technique) for multiclass imbalanced data.
 }
+\examples{
+\dontrun{
+# Create imbalanced multiclass data
+set.seed(123)
+data <- data.frame(
+  Item1 = sample(1:5, 200, replace = TRUE),
+  Item2 = sample(1:5, 200, replace = TRUE),
+  Item3 = sample(1:5, 200, replace = TRUE),
+  Group = c(rep("A", 100), rep("B", 70), rep("C", 30))  # Imbalanced classes
+)
+
+# Check original class distribution
+table(data$Group)
+# A   B   C
+# 100 70  30
+
+# Apply SMOTE to balance classes
+balanced_data <- smote_multiclass(
+  data = data,
+  outcome = "Group",
+  perc_maj = 100,  # Target 100\% of majority class size
+  k = 5,
+  seed = 123
+)
+
+# Check balanced class distribution
+table(balanced_data$Group)
+
+# Partial balancing (50\% of majority)
+partial_balanced <- smote_multiclass(
+  data = data,
+  outcome = "Group",
+  perc_maj = 50,
+  seed = 456
+)
+table(partial_balanced$Group)
+}
+}

@@ -38,3 +38,59 @@ A list containing fit indices, specifications, interfactor correlations, and pat
 \description{
 Performs exploratory factor analysis using lavaan with rotation.
 }
+\examples{
+\dontrun{
+# Create sample data with 15 Likert-type items
+set.seed(123)
+n <- 300
+data_efa <- data.frame(
+  Item1 = sample(1:5, n, replace = TRUE),
+  Item2 = sample(1:5, n, replace = TRUE),
+  Item3 = sample(1:5, n, replace = TRUE),
+  Item4 = sample(1:5, n, replace = TRUE),
+  Item5 = sample(1:5, n, replace = TRUE),
+  Item6 = sample(1:5, n, replace = TRUE),
+  Item7 = sample(1:5, n, replace = TRUE),
+  Item8 = sample(1:5, n, replace = TRUE),
+  Item9 = sample(1:5, n, replace = TRUE),
+  Item10 = sample(1:5, n, replace = TRUE),
+  Item11 = sample(1:5, n, replace = TRUE),
+  Item12 = sample(1:5, n, replace = TRUE),
+  Item13 = sample(1:5, n, replace = TRUE),
+  Item14 = sample(1:5, n, replace = TRUE),
+  Item15 = sample(1:5, n, replace = TRUE)
+)
+
+# Perform EFA with 3 factors using WLSMV estimator
+result <- EFA_modern(
+  n_factors = 3,
+  n_items = 15,
+  name_items = "Item",
+  data = data_efa,
+  apply_threshold = TRUE,
+  estimator = "WLSMV",
+  rotation = "oblimin"
+)
+
+# Access fit indices
+result$Bondades_Original
+
+# Access pattern matrix (factor loadings)
+result$result_df
+
+# Access interfactor correlations
+result$InterFactor
+
+# Example excluding specific items
+result2 <- EFA_modern(
+  n_factors = 3,
+  n_items = 15,
+  name_items = "Item",
+  data = data_efa,
+  apply_threshold = TRUE,
+  estimator = "WLSMV",
+  rotation = "oblimin",
+  exclude_items = c("Item5", "Item10")
+)
+}
+}

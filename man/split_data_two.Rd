@@ -26,3 +26,38 @@ A list with exploratorio and confirmatorio data frames.
 \description{
 Splits a data frame into exploratory and confirmatory subsets.
 }
+\examples{
+\dontrun{
+# Create sample data
+set.seed(123)
+data <- data.frame(
+  Item1 = sample(1:5, 500, replace = TRUE),
+  Item2 = sample(1:5, 500, replace = TRUE),
+  Item3 = sample(1:5, 500, replace = TRUE),
+  Item4 = sample(1:5, 500, replace = TRUE)
+)
+
+# Split data 50/50 for EFA and CFA
+splits <- split_data_two(
+  df = data,
+  perc_exploratorio = 0.5,
+  perc_confirmatorio = 0.5,
+  seed = 123
+)
+
+# Access the subsets
+efa_data <- splits$exploratorio
+cfa_data <- splits$confirmatorio
+
+nrow(efa_data)  # Should be 250
+nrow(cfa_data)  # Should be 250
+
+# Different proportions: 60\% EFA, 40\% CFA
+splits2 <- split_data_two(
+  df = data,
+  perc_exploratorio = 0.6,
+  perc_confirmatorio = 0.4,
+  seed = 456
+)
+}
+}

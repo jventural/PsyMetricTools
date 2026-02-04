@@ -47,3 +47,58 @@ A list with EFA results and optional bootstrap statistics.
 \description{
 Performs EFA with optional bootstrap resampling for stability analysis.
 }
+\examples{
+\dontrun{
+# Create sample data
+set.seed(123)
+n <- 300
+data <- data.frame(
+  Item1 = sample(1:5, n, replace = TRUE),
+  Item2 = sample(1:5, n, replace = TRUE),
+  Item3 = sample(1:5, n, replace = TRUE),
+  Item4 = sample(1:5, n, replace = TRUE),
+  Item5 = sample(1:5, n, replace = TRUE),
+  Item6 = sample(1:5, n, replace = TRUE),
+  Item7 = sample(1:5, n, replace = TRUE),
+  Item8 = sample(1:5, n, replace = TRUE),
+  Item9 = sample(1:5, n, replace = TRUE)
+)
+
+# Basic EFA without bootstrap
+result_basic <- efa_with_bootstrap(
+  n_factors = 3,
+  n_items = 9,
+  name_items = "Item",
+  data = data,
+  apply_threshold = TRUE,
+  bootstrap = FALSE
+)
+
+# View fit indices
+result_basic$Bondades_Original
+
+# View factor loadings
+result_basic$result_df
+
+# EFA with bootstrap for stability analysis
+result_boot <- efa_with_bootstrap(
+  n_factors = 3,
+  n_items = 9,
+  name_items = "Item",
+  data = data,
+  apply_threshold = TRUE,
+  bootstrap = TRUE,
+  n_bootstrap = 100,  # Use 1000 in practice
+  bootstrap_seed = 123
+)
+
+# View bootstrap summary of fit indices
+result_boot$Bootstrap$fit_indices_summary$summary
+
+# View bootstrap summary of factor loadings
+result_boot$Bootstrap$loadings_summary
+
+# View global loadings summary
+result_boot$Bootstrap$global_loadings_summary
+}
+}

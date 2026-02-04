@@ -38,3 +38,48 @@ A ggplot object.
 \description{
 Creates a diverging stacked bar chart visualization for Likert scale items.
 }
+\examples{
+\dontrun{
+# Create sample survey data with binary Likert items
+set.seed(123)
+n <- 200
+survey_data <- data.frame(
+  IS1 = sample(1:2, n, replace = TRUE),
+  IS2 = sample(1:2, n, replace = TRUE),
+  IS3 = sample(1:2, n, replace = TRUE),
+  IS4 = sample(1:2, n, replace = TRUE),
+  IS5 = sample(1:2, n, replace = TRUE)
+)
+
+# Create diverging stacked bar chart
+plot <- Plot_Likert2(
+  data = survey_data,
+  prefix = "IS",
+  labels = c("Disagree", "Agree"),
+  palette = "Blues",
+  text_size = 3,
+  threshold = 5,
+  show_text = TRUE,
+  item_range = 1:5
+)
+print(plot)
+
+# Example with 5-point scale
+survey_data2 <- data.frame(
+  Q1 = sample(1:5, n, replace = TRUE),
+  Q2 = sample(1:5, n, replace = TRUE),
+  Q3 = sample(1:5, n, replace = TRUE),
+  Q4 = sample(1:5, n, replace = TRUE)
+)
+
+plot2 <- Plot_Likert2(
+  data = survey_data2,
+  prefix = "Q",
+  labels = c("Strongly disagree", "Disagree", "Neutral",
+             "Agree", "Strongly agree"),
+  palette = "RdYlBu",
+  item_range = 1:4
+)
+print(plot2)
+}
+}

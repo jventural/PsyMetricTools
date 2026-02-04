@@ -35,3 +35,48 @@ Data frame with bootstrap results including fit measures and reliability.
 \description{
 Performs bootstrap CFA with reliability estimation.
 }
+\examples{
+\dontrun{
+# Create sample data with 9 Likert-type items (3 factors, 3 items each)
+set.seed(123)
+n <- 300
+data_cfa <- data.frame(
+  Item1 = sample(1:5, n, replace = TRUE),
+  Item2 = sample(1:5, n, replace = TRUE),
+  Item3 = sample(1:5, n, replace = TRUE),
+  Item4 = sample(1:5, n, replace = TRUE),
+  Item5 = sample(1:5, n, replace = TRUE),
+  Item6 = sample(1:5, n, replace = TRUE),
+  Item7 = sample(1:5, n, replace = TRUE),
+  Item8 = sample(1:5, n, replace = TRUE),
+  Item9 = sample(1:5, n, replace = TRUE)
+)
+
+# Define the CFA model
+model <- "
+  F1 =~ Item1 + Item2 + Item3
+  F2 =~ Item4 + Item5 + Item6
+  F3 =~ Item7 + Item8 + Item9
+"
+
+# Perform bootstrap CFA with 100 replications (use more in practice)
+result <- boot_cfa(
+  new_df = data_cfa,
+  model_string = model,
+  item_prefix = "Item",
+  seed = 2023,
+  n_replications = 100,
+  ordered = TRUE,
+  estimator = "WLSMV"
+)
+
+# Access fit measures
+result$fit_measures1
+
+# Check convergence rates
+mean(result$converged1)
+
+# Access reliability estimates (omega)
+result[, c("Rel1", "Rel2", "Rel3")]
+}
+}
