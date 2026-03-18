@@ -12,3 +12,4 @@
 ^test_.*\.png$
 ^find_unicode\.R$
 ^nul$
+^CRAN-SUBMISSION$
