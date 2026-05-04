@@ -40,7 +40,20 @@ plot_cfa_stability_ridgeline <- function(resultados,
                                          vline_color = "red",
                                          vline_linetype = "dashed",
                                          theme_style = "minimal",
-                                         rel_min_height = 0.01) {
+                                         rel_min_height = 0.01,
+                                         lang = c("es", "en")) {
+
+  lang <- match.arg(lang)
+  i18n <- list(
+    es = list(legend = "% Muestra",
+              x = "Valor estimado",
+              y = "Porcentaje de la muestra",
+              caption = "Nota. Las lineas verticales dentro de las distribuciones representan los percentiles 2.5%, 50% y 97.5%."),
+    en = list(legend = "% Sample",
+              x = "Estimated value",
+              y = "Sample percentage",
+              caption = "Note. Vertical lines inside the distributions represent the 2.5%, 50%, and 97.5% percentiles.")
+  )[[lang]]
 
   # Verificar que ggridges este instalado
   if (!requireNamespace("ggridges", quietly = TRUE)) {
@@ -135,7 +148,7 @@ plot_cfa_stability_ridgeline <- function(resultados,
     # Usar gradiente por porcentaje
     p <- ggplot2::ggplot(resultados_long, ggplot2::aes(x = Valor, y = Porcentaje_factor, fill = Porcentaje)) +
       ggplot2::scale_fill_gradient(low = gradient_colors[1], high = gradient_colors[2],
-                          name = "% Muestra")
+                          name = i18n$legend)
   } else {
     # Usar color fijo
     p <- ggplot2::ggplot(resultados_long, ggplot2::aes(x = Valor, y = Porcentaje_factor)) +
@@ -181,13 +194,9 @@ plot_cfa_stability_ridgeline <- function(resultados,
 
   # Etiquetas
   p <- p + ggplot2::labs(
-    x = "Valor estimado",
-    y = "Porcentaje de la muestra",
-    caption = if(show_quantiles) {
-      "Nota. Las lineas verticales dentro de las distribuciones representan los percentiles 2.5%, 50% y 97.5%."
-    } else {
-      NULL
-    }
+    x = i18n$x,
+    y = i18n$y,
+    caption = if (show_quantiles) i18n$caption else NULL
   )
 
   # Aplicar tema
