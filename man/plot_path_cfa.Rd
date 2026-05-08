@@ -2,25 +2,29 @@
 % Please edit documentation in R/plot_path_cfa.R
 \name{plot_path_cfa}
 \alias{plot_path_cfa}
-\title{Path diagram for a CFA model (ggplot2)}
+\title{Path diagram for a CFA model (psychometric convention, ggplot2)}
 \usage{
 plot_path_cfa(
   fit,
   loading_threshold = 0.3,
   show_loading_labels = TRUE,
   loading_label_decimals = 2,
-  loading_label_position = 0.32,
+  loading_label_position = 0.55,
   correlate_factors = TRUE,
   show_correlation_labels = TRUE,
   correlation_curvature = 0.45,
+  bw = TRUE,
   palette = NULL,
-  edge_width_range = c(0.6, 2.4),
+  factor_radius = 0.85,
+  item_half_width = 0.65,
+  item_half_height = 0.28,
+  edge_width_range = c(0.4, 1.6),
   node_label_size = 3,
   edge_label_size = 2.7,
   item_x = 0,
   factor_x = 8,
   item_spacing = 1,
-  group_gap = 2.5,
+  group_gap = 1.2,
   fit_indices = c("cfi.scaled", "tli.scaled", "rmsea.scaled", "srmr"),
   show_n = TRUE,
   title = NULL,
@@ -33,8 +37,8 @@ plot_path_cfa(
 \item{fit}{Objeto \code{lavaan} ajustado con \code{lavaan::cfa()} (o
 \code{lavaan::sem()} con bloque de medida).}
 
-\item{loading_threshold}{Numeric. Cargas con \eqn{|\lambda| <} threshold
-se omiten del diagrama (default 0.30).}
+\item{loading_threshold}{Numeric. Cargas con \eqn{|\lambda|} bajo el
+umbral se omiten (default 0.30).}
 
 \item{show_loading_labels}{Logical. Imprimir el valor de \eqn{\lambda}
 sobre cada flecha (default \code{TRUE}).}
@@ -42,13 +46,12 @@ sobre cada flecha (default \code{TRUE}).}
 \item{loading_label_decimals}{Integer. Decimales para etiquetas
 (default 2).}
 
-\item{loading_label_position}{Numeric en (0, 1). Posición de la etiqueta
-\eqn{\lambda} a lo largo de la flecha, medida desde el factor. Valor
-pequeño \eqn{\to} etiqueta cerca del item; default 0.32 para evitar
-solapamiento cuando varias flechas convergen al mismo factor.}
+\item{loading_label_position}{Numeric en (0, 1). Posicion de la
+etiqueta a lo largo de la flecha medida desde el factor; default 0.55
+(mas cerca del item).}
 
 \item{correlate_factors}{Logical. Dibujar correlaciones latentes
-\eqn{\phi} entre factores como curvas punteadas (default \code{TRUE}).}
+\eqn{\phi} entre factores (default \code{TRUE}).}
 
 \item{show_correlation_labels}{Logical. Mostrar el valor de \eqn{\phi}
 junto a cada curva (default \code{TRUE}).}
@@ -56,37 +59,46 @@ junto a cada curva (default \code{TRUE}).}
 \item{correlation_curvature}{Numeric. Curvatura de las correlaciones
 (default 0.45).}
 
+\item{bw}{Logical. Si \code{TRUE} (default), dibujo lineal en blanco y
+negro al estilo libro de texto. Si \code{FALSE} usa color: ya sea la
+\code{palette} provista o una paleta pastel automatica.}
+
 \item{palette}{Vector con nombres iguales a los factores. Si \code{NULL}
-se usa una paleta pastel por defecto.}
+se respeta \code{bw}: blanco y negro o pastel auto. Pasar
+\code{palette} fuerza color (override \code{bw}).}
+
+\item{factor_radius}{Numeric. Radio (en unidades del eje) de los
+circulos de factor (default 0.85).}
+
+\item{item_half_width, item_half_height}{Numeric. Medio ancho y media
+altura de los rectangulos de item (defaults 0.65 y 0.28).}
 
 \item{edge_width_range}{Vector de longitud 2 con el rango de grosor
-de las flechas (default \code{c(0.3, 2.4)}).}
+de las flechas (default \code{c(0.4, 1.6)}).}
 
-\item{node_label_size, edge_label_size}{Tamaños de fuente para los
-textos (defaults 3.0 y 2.6).}
+\item{node_label_size, edge_label_size}{Tamanos de fuente para los
+textos (defaults 3.0 y 2.7).}
 
-\item{item_x, factor_x}{Coordenadas X de las dos columnas (defaults 0
-y 6).}
+\item{item_x}{Numeric. Coordenada X de la columna de items (default 0).}
+
+\item{factor_x}{Numeric. Coordenada X de los centros de los circulos
+de factor (default 8).}
 
 \item{item_spacing}{Numeric. Distancia vertical entre items
 consecutivos del mismo factor (default 1).}
 
-\item{group_gap}{Numeric. Espacio vertical adicional entre grupos de
-items de distintos factores (default 1.5).}
+\item{group_gap}{Numeric. Espacio adicional entre grupos de items de
+distintos factores (default 1.2).}
 
 \item{fit_indices}{Vector de nombres de \code{lavaan::fitMeasures()} a
-incluir en el subtítulo (default \code{c("cfi.scaled","tli.scaled",
-"rmsea.scaled","srmr")}).}
+incluir en el subtitulo.}
 
-\item{show_n}{Logical. Anexar \eqn{N} al subtítulo (default \code{TRUE}).}
+\item{show_n}{Logical. Anexar \eqn{N} al subtitulo (default \code{TRUE}).}
 
-\item{title, subtitle, caption}{Cadenas para los componentes
-correspondientes. Si \code{subtitle = NULL} se construye automática-
-mente con \code{fit_indices} y \eqn{N}.}
+\item{title, subtitle, caption}{Cadenas para los componentes del plot.}
 
-\item{factor_label_map}{Lista nombrada para renombrar factores en el
-diagrama (e.g. \code{list(F1 = "Cognitive", F2 = "Affective")}).
-Default \code{NULL}.}
+\item{factor_label_map}{Lista nombrada para renombrar factores (e.g.
+\code{list(F1 = "Cognitive", F2 = "Affective")}).}
 }
 \value{
 Un objeto \code{ggplot} listo para imprimir, guardar con
@@ -94,35 +106,34 @@ Un objeto \code{ggplot} listo para imprimir, guardar con
 }
 \description{
 Genera un diagrama de senderos para un modelo CFA ajustado
-  con \code{lavaan::cfa()}. Los \strong{items} se colocan en la columna
-  izquierda agrupados por factor (con un pequeño espacio vertical entre
-  grupos), y los \strong{factores} en la columna derecha, alineados al
-  centroide vertical de sus items. Las flechas factor \eqn{\to} item
-  tienen grosor proporcional a \eqn{|\lambda|} (carga estandarizada) y
-  color por factor de origen. Las correlaciones latentes \eqn{\phi}
-  entre factores se dibujan como curvas punteadas con su valor.
-
-  El estilo es análogo a \code{\link{plot_path_mediation}} pero adaptado
-  a la sintaxis CFA (\code{op == "=~"}). Diseñado como reemplazo legible
-  de \code{semPlot} cuando hay 10+ items.
+  con \code{lavaan::cfa()} siguiendo la convencion psicometrica estandar:
+  \strong{factores latentes como elipses (circulos)}, \strong{items
+  observados como rectangulos}, y \strong{cargas dibujadas en abanico}
+  desde el borde del circulo del factor hacia cada item. Las
+  correlaciones latentes se representan como curvas dobles entre
+  factores. Por defecto el dibujo es lineal (blanco y negro), tipo
+  diagrama de Brown (2015) o Kline; el usuario puede pedir paleta de
+  color con \code{bw = FALSE} o pasando \code{palette}.
 }
 \details{
-Toma los coeficientes estandarizados de \code{lavaan::standardizedSolution()}
-y filtra:
+Toma \code{lavaan::standardizedSolution()} y filtra:
 \itemize{
-  \item \code{op == "=~"} para construir las flechas factor \eqn{\to} item.
+  \item \code{op == "=~"} para construir las cargas factor \eqn{\to} item.
   \item \code{op == "~~"} con \code{lhs != rhs} entre factores latentes
         para las correlaciones \eqn{\phi}.
 }
-Las varianzas residuales se omiten para evitar saturación visual; si las
-necesitas, usa \code{semPlot::semPaths(..., what = "std")}.
+
+Cada flecha sale del \strong{borde} del circulo del factor (no del
+centro) gracias a un calculo trigonometrico que las distribuye en
+abanico, evitando la convergencia visual al mismo punto.
+
+Las varianzas residuales se omiten para mantener la lectura limpia. Si
+las necesitas explicitas, usa \code{semPlot::semPaths(..., what = "std")}.
 }
 \examples{
 \dontrun{
-library(lavaan)
-library(PsyMetricTools)
+library(lavaan); library(PsyMetricTools)
 
-# Modelo CFA de 3 factores
 mod <- '
   F1 =~ ITEM1 + ITEM2 + ITEM3 + ITEM4 + ITEM5
   F2 =~ ITEM6 + ITEM7 + ITEM8 + ITEM9 + ITEM10
@@ -131,15 +142,18 @@ mod <- '
 fit <- cfa(mod, data = my_data, ordered = paste0("ITEM", 1:15),
            estimator = "WLSMV", std.lv = TRUE)
 
-plot_path_cfa(fit, title = "Estructura factorial final")
+# Default: black & white (textbook style)
+plot_path_cfa(fit, title = "DERS — final structure")
 
-# Renombrar factores y elegir paleta
-plot_path_cfa(fit,
-  factor_label_map = list(F1 = "Cognitive", F2 = "Affective", F3 = "Behavioral"),
+# With colour palette
+plot_path_cfa(fit, bw = FALSE,
   palette = c(F1 = "#90CAF9", F2 = "#F4A8A8", F3 = "#A5D6A7"))
 }
 }
 \references{
 Brown, T. A. (2015). \emph{Confirmatory factor analysis for applied
 research} (2nd ed.). Guilford Press.
+
+Kline, R. B. (2023). \emph{Principles and practice of structural
+equation modeling} (5th ed.). Guilford Press.
 }
