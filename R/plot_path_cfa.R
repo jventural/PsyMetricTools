@@ -20,6 +20,10 @@
 #'   sobre cada flecha (default \code{TRUE}).
 #' @param loading_label_decimals Integer. Decimales para etiquetas
 #'   (default 2).
+#' @param loading_label_position Numeric en (0, 1). Posición de la etiqueta
+#'   \eqn{\lambda} a lo largo de la flecha, medida desde el factor. Valor
+#'   pequeño \eqn{\to} etiqueta cerca del item; default 0.32 para evitar
+#'   solapamiento cuando varias flechas convergen al mismo factor.
 #' @param correlate_factors Logical. Dibujar correlaciones latentes
 #'   \eqn{\phi} entre factores como curvas punteadas (default \code{TRUE}).
 #' @param show_correlation_labels Logical. Mostrar el valor de \eqn{\phi}
@@ -100,17 +104,18 @@ plot_path_cfa <- function(fit,
                           loading_threshold       = 0.30,
                           show_loading_labels     = TRUE,
                           loading_label_decimals  = 2,
+                          loading_label_position  = 0.32,
                           correlate_factors       = TRUE,
                           show_correlation_labels = TRUE,
                           correlation_curvature   = 0.45,
                           palette                 = NULL,
-                          edge_width_range        = c(0.3, 2.4),
+                          edge_width_range        = c(0.6, 2.4),
                           node_label_size         = 3.0,
-                          edge_label_size         = 2.6,
+                          edge_label_size         = 2.7,
                           item_x                  = 0,
-                          factor_x                = 6,
+                          factor_x                = 8,
                           item_spacing            = 1,
-                          group_gap               = 1.5,
+                          group_gap               = 2.5,
                           fit_indices             = c("cfi.scaled","tli.scaled",
                                                        "rmsea.scaled","srmr"),
                           show_n                  = TRUE,
@@ -160,23 +165,33 @@ plot_path_cfa <- function(fit,
   }
   item_nodes <- do.call(rbind, item_nodes_list)
 
-  # Factor nodes (right column), centered on their items
+  # Factor nodes (right column): tall rectangles that span the full
+  # vertical range of their items, with the factor name centered.
   factor_label_for <- function(f) {
     if (is.null(factor_label_map) || is.null(factor_label_map[[f]])) f
     else as.character(factor_label_map[[f]])
   }
+  factor_half_width  <- 0.7
+  factor_pad_y       <- 0.4
   factor_nodes <- do.call(rbind, lapply(factors, function(f) {
     its <- item_nodes[item_nodes$block == f, ]
+    yb  <- min(its$y) - factor_pad_y
+    yt  <- max(its$y) + factor_pad_y
     data.frame(
-      id    = f,
-      label = factor_label_for(f),
-      block = f,
-      layer = 2L,
-      x     = factor_x,
-      y     = mean(its$y),
+      id       = f,
+      label    = factor_label_for(f),
+      block    = f,
+      layer    = 2L,
+      x        = factor_x,
+      y        = (yb + yt) / 2,
+      x_left   = factor_x - factor_half_width,
+      x_right  = factor_x + factor_half_width,
+      y_bottom = yb,
+      y_top    = yt,
       stringsAsFactors = FALSE)
   }))
-  nodes <- rbind(item_nodes, factor_nodes)
+  nodes <- rbind(item_nodes[, c("id","label","block","layer","x","y")],
+                  factor_nodes[, c("id","label","block","layer","x","y")])
 
   # ---- Default palette -----------------------------------------------------
   if (is.null(palette)) {
@@ -186,55 +201,60 @@ plot_path_cfa <- function(fit,
   }
 
   # ---- Edges (factor -> item) ---------------------------------------------
+  # Origin is the LEFT edge of the factor rectangle at the y of the item;
+  # destination is the RIGHT edge of the item label at the same y. This
+  # makes arrows horizontal and parallel, eliminating the visual cross-fire
+  # that happens when many arrows converge on a single factor centroid.
   edges <- merge(loadings,
-    data.frame(lhs = factor_nodes$id, x_from = factor_nodes$x,
-               y_from = factor_nodes$y, stringsAsFactors = FALSE),
+    data.frame(lhs = factor_nodes$id, x_from = factor_nodes$x_left,
+               stringsAsFactors = FALSE),
     by = "lhs", all.x = TRUE)
   edges <- merge(edges,
     data.frame(rhs = item_nodes$id, x_to = item_nodes$x,
                y_to = item_nodes$y, stringsAsFactors = FALSE),
     by = "rhs", all.x = TRUE)
-  edges$abs_b <- abs(edges$est.std)
-  fmt <- paste0("%.", loading_label_decimals, "f")
+  edges$y_from     <- edges$y_to                  # horizontal arrows
+  edges$abs_b      <- abs(edges$est.std)
+  fmt              <- paste0("%.", loading_label_decimals, "f")
   edges$label      <- sprintf(fmt, edges$est.std)
   edges$block_from <- edges$lhs
 
-  # ---- Shrink arrows so they don't collide with node labels ---------------
-  shrink_dx <- 0.9
-  shrink_dy <- 0.4
-  shrink_one <- function(x1, y1, x2, y2) {
-    vx <- x2 - x1; vy <- y2 - y1; L <- sqrt(vx^2 + vy^2)
-    if (is.na(L) || L == 0) return(c(x1, y1, x2, y2))
-    ux <- vx / L; uy <- vy / L
-    c(x1 + ux * shrink_dx, y1 + uy * shrink_dy,
-      x2 - ux * shrink_dx, y2 - uy * shrink_dy)
-  }
-  exy <- t(mapply(shrink_one, edges$x_from, edges$y_from,
-                              edges$x_to,   edges$y_to))
-  edges$x_from2 <- exy[, 1]; edges$y_from2 <- exy[, 2]
-  edges$x_to2   <- exy[, 3]; edges$y_to2   <- exy[, 4]
+  # Pull each end inward by a small horizontal margin so the arrowhead does
+  # not overlap the item's label box and the tail does not overlap the
+  # factor rectangle.
+  margin_item   <- 0.55
+  margin_factor <- 0.05
+  edges$x_from2 <- edges$x_from - margin_factor
+  edges$y_from2 <- edges$y_from
+  edges$x_to2   <- edges$x_to   + margin_item
+  edges$y_to2   <- edges$y_to
 
-  # Edge label position (slight perpendicular offset)
-  edges$mx <- (edges$x_from + edges$x_to) / 2
-  edges$my <- (edges$y_from + edges$y_to) / 2
+  # Edge label position: place along the line at the requested fraction
+  # measured from the factor side. A small value (0.30) puts the label
+  # near the item, where it does not get crowded by other arrows that
+  # converge on the factor.
+  t_lab <- max(0.05, min(0.95, loading_label_position))
   edges$dx <- edges$x_to - edges$x_from
   edges$dy <- edges$y_to - edges$y_from
   edges$L  <- sqrt(edges$dx^2 + edges$dy^2)
-  edges$lab_x <- edges$mx + (-edges$dy / edges$L) * 0.18
-  edges$lab_y <- edges$my + ( edges$dx / edges$L) * 0.18
+  edges$lab_x <- edges$x_from + edges$dx * (1 - t_lab)
+  edges$lab_y <- edges$y_from + edges$dy * (1 - t_lab)
 
   # ---- Latent correlations between factors --------------------------------
+  # Anchor curves on the RIGHT edge of the factor rectangles so they live
+  # entirely to the right of the diagram and never cross the loading arrows
+  # on the left side.
   cor_segments <- NULL
   if (correlate_factors) {
     cors <- est[est$op == "~~" & est$lhs != est$rhs &
                 est$lhs %in% factors & est$rhs %in% factors, ]
     if (nrow(cors) > 0L) {
       cors <- merge(cors,
-        data.frame(lhs = factor_nodes$id, x_from = factor_nodes$x,
+        data.frame(lhs = factor_nodes$id, x_from = factor_nodes$x_right,
                    y_from = factor_nodes$y, stringsAsFactors = FALSE),
         by = "lhs", all.x = TRUE)
       cors <- merge(cors,
-        data.frame(rhs = factor_nodes$id, x_to = factor_nodes$x,
+        data.frame(rhs = factor_nodes$id, x_to = factor_nodes$x_right,
                    y_to = factor_nodes$y, stringsAsFactors = FALSE),
         by = "rhs", all.x = TRUE)
       cors$cor_label <- sprintf(fmt, cors$est.std)
@@ -264,26 +284,43 @@ plot_path_cfa <- function(fit,
   # ---- Plot ----------------------------------------------------------------
   p <- ggplot2::ggplot()
 
-  # Latent correlations as dashed curves
+  # Latent correlations as dashed curves with stepped curvatures so that
+  # non-adjacent factor pairs do not overlap with adjacent ones.
   if (!is.null(cor_segments) && nrow(cor_segments) > 0L) {
-    p <- p +
-      ggplot2::geom_curve(
-        data = cor_segments,
-        ggplot2::aes(x = .data$x_from, xend = .data$x_to,
-                     y = .data$y_from, yend = .data$y_to),
-        curvature = correlation_curvature,
-        linetype  = "dashed",
-        color     = "grey40",
-        alpha     = 0.6,
-        linewidth = 0.4)
+    factor_order <- factor_nodes$id
+    cor_segments$lvl_dist <- abs(
+      match(cor_segments$lhs, factor_order) -
+      match(cor_segments$rhs, factor_order))
+    cor_segments$curv <- correlation_curvature *
+                          (1 + 0.45 * (cor_segments$lvl_dist - 1)) *
+                          ifelse(seq_len(nrow(cor_segments)) %% 2L == 0L,
+                                  -1, 1)
+
+    # geom_curve requires a fixed curvature, so draw each row separately.
+    for (i in seq_len(nrow(cor_segments))) {
+      p <- p +
+        ggplot2::geom_curve(
+          data = cor_segments[i, , drop = FALSE],
+          ggplot2::aes(x = .data$x_from, xend = .data$x_to,
+                       y = .data$y_from, yend = .data$y_to),
+          curvature = cor_segments$curv[i],
+          linetype  = "dashed",
+          color     = "grey40",
+          alpha     = 0.65,
+          linewidth = 0.4)
+    }
 
     if (show_correlation_labels) {
-      cor_segments$mid_x <- factor_x + 1.0
-      cor_segments$mid_y <- (cor_segments$y_from + cor_segments$y_to) / 2
+      # Place labels well clear of the factor rectangle, with extra
+      # offset for curves that bulge further out (larger |lvl_dist|).
+      cor_segments$lab_x <- factor_x + factor_half_width + 0.9 +
+        1.2 * (cor_segments$lvl_dist - 1) +
+        0.4 * abs(cor_segments$curv)
+      cor_segments$lab_y <- (cor_segments$y_from + cor_segments$y_to) / 2
       p <- p +
         ggplot2::geom_label(
           data = cor_segments,
-          ggplot2::aes(x = .data$mid_x, y = .data$mid_y,
+          ggplot2::aes(x = .data$lab_x, y = .data$lab_y,
                        label = .data$cor_label),
           color = "grey25", size = edge_label_size, fontface = "italic",
           label.padding = ggplot2::unit(0.10, "lines"),
@@ -324,15 +361,20 @@ plot_path_cfa <- function(fit,
     label.r       = ggplot2::unit(0.12, "lines"),
     label.size    = 0)
 
-  # Factor nodes (bigger, bold)
-  p <- p + ggplot2::geom_label(
-    data = factor_nodes,
-    ggplot2::aes(x = .data$x, y = .data$y, label = .data$label,
-                 fill = .data$block),
-    color = "grey15", size = node_label_size + 0.6, fontface = "bold",
-    label.padding = ggplot2::unit(0.45, "lines"),
-    label.r       = ggplot2::unit(0.55, "lines"),
-    label.size    = 0)
+  # Factor nodes: rounded rectangles spanning the vertical range of their
+  # items, with the factor label centered. Drawn AFTER the loading arrows
+  # so the rectangles cleanly cover the arrow tails.
+  p <- p +
+    ggplot2::geom_rect(
+      data = factor_nodes,
+      ggplot2::aes(xmin = .data$x_left, xmax = .data$x_right,
+                   ymin = .data$y_bottom, ymax = .data$y_top,
+                   fill = .data$block),
+      color = "grey20", linewidth = 0.4, alpha = 0.95) +
+    ggplot2::geom_text(
+      data = factor_nodes,
+      ggplot2::aes(x = .data$x, y = .data$y, label = .data$label),
+      color = "grey15", size = node_label_size + 0.8, fontface = "bold")
 
   p <- p +
     ggplot2::scale_color_manual(values = palette, name = "Factor") +
@@ -348,8 +390,9 @@ plot_path_cfa <- function(fit,
       linewidth = ggplot2::guide_legend(order = 2),
       fill      = "none") +
     ggplot2::coord_cartesian(
-      xlim = c(item_x - 1.5, factor_x + 2.5),
-      ylim = c(min(nodes$y) - 1, max(nodes$y) + 1),
+      xlim = c(item_x - 1.5,
+                factor_x + factor_half_width + 3.5),
+      ylim = c(min(nodes$y) - 1.5, max(nodes$y) + 1.5),
       clip = "off") +
     ggplot2::theme_void(base_size = 11) +
     ggplot2::theme(

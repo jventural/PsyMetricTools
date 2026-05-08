@@ -9,17 +9,18 @@ plot_path_cfa(
   loading_threshold = 0.3,
   show_loading_labels = TRUE,
   loading_label_decimals = 2,
+  loading_label_position = 0.32,
   correlate_factors = TRUE,
   show_correlation_labels = TRUE,
   correlation_curvature = 0.45,
   palette = NULL,
-  edge_width_range = c(0.3, 2.4),
+  edge_width_range = c(0.6, 2.4),
   node_label_size = 3,
-  edge_label_size = 2.6,
+  edge_label_size = 2.7,
   item_x = 0,
-  factor_x = 6,
+  factor_x = 8,
   item_spacing = 1,
-  group_gap = 1.5,
+  group_gap = 2.5,
   fit_indices = c("cfi.scaled", "tli.scaled", "rmsea.scaled", "srmr"),
   show_n = TRUE,
   title = NULL,
@@ -40,6 +41,11 @@ sobre cada flecha (default \code{TRUE}).}
 
 \item{loading_label_decimals}{Integer. Decimales para etiquetas
 (default 2).}
+
+\item{loading_label_position}{Numeric en (0, 1). Posición de la etiqueta
+\eqn{\lambda} a lo largo de la flecha, medida desde el factor. Valor
+pequeño \eqn{\to} etiqueta cerca del item; default 0.32 para evitar
+solapamiento cuando varias flechas convergen al mismo factor.}
 
 \item{correlate_factors}{Logical. Dibujar correlaciones latentes
 \eqn{\phi} entre factores como curvas punteadas (default \code{TRUE}).}
