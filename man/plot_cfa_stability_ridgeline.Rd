@@ -18,7 +18,8 @@ plot_cfa_stability_ridgeline(
   vline_color = "red",
   vline_linetype = "dashed",
   theme_style = "minimal",
-  rel_min_height = 0.01
+  rel_min_height = 0.01,
+  lang = c("es", "en")
 )
 }
 \arguments{
