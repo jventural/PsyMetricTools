@@ -55,6 +55,8 @@ devtools::install_github("jventural/PsyMetricTools")
 | `plot_cfa_stability()` | CFA stability plots |
 | `plot_path_mediation()` | Three-column SEM path diagram (distal predictors → mediators → outcome) |
 | `plot_mediation_forest()` | Forest plot of direct, indirect, and total effects with 95 % CIs |
+| `plot_mediation_chord()` | Chord diagram of bivariate associations between distal predictors, mediators, and outcome |
+| `plot_mediation_donuts()` | Donut panel of mediation proportions per parallel mediator |
 
 ### Preprocessing
 
@@ -186,6 +188,45 @@ plot_mediation_forest(
 ```
 
 The forest plot is the recommended visualization when the model has eight or more distal predictors, following the recommendation of Fife and Mendoza (2018) on supplementing path diagrams with effect-decomposition panels.
+
+### Circular Visualizations: Chord Diagram and Mediation Donuts
+
+```r
+library(lavaan)
+library(PsyMetricTools)
+
+# Same fit object as above (path-analysis model with distal X, parallel M, outcome Y)
+
+# 1) Chord diagram of bivariate X-M and X-Y associations
+node_groups <- c(X1 = "Block A", X2 = "Block A", X3 = "Block B",
+                 M1 = "Mediator", M2 = "Mediator", Y = "Outcome")
+palette <- c("Block A" = "#FFE082", "Block B" = "#B0BEC5",
+             "Mediator" = "#F4A8A8", "Outcome" = "#90CAF9")
+
+plot_mediation_chord(
+  fit,
+  predictors = c("X1","X2","X3"),
+  mediators  = c("M1","M2"),
+  outcome    = "Y",
+  node_groups = node_groups,
+  palette = palette,
+  chord_width_range = c(0.5, 8),
+  title = "Bivariate associations across the parallel mediation model"
+)
+
+# 2) Donut panel of mediation proportions for one distal predictor
+plot_mediation_donuts(
+  fit,
+  predictor  = "X1",
+  mediators  = c("Mediator 1" = "M1", "Mediator 2" = "M2"),
+  outcome    = "Y",
+  show_total = TRUE,
+  title    = "Mediation proportion of X1 on Y",
+  subtitle = "Each panel shows |a x b| / Sum |a x b| per parallel mediator"
+)
+```
+
+The chord diagram and the donut panel replicate the circular style of Wang et al. (2025, *BMC Medicine*) and are best suited for parallel multiple mediator models with several distal predictors and three to five mediators.
 
 ## Tutorials
 
