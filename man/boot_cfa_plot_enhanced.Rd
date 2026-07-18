@@ -49,7 +49,7 @@ ignorando \code{semantic_colors}. Se mantiene por compatibilidad hacia atrás.}
 \code{palette} no nulo, se usará. Si \code{semantic_colors=TRUE}, se ignora.}
 
 \item{semantic_colors}{Lógico. Si \code{TRUE} (default), el color del boxplot
-se asigna según el veredicto de compliance: verde si \%pasa ≥ 90, rojo si
+se asigna según el veredicto de compliance: verde si \%pasa >= 90, rojo si
 < 90. Esto hace el plot dialogar visualmente con las bandas pasa/falla del
 fondo. Si \code{FALSE}, usa la paleta única \code{palette}.}
 
@@ -87,7 +87,7 @@ sub-panel. Tres opciones:
 \code{list(omega = 0.70, CFI = 0.95, TLI = 0.95, RMSEA = 0.08, SRMR = 0.08, CRMR = 0.08)}.}
 
 \item{higher_better}{Lista nombrada lógica indicando si el cutoff es un mínimo
-(\code{TRUE}, e.g., CFI ≥ .95) o un máximo (\code{FALSE}, e.g., RMSEA ≤ .08).}
+(\code{TRUE}, e.g., CFI >= .95) o un máximo (\code{FALSE}, e.g., RMSEA <= .08).}
 
 \item{show_jitter}{Mostrar jitter de réplicas detrás del boxplot (default \code{TRUE}).}
 

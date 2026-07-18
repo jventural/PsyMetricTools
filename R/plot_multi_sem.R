@@ -1,5 +1,8 @@
 #' @title Plot Multiple SEM Models
-#' @description Creates a panel of SEM path diagrams for multiple models.
+#' @description Creates a panel of SEM path diagrams for multiple models. The
+#'   panel can be arranged in a single row (default) or in an arbitrary grid via
+#'   the \code{nrow} / \code{ncol} arguments; empty cells are left blank when the
+#'   number of models does not fill the grid.
 #' @param models List of lavaan model objects.
 #' @param titles Titles for each model (default NULL).
 #' @param layout Layout type (default "tree2").
@@ -17,6 +20,11 @@
 #' @param color Color list for nodes.
 #' @param mar Inner margins.
 #' @param outerMar Outer margins.
+#' @param nrow Number of rows in the panel grid. Default \code{NULL} (a single
+#'   row). If only one of \code{nrow}/\code{ncol} is supplied, the other is
+#'   derived from the number of models.
+#' @param ncol Number of columns in the panel grid. Default \code{NULL} (one
+#'   column per model when \code{nrow} is also \code{NULL}).
 #' @param show_fit_indices Show fit indices (default TRUE).
 #' @param fit_indices Which fit indices to show.
 #' @param use_scaled Use scaled indices (default FALSE).
@@ -27,8 +35,8 @@
 #' @param save_plot Save plot to file (default FALSE).
 #' @param filename Output filename.
 #' @param file_format Output format (png, pdf, tiff, jpeg).
-#' @param width_per Width per plot in inches.
-#' @param height Height in inches.
+#' @param width_per Width per plot in inches (per column).
+#' @param height Height in inches (per row).
 #' @param dpi Resolution.
 #' @param units Units for dimensions.
 #' @return NULL (plots are drawn to device).
@@ -55,7 +63,7 @@
 #' fit1 <- cfa(model1, data = data, ordered = TRUE, estimator = "WLSMV")
 #' fit2 <- cfa(model2, data = data, ordered = TRUE, estimator = "WLSMV")
 #'
-#' # Plot multiple models side by side
+#' # Plot multiple models side by side (single row, default)
 #' plot_multi_sem(
 #'   models = list(fit1, fit2),
 #'   model_descriptions = c("1-Factor Model", "2-Factor Model"),
@@ -64,18 +72,16 @@
 #'   use_scaled = TRUE
 #' )
 #'
-#' # Save to file
+#' # Arrange three models in two rows (2 x 2 grid; last cell left blank)
 #' plot_multi_sem(
-#'   models = list(fit1, fit2),
-#'   model_descriptions = c("Model 1", "Model 2"),
-#'   save_plot = TRUE,
-#'   filename = "sem_comparison",
-#'   file_format = "png",
-#'   width_per = 5,
-#'   height = 5,
-#'   dpi = 300
+#'   models = list(fit1, fit2, fit1),
+#'   model_descriptions = c("Model 1", "Model 2", "Model 3"),
+#'   nrow = 2, ncol = 2,
+#'   save_plot = TRUE, filename = "sem_grid",
+#'   width_per = 6, height = 6
 #' )
 #' }
+#' @importFrom graphics plot.new
 #' @export
 plot_multi_sem <- function(models,
                            titles = NULL,
@@ -95,6 +101,9 @@ plot_multi_sem <- function(models,
                            color       = list(lat = "grey80", man = "grey90"),
                            mar         = c(4,4,4,4),
                            outerMar    = c(1,1,3,1),
+                           # Disposicion del panel (grilla)
+                           nrow        = NULL,
+                           ncol        = NULL,
                            # Indices de bondad de ajuste
                            show_fit_indices   = TRUE,
                            fit_indices        = c("cfi", "tli", "rmsea", "srmr"),
@@ -108,12 +117,26 @@ plot_multi_sem <- function(models,
                            save_plot   = FALSE,
                            filename    = "sem_models_plot",
                            file_format = "png",
-                           width_per   = 4,    # ancho (in) por cada grafico
-                           height      = 4,    # altura fija (in)
+                           width_per   = 4,    # ancho (in) por cada columna
+                           height      = 4,    # altura (in) por cada fila
                            dpi         = 300,
                            units       = "in") {
 
   n <- length(models)
+
+  # Determinar la grilla del panel (retrocompatible: por defecto 1 fila x n)
+  if (is.null(nrow) && is.null(ncol)) {
+    nrow <- 1L
+    ncol <- n
+  } else if (is.null(nrow)) {
+    nrow <- ceiling(n / ncol)
+  } else if (is.null(ncol)) {
+    ncol <- ceiling(n / nrow)
+  }
+  if (nrow * ncol < n) {
+    stop(sprintf("La grilla (%d x %d = %d celdas) es menor que el numero de modelos (%d).",
+                 nrow, ncol, nrow * ncol, n))
+  }
 
   # Generar titulos si no se proporcionan
   if (is.null(titles) && is.null(custom_titles)) {
@@ -124,28 +147,29 @@ plot_multi_sem <- function(models,
 
   # Abrir dispositivo para guardar si se requiere
   if (save_plot) {
-    total_width <- width_per * n
+    total_width  <- width_per * ncol
+    total_height <- height * nrow
     if (file_format == "png") {
       png(paste0(filename, ".png"),
           width  = total_width,
-          height = height,
+          height = total_height,
           units  = units,
           res    = dpi)
     } else if (file_format == "pdf") {
       pdf(paste0(filename, ".pdf"),
           width  = total_width,
-          height = height)
+          height = total_height)
     } else if (file_format == "tiff") {
       tiff(paste0(filename, ".tiff"),
            width  = total_width,
-           height = height,
+           height = total_height,
            units  = units,
            res    = dpi,
            compression = "lzw")
     } else if (file_format == "jpeg") {
       jpeg(paste0(filename, ".jpg"),
            width  = total_width,
-           height = height,
+           height = total_height,
            units  = units,
            res    = dpi,
            quality = 100)
@@ -154,8 +178,8 @@ plot_multi_sem <- function(models,
     }
   }
 
-  # Configurar canvas: 1 fila x n columnas
-  par(mfrow = c(1, n), mar = outerMar)
+  # Configurar canvas: nrow filas x ncol columnas
+  par(mfrow = c(nrow, ncol), mar = outerMar)
 
   for (i in seq_len(n)) {
     # Dibujar el SEM
@@ -212,6 +236,12 @@ plot_multi_sem <- function(models,
           line     = 1,
           cex.main = title.cex,
           font.main= title.font)
+  }
+
+  # Rellenar celdas sobrantes de la grilla en blanco
+  resto <- nrow * ncol - n
+  if (resto > 0) {
+    for (k in seq_len(resto)) plot.new()
   }
 
   # Restaurar dispositivo

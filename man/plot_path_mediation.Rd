@@ -79,12 +79,12 @@ los textos.}
 incluir en el subtítulo (default \code{c("cfi.robust","tli.robust",
 "rmsea.robust","srmr")}).}
 
-\item{show_r2}{Lógico. Anexar los R² de las variables endógenas al subtítulo
+\item{show_r2}{Lógico. Anexar los \eqn{R^2} de las variables endógenas al subtítulo
 (default \code{TRUE}).}
 
 \item{title, subtitle, caption}{Cadenas de texto para los componentes
 correspondientes. Si \code{subtitle = NULL}, se construye automáticamente
-con los \code{fit_indices} y los R² (cuando \code{show_r2 = TRUE}).}
+con los \code{fit_indices} y los \eqn{R^2} (cuando \code{show_r2 = TRUE}).}
 
 \item{layer_labels}{Vector de longitud 3 con las etiquetas inferiores de
 las tres capas (default \code{c("Predictores distales","Mediadores",

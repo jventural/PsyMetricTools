@@ -12,7 +12,7 @@
 #'   aparecen en \code{rhs} de las regresiones \code{outcome ~ X}.
 #' @param mediators Vector de IDs de los mediadores (M) tal como aparecen en
 #'   \code{lhs} de las regresiones \code{M ~ X}.
-#' @param outcome ID del outcome opcional (para incluir cuerdas X→Y).
+#' @param outcome ID del outcome opcional (para incluir cuerdas X -> Y).
 #' @param node_groups Vector \emph{named} que mapea cada ID a su bloque
 #'   conceptual (por ejemplo, \code{c(sueno_num = "Hábito", DASS_dep = "DASS")}).
 #'   Si \code{NULL}, se usa "X" para predictores y "M" para mediadores.

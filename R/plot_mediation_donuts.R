@@ -2,7 +2,7 @@
 #' @description Genera un panel de \emph{donuts} (gráficos circulares con
 #'   centro hueco) que cuantifica visualmente la proporción del efecto total
 #'   mediado por cada uno de los mediadores paralelos para un predictor distal
-#'   determinado. Cada donut muestra el porcentaje de la asociación X→Y
+#'   determinado. Cada donut muestra el porcentaje de la asociación X -> Y
 #'   atribuible al mediador en cuestión, replicando el estilo de la Figura 2
 #'   superior de Wang et al. (2025, BMC Medicine).
 #'
@@ -126,7 +126,7 @@ plot_mediation_donuts <- function(fit,
   # ---- Helper: un donut ---------------------------------------------------
   make_donut <- function(label, color, prop_val) {
     abs_p <- min(abs(prop_val), 1)
-    sign_str <- if (prop_val < 0) "−" else "+"
+    sign_str <- if (prop_val < 0) "\u2212" else "+"
     pct_text <- sprintf("%s%.1f %%", sign_str, 100 * abs_p)
     df <- data.frame(
       cat = factor(c("filled","empty"), levels = c("filled","empty")),
@@ -163,7 +163,7 @@ plot_mediation_donuts <- function(fit,
 
   if (show_total) {
     total_prop <- sum(abs_prop)
-    sign_str <- if (ind_tot < 0) "−" else "+"
+    sign_str <- if (ind_tot < 0) "\u2212" else "+"
     df_tot <- data.frame(
       cat = factor(c("filled","empty"), levels = c("filled","empty")),
       ymin = c(0, min(total_prop, 1)),

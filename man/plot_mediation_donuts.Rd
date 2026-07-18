@@ -66,7 +66,7 @@ Un objeto \code{patchwork} (composición de \code{ggplot}s) listo
 Genera un panel de \emph{donuts} (gráficos circulares con
   centro hueco) que cuantifica visualmente la proporción del efecto total
   mediado por cada uno de los mediadores paralelos para un predictor distal
-  determinado. Cada donut muestra el porcentaje de la asociación X→Y
+  determinado. Cada donut muestra el porcentaje de la asociación X -> Y
   atribuible al mediador en cuestión, replicando el estilo de la Figura 2
   superior de Wang et al. (2025, BMC Medicine).
 }

@@ -1,3 +1,31 @@
+# PsyMetricTools 1.2.1
+
+## CRAN fixes
+
+* The PDF manual now builds without LaTeX errors: the Unicode symbols
+  `>=`, `<=`, `->` and `R^2` are written in portable form in the
+  documentation of `boot_cfa_plot_enhanced()`, `plot_mediation_chord()`,
+  `plot_mediation_donuts()` and `plot_path_mediation()`. This was the
+  error that caused the 1.2.0 submission to be archived by CRAN.
+* `DESCRIPTION` now declares `R (>= 4.1.0)`, required by the use of the
+  native pipe `|>` / lambda `\(...)` syntax in `invertir_items()` and
+  `split_data_stratified_clustered()`.
+
+## Improvements
+
+* `plot_path_cfa()` rewritten: latent variables as circles, observed
+  variables as rectangles, fan-out arrows, black-and-white default.
+
+# PsyMetricTools 1.2.0
+
+## Improvements
+
+* `plot_multi_sem()` now supports multi-row panel layouts via the new `nrow` and
+  `ncol` arguments. By default it keeps the previous behaviour (a single row with
+  one column per model); when a grid is requested, leftover cells are left blank.
+  Saved-figure dimensions scale with the grid (`width_per` per column, `height`
+  per row).
+
 # PsyMetricTools 1.0.0
 
 * Initial CRAN submission

@@ -22,7 +22,7 @@
 #' @param accent_color \[Deprecated\] Color de acento. Si se especifica con
 #'   \code{palette} no nulo, se usará. Si \code{semantic_colors=TRUE}, se ignora.
 #' @param semantic_colors Lógico. Si \code{TRUE} (default), el color del boxplot
-#'   se asigna según el veredicto de compliance: verde si \%pasa ≥ 90, rojo si
+#'   se asigna según el veredicto de compliance: verde si \%pasa >= 90, rojo si
 #'   < 90. Esto hace el plot dialogar visualmente con las bandas pasa/falla del
 #'   fondo. Si \code{FALSE}, usa la paleta única \code{palette}.
 #' @param pass_palette Vector de 3 verdes de claro a oscuro para variables que
@@ -51,7 +51,7 @@
 #' @param cutoffs Lista nombrada con los valores de corte por índice. Default:
 #'   \code{list(omega = 0.70, CFI = 0.95, TLI = 0.95, RMSEA = 0.08, SRMR = 0.08, CRMR = 0.08)}.
 #' @param higher_better Lista nombrada lógica indicando si el cutoff es un mínimo
-#'   (\code{TRUE}, e.g., CFI ≥ .95) o un máximo (\code{FALSE}, e.g., RMSEA ≤ .08).
+#'   (\code{TRUE}, e.g., CFI >= .95) o un máximo (\code{FALSE}, e.g., RMSEA <= .08).
 #' @param show_jitter Mostrar jitter de réplicas detrás del boxplot (default \code{TRUE}).
 #' @param show_compliance Mostrar \% compliance arriba (default \code{TRUE}).
 #' @param show_median_label Mostrar etiqueta \code{Mdn = X.XXX} al lado del boxplot
@@ -82,7 +82,7 @@
 #' }
 #'
 #' @export
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 boot_cfa_plot_enhanced <- function(df,
                                     save = FALSE,
                                     path = "Plot_boot_cfa_enhanced.jpg",
@@ -114,14 +114,14 @@ boot_cfa_plot_enhanced <- function(df,
   table_style <- match.arg(table_style)
   i18n <- list(
     es = list(
-      y_omega  = "ω (Confiabilidad)",
+      y_omega  = "\u03c9 (Confiabilidad)",
       y_comp   = "Comparativos",
       y_abs    = "Absolutos",
       pass_int = "%.0f%% pasa",
       pass_dec = "%.1f%% pasa"
     ),
     en = list(
-      y_omega  = "ω (Reliability)",
+      y_omega  = "\u03c9 (Reliability)",
       y_comp   = "Comparative",
       y_abs    = "Absolute",
       pass_int = "%.0f%% pass",
@@ -157,7 +157,7 @@ boot_cfa_plot_enhanced <- function(df,
     n_fail <- K - n_pass
     pass_idx <- which(ann_df$pct_pass >= compliance_threshold)
     fail_idx <- which(ann_df$pct_pass <  compliance_threshold)
-    # Asignar gradiente claro→oscuro DENTRO de cada grupo
+    # Asignar gradiente claro->oscuro DENTRO de cada grupo
     if (n_pass > 0) {
       pp <- if (n_pass == 1) pass_palette[3]
             else if (n_pass == 2) pass_palette[2:3]

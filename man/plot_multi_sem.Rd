@@ -22,6 +22,8 @@ plot_multi_sem(
   color = list(lat = "grey80", man = "grey90"),
   mar = c(4, 4, 4, 4),
   outerMar = c(1, 1, 3, 1),
+  nrow = NULL,
+  ncol = NULL,
   show_fit_indices = TRUE,
   fit_indices = c("cfi", "tli", "rmsea", "srmr"),
   use_scaled = FALSE,
@@ -73,6 +75,13 @@ plot_multi_sem(
 
 \item{outerMar}{Outer margins.}
 
+\item{nrow}{Number of rows in the panel grid. Default \code{NULL} (a single
+row). If only one of \code{nrow}/\code{ncol} is supplied, the other is
+derived from the number of models.}
+
+\item{ncol}{Number of columns in the panel grid. Default \code{NULL} (one
+column per model when \code{nrow} is also \code{NULL}).}
+
 \item{show_fit_indices}{Show fit indices (default TRUE).}
 
 \item{fit_indices}{Which fit indices to show.}
@@ -93,9 +102,9 @@ plot_multi_sem(
 
 \item{file_format}{Output format (png, pdf, tiff, jpeg).}
 
-\item{width_per}{Width per plot in inches.}
+\item{width_per}{Width per plot in inches (per column).}
 
-\item{height}{Height in inches.}
+\item{height}{Height in inches (per row).}
 
 \item{dpi}{Resolution.}
 
@@ -105,7 +114,10 @@ plot_multi_sem(
 NULL (plots are drawn to device).
 }
 \description{
-Creates a panel of SEM path diagrams for multiple models.
+Creates a panel of SEM path diagrams for multiple models. The
+  panel can be arranged in a single row (default) or in an arbitrary grid via
+  the \code{nrow} / \code{ncol} arguments; empty cells are left blank when the
+  number of models does not fill the grid.
 }
 \examples{
 \dontrun{
@@ -130,7 +142,7 @@ model2 <- "F1 =~ Item1 + Item2 + Item3\nF2 =~ Item4 + Item5 + Item6"
 fit1 <- cfa(model1, data = data, ordered = TRUE, estimator = "WLSMV")
 fit2 <- cfa(model2, data = data, ordered = TRUE, estimator = "WLSMV")
 
-# Plot multiple models side by side
+# Plot multiple models side by side (single row, default)
 plot_multi_sem(
   models = list(fit1, fit2),
   model_descriptions = c("1-Factor Model", "2-Factor Model"),
@@ -139,16 +151,13 @@ plot_multi_sem(
   use_scaled = TRUE
 )
 
-# Save to file
+# Arrange three models in two rows (2 x 2 grid; last cell left blank)
 plot_multi_sem(
-  models = list(fit1, fit2),
-  model_descriptions = c("Model 1", "Model 2"),
-  save_plot = TRUE,
-  filename = "sem_comparison",
-  file_format = "png",
-  width_per = 5,
-  height = 5,
-  dpi = 300
+  models = list(fit1, fit2, fit1),
+  model_descriptions = c("Model 1", "Model 2", "Model 3"),
+  nrow = 2, ncol = 2,
+  save_plot = TRUE, filename = "sem_grid",
+  width_per = 6, height = 6
 )
 }
 }

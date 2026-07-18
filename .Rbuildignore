@@ -13,3 +13,8 @@
 ^find_unicode\.R$
 ^nul$
 ^CRAN-SUBMISSION$
+^LICENSE\.md$
+^cran-comments\.md$
+^.*\.Rcheck$
+^\.\.Rcheck$
+^test_circular\.R$

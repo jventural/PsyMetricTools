@@ -84,9 +84,9 @@ multi_cfa <- function(modelos, data, estimator, ordered = TRUE, orthogonal_indic
 
       # Calcular medidas de bondad de ajuste
       bondad_ajuste <- round(fitMeasures(fit, c("chisq.scaled", "df.scaled", "srmr", "wrmr", "cfi.scaled", "tli.scaled", "rmsea.scaled", "crmr")), 3)
-      indices_modificacion <- modificationIndices(fit, sort = TRUE) %>% dplyr::filter(mi > 10) %>% mutate(mi = round(mi, 2))
+      indices_modificacion <- modificationIndices(fit, sort. = TRUE) %>% dplyr::filter(mi > 10) %>% mutate(mi = round(mi, 2))
       correlaciones_factores <- round(as.data.frame(inspect(fit, what = "std")$psi), 2)
-      fiabilidad <- round(compRelSEM(fit, tau.eq = F, ord.scale = T), 2)
+      fiabilidad <- round(compRelSEM(fit, tau.eq = FALSE, ord.scale = TRUE), 2)
 
       return(list(fit = fit,
                   bondad_ajuste = bondad_ajuste,

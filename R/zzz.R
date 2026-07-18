@@ -94,6 +94,9 @@ utils::globalVariables(c(
   # openxlsx functions
   "addWorksheet", "createWorkbook", "saveWorkbook", "writeData",
 
+  # erp_analysis (erp_by_item / plot_erp)
+  "ERP", "Flag_ERP", "p_high", "p_low",
+
   # Other
   "modifyList", "txtProgressBar"
 ))

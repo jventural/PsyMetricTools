@@ -33,7 +33,7 @@ aparecen en \code{rhs} de las regresiones \code{outcome ~ X}.}
 \item{mediators}{Vector de IDs de los mediadores (M) tal como aparecen en
 \code{lhs} de las regresiones \code{M ~ X}.}
 
-\item{outcome}{ID del outcome opcional (para incluir cuerdas X→Y).}
+\item{outcome}{ID del outcome opcional (para incluir cuerdas X -> Y).}
 
 \item{node_groups}{Vector \emph{named} que mapea cada ID a su bloque
 conceptual (por ejemplo, \code{c(sueno_num = "Hábito", DASS_dep = "DASS")}).

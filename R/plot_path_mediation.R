@@ -41,11 +41,11 @@
 #' @param fit_indices Vector con nombres de \code{lavaan::fitMeasures()} a
 #'   incluir en el subtítulo (default \code{c("cfi.robust","tli.robust",
 #'   "rmsea.robust","srmr")}).
-#' @param show_r2 Lógico. Anexar los R² de las variables endógenas al subtítulo
+#' @param show_r2 Lógico. Anexar los \eqn{R^2} de las variables endógenas al subtítulo
 #'   (default \code{TRUE}).
 #' @param title,subtitle,caption Cadenas de texto para los componentes
 #'   correspondientes. Si \code{subtitle = NULL}, se construye automáticamente
-#'   con los \code{fit_indices} y los R² (cuando \code{show_r2 = TRUE}).
+#'   con los \code{fit_indices} y los \eqn{R^2} (cuando \code{show_r2 = TRUE}).
 #' @param layer_labels Vector de longitud 3 con las etiquetas inferiores de
 #'   las tres capas (default \code{c("Predictores distales","Mediadores",
 #'   "Variable dependiente")}).
@@ -230,13 +230,13 @@ plot_path_mediation <- function(fit,
     if (!is.null(fi) && length(fi) > 0) {
       labs <- toupper(sub("\\.robust$", "", names(fi)))
       sub_pieces <- c(sub_pieces,
-        paste(sprintf("%s = %.3f", labs, as.numeric(fi)), collapse = " • "))
+        paste(sprintf("%s = %.3f", labs, as.numeric(fi)), collapse = " \u2022 "))
     }
     if (show_r2) {
       r2 <- tryCatch(lavaan::lavInspect(fit, "r2"), error = function(e) NULL)
       if (!is.null(r2)) {
         sub_pieces <- c(sub_pieces,
-          paste0("R² — ",
+          paste0("R\u00b2 \u2014 ",
                  paste(sprintf("%s = %.2f", names(r2), r2), collapse = ", ")))
       }
     }

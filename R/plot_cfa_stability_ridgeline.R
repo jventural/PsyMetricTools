@@ -15,6 +15,7 @@
 #' @param vline_linetype Tipo de linea de referencia (por defecto "dashed").
 #' @param theme_style Estilo del tema: "minimal", "bw", "classic" (por defecto "minimal").
 #' @param rel_min_height Altura minima relativa para recortar colas (por defecto 0.01).
+#' @param lang Idioma de las etiquetas: "es" (por defecto) o "en".
 #' @return Un objeto ggplot.
 #' @export
 #' @examples

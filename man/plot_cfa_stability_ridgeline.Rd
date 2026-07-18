@@ -49,6 +49,8 @@ plot_cfa_stability_ridgeline(
 \item{theme_style}{Estilo del tema: "minimal", "bw", "classic" (por defecto "minimal").}
 
 \item{rel_min_height}{Altura minima relativa para recortar colas (por defecto 0.01).}
+
+\item{lang}{Idioma de las etiquetas: "es" (por defecto) o "en".}
 }
 \value{
 Un objeto ggplot.
