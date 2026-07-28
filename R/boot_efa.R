@@ -15,7 +15,7 @@
 #' @param ordered Logical; treat indicators as ordered/categorical (default: TRUE).
 #'   Set to FALSE for continuous indicators with ML estimator.
 #' @param apply_threshold Whether to apply threshold to loadings (default: FALSE).
-#' @param seed Random seed for reproducibility (default: 2023).
+#' @param seed Optional random seed for reproducibility (default: NULL, no seed is set).
 #' @param n_replications Number of bootstrap replications (default: 1000).
 #'
 #' @return A list containing:
@@ -30,15 +30,18 @@
 #'
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' set.seed(123)
+#' n <- 200
+#' data <- as.data.frame(lapply(setNames(1:6, paste0("PBA", 1:6)),
+#'                              function(i) sample(1:5, n, replace = TRUE)))
 #' results <- boot_efa(
-#'   data = my_data,
-#'   n_factors = 3,
-#'   n_items = 23,
+#'   data = data,
+#'   n_factors = 2,
+#'   n_items = 6,
 #'   name_items = "PBA",
-#'   exclude_items = c("PBA13", "PBA23"),
 #'   rotation = "oblimin",
-#'   n_replications = 1000
+#'   n_replications = 5
 #' )
 #' }
 boot_efa <- function(data,
@@ -50,7 +53,7 @@ boot_efa <- function(data,
                      estimator = "WLSMV",
                      ordered = TRUE,
                      apply_threshold = FALSE,
-                     seed = 2023,
+                     seed = NULL,
                      n_replications = 1000) {
 
   # Funcion interna para identificar el tipo de estimador
@@ -349,7 +352,7 @@ boot_efa <- function(data,
     })
   }
 
-  set.seed(seed)
+  if (!is.null(seed)) set.seed(seed)
 
   # Generar el modelo base para EFA
   modelos <- generate_modelos(

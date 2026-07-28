@@ -10,7 +10,7 @@
 #' @param exclude_items Items to exclude (default NULL).
 #' @return A list containing fit indices, specifications, interfactor correlations, and pattern matrix.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create sample data with 15 Likert-type items
 #' set.seed(123)
 #' n <- 300

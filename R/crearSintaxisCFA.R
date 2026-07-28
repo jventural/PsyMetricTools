@@ -6,7 +6,7 @@
 #'
 #' @return A character string with lavaan model syntax.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Example 1: Create CFA syntax from EFA results with factor loadings
 #' # Assume you have EFA results with items and their factor loadings
 #' efa_loadings <- data.frame(
@@ -33,10 +33,6 @@
 #' # Output:
 #' # F1 =~ Q1 + Q2 + Q3
 #' # F2 =~ Q4 + Q5 + Q6
-#'
-#' # Use generated syntax with lavaan
-#' library(lavaan)
-#' fit <- cfa(model, data = my_data, ordered = TRUE, estimator = "WLSMV")
 #' }
 #' @export
 crearSintaxisCFA <- function(df) {

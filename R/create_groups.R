@@ -7,7 +7,7 @@
 #'
 #' @return A named list with item indices for each group.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create groups for a 3-factor model with different items per factor
 #' groups <- create_groups(
 #'   names = c("Anxiety", "Depression", "Stress"),

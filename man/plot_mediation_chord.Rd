@@ -87,8 +87,23 @@ construye una matriz adyacencia que se pasa a
 \code{circlize::chordDiagram()}. Requiere el paquete \code{circlize}.
 }
 \examples{
-\dontrun{
-library(lavaan); library(PsyMetricTools); library(circlize)
+\donttest{
+library(lavaan); library(circlize)
+
+set.seed(123)
+n <- 300
+X1 <- rnorm(n); X2 <- rnorm(n); X3 <- rnorm(n)
+M1 <- 0.5 * X1 + 0.3 * X2 + rnorm(n, 0, 0.8)
+M2 <- 0.4 * X2 + 0.3 * X3 + rnorm(n, 0, 0.8)
+Y  <- 0.4 * M1 + 0.3 * M2 + 0.2 * X1 + rnorm(n, 0, 0.7)
+your_data <- data.frame(X1, X2, X3, M1, M2, Y)
+
+mod <- '
+  M1 ~ X1 + X2 + X3
+  M2 ~ X1 + X2 + X3
+  Y  ~ M1 + M2
+'
+fit <- sem(mod, data = your_data)
 
 plot_mediation_chord(
   fit,

@@ -30,7 +30,7 @@ A list with exploratorio and confirmatorio data frames.
 Splits a data frame using stratified and clustered sampling.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create sample data with stratification and clustering variables
 set.seed(123)
 data <- data.frame(

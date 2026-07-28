@@ -24,7 +24,7 @@ A data frame with oversampled minority classes.
 Applies SMOTE (Synthetic Minority Over-sampling Technique) for multiclass imbalanced data.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create imbalanced multiclass data
 set.seed(123)
 data <- data.frame(

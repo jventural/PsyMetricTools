@@ -30,7 +30,7 @@ Computes the Extreme-Response Proportion (ERP) for each item in
   effects or poor item discrimination.
 }
 \examples{
-\dontrun{
+\donttest{
 set.seed(123)
 df <- data.frame(
   IT1 = sample(1:5, 200, replace = TRUE),

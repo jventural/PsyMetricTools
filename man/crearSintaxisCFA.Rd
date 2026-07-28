@@ -16,7 +16,7 @@ A character string with lavaan model syntax.
 Generates lavaan CFA model syntax from a data frame with items and factors.
 }
 \examples{
-\dontrun{
+\donttest{
 # Example 1: Create CFA syntax from EFA results with factor loadings
 # Assume you have EFA results with items and their factor loadings
 efa_loadings <- data.frame(
@@ -43,9 +43,5 @@ cat(model2)
 # Output:
 # F1 =~ Q1 + Q2 + Q3
 # F2 =~ Q4 + Q5 + Q6
-
-# Use generated syntax with lavaan
-library(lavaan)
-fit <- cfa(model, data = my_data, ordered = TRUE, estimator = "WLSMV")
 }
 }

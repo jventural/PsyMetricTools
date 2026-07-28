@@ -6,22 +6,24 @@
 #'
 #' @return A data frame with fit measures for each factor solution.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # First, run EFA_modern to get specifications
 #' set.seed(123)
 #' n <- 300
+#' g <- rnorm(n)
+#' t1 <- 0.7 * g + rnorm(n, 0, 0.7)
+#' t2 <- 0.7 * g + rnorm(n, 0, 0.7)
+#' sim_item <- function(t) {
+#'   as.numeric(cut(t + rnorm(length(t), 0, 0.8), c(-Inf, -1, 0, 1, Inf)))
+#' }
 #' data_efa <- data.frame(
-#'   Item1 = sample(1:5, n, replace = TRUE),
-#'   Item2 = sample(1:5, n, replace = TRUE),
-#'   Item3 = sample(1:5, n, replace = TRUE),
-#'   Item4 = sample(1:5, n, replace = TRUE),
-#'   Item5 = sample(1:5, n, replace = TRUE),
-#'   Item6 = sample(1:5, n, replace = TRUE)
+#'   Item1 = sim_item(t1), Item2 = sim_item(t1), Item3 = sim_item(t1),
+#'   Item4 = sim_item(t2), Item5 = sim_item(t2), Item6 = sim_item(t2)
 #' )
 #'
 #' # Run EFA
 #' efa_result <- EFA_modern(
-#'   n_factors = 3,
+#'   n_factors = 2,
 #'   n_items = 6,
 #'   name_items = "Item",
 #'   data = data_efa,

@@ -20,7 +20,7 @@ Creates a horizontal bar chart of ERP values per item, with a
   are visually distinguished by fill colour.
 }
 \examples{
-\dontrun{
+\donttest{
 set.seed(123)
 df <- data.frame(
   IT1 = sample(1:5, 200, replace = TRUE),

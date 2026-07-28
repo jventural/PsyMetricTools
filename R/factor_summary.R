@@ -8,7 +8,7 @@
 #'
 #' @return A data frame with items, factor loadings, h2, and u2.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(psych)
 #'
 #' # Create sample data

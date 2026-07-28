@@ -10,7 +10,7 @@
 #'
 #' @return A list of model syntax strings for each factor solution.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Generate models for 1 to 4 factor solutions using item prefix
 #' models <- generate_modelos(
 #'   n_factors = 4,

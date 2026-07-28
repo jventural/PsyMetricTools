@@ -18,7 +18,7 @@ A data frame with percentages for each fit measure.
 Calculates the percentage of bootstrap replications meeting specified fit thresholds.
 }
 \examples{
-\dontrun{
+\donttest{
 # First run boot_cfa to get bootstrap results
 set.seed(123)
 n <- 300
@@ -40,7 +40,7 @@ boot_results <- boot_cfa(
   new_df = data,
   model_string = model,
   item_prefix = "Item",
-  n_replications = 100
+  n_replications = 25
 )
 
 # Define threshold string

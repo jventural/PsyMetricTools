@@ -20,7 +20,7 @@ A data frame with items, factor loadings, h2, and u2.
 Creates a summary table with loadings, communalities, and uniquenesses.
 }
 \examples{
-\dontrun{
+\donttest{
 library(psych)
 
 # Create sample data

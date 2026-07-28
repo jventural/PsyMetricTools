@@ -26,7 +26,13 @@ Fits a CFA model using \code{\link[lavaan]{cfa}} with error
   fails to converge or encounters estimation problems.
 }
 \examples{
-\dontrun{
+\donttest{
+set.seed(123)
+mydata <- data.frame(
+  x1 = sample(1:5, 200, replace = TRUE),
+  x2 = sample(1:5, 200, replace = TRUE),
+  x3 = sample(1:5, 200, replace = TRUE)
+)
 model <- 'F1 =~ x1 + x2 + x3'
 fit <- safe_cfa(model, data = mydata, items = c("x1", "x2", "x3"))
 if (!is.null(fit)) summary(fit)

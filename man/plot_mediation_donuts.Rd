@@ -82,14 +82,28 @@ parte inferior.
 Requiere los paquetes \code{ggplot2} y \code{patchwork}.
 }
 \examples{
-\dontrun{
-library(lavaan); library(PsyMetricTools); library(patchwork)
+\donttest{
+library(lavaan); library(patchwork)
+
+set.seed(123)
+n <- 300
+sueno_num <- rnorm(n)
+DASS_dep <- 0.5 * sueno_num + rnorm(n, 0, 0.8)
+DASS_anx <- 0.4 * sueno_num + rnorm(n, 0, 0.8)
+suic <- 0.4 * DASS_dep + 0.3 * DASS_anx + 0.2 * sueno_num + rnorm(n, 0, 0.7)
+dat <- data.frame(sueno_num, DASS_dep, DASS_anx, suic)
+
+mod <- '
+  DASS_dep ~ sueno_num
+  DASS_anx ~ sueno_num
+  suic ~ DASS_dep + DASS_anx + sueno_num
+'
+fit <- sem(mod, data = dat)
 
 plot_mediation_donuts(
   fit,
   predictor = "sueno",
-  mediators = c("Depresión" = "DASS_dep", "Ansiedad" = "DASS_anx",
-                "Estrés" = "DASS_str", "Bienestar" = "bien"),
+  mediators = c("Depresión" = "DASS_dep", "Ansiedad" = "DASS_anx"),
   outcome = "suic",
   predictor_regression = "sueno_num",
   title = "Mediación de la calidad del sueño sobre la conducta suicida"

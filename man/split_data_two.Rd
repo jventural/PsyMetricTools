@@ -27,7 +27,7 @@ A list with exploratorio and confirmatorio data frames.
 Splits a data frame into exploratory and confirmatory subsets.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create sample data
 set.seed(123)
 data <- data.frame(

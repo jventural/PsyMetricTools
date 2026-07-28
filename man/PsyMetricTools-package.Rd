@@ -6,7 +6,7 @@
 \alias{PsyMetricTools-package}
 \title{PsyMetricTools: Psychometric and Statistical Analysis Tools}
 \description{
-A comprehensive package designed for psychometric and statistical analysis in social sciences. It includes functions for data preprocessing, factor analysis, reliability testing, descriptive statistics, visualization of Likert-scale items, measurement invariance analysis, and handling multi-class imbalances. The package facilitates advanced data analysis tasks commonly encountered in psychological and educational research. Includes an updated easy_invariance() function for ordinal data following Wu and Estabrook (2016) \doi{10.1037/met0000051}.
+Provides tools for psychometric and statistical analysis in social sciences, including functions for data preprocessing, factor analysis, reliability testing, descriptive statistics, visualization of Likert-scale items, measurement invariance analysis, and handling of multi-class imbalance. Facilitates advanced data analysis tasks commonly encountered in psychological and educational research. Includes an updated easy_invariance() function for ordinal data following Wu and Estabrook (2016) \doi{10.1037/met0000051}.
 }
 \seealso{
 Useful links:

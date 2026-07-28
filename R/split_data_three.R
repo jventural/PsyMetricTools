@@ -7,7 +7,7 @@
 #' @param seed Random seed for reproducibility (default NULL).
 #' @return A list with piloto, exploratorio and confirmatorio data frames.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create sample data
 #' set.seed(123)
 #' data <- data.frame(

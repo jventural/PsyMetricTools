@@ -27,7 +27,7 @@ Computes McDonald's omega using the R-squared values
   to compute omega for multiple factors at once.
 }
 \examples{
-\dontrun{
+\donttest{
 library(lavaan)
 model <- 'F1 =~ x1 + x2 + x3
            F2 =~ x4 + x5 + x6'

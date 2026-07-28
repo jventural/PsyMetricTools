@@ -21,7 +21,15 @@ Calculates the percentage of bootstrap EFA replications that meet
 specified fit measure thresholds.
 }
 \examples{
-\dontrun{
+\donttest{
+set.seed(123)
+n <- 200
+data <- as.data.frame(lapply(setNames(1:6, paste0("PBA", 1:6)),
+                             function(i) sample(1:5, n, replace = TRUE)))
+results_boot_efa <- boot_efa(
+  data = data, n_factors = 2, n_items = 6, name_items = "PBA",
+  rotation = "oblimin", n_replications = 5
+)
 thresholds <- "CFI > 0.95, TLI > 0.95, RMSEA < 0.06, SRMR < 0.08"
 calculate_per_fit_efa(results_boot_efa, thresholds)
 }

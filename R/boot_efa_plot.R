@@ -4,8 +4,9 @@
 #' from bootstrap EFA results.
 #'
 #' @param boot_efa_results Results from boot_efa function.
-#' @param save Logical, whether to save the plot (default: TRUE).
-#' @param path File path to save the plot (default: "Plot_boot_efa.jpg").
+#' @param save Logical, whether to save the plot (default: FALSE).
+#' @param path File path to save the plot (default: NULL; required when
+#'   \code{save = TRUE}, e.g. \code{file.path(tempdir(), "Plot_boot_efa.jpg")}).
 #' @param dpi Resolution in dots per inch (default: 600).
 #' @param omega_ymin_annot Y-axis minimum for omega table annotation.
 #' @param omega_ymax_annot Y-axis maximum for omega table annotation.
@@ -20,15 +21,24 @@
 #'
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' set.seed(123)
+#' n <- 200
+#' data <- as.data.frame(lapply(setNames(1:6, paste0("PBA", 1:6)),
+#'                              function(i) sample(1:5, n, replace = TRUE)))
+#' results_boot_efa <- boot_efa(
+#'   data = data, n_factors = 2, n_items = 6, name_items = "PBA",
+#'   rotation = "oblimin", n_replications = 5
+#' )
 #' boot_efa_plot(results_boot_efa,
-#'               path = "mi_grafico_efa.jpg",
+#'               save = TRUE,
+#'               path = file.path(tempdir(), "mi_grafico_efa.jpg"),
 #'               omega_ymin_annot = 0.70,
 #'               omega_ymax_annot = 0.80)
 #' }
 boot_efa_plot <- function(boot_efa_results,
-                          save = TRUE,
-                          path = "Plot_boot_efa.jpg",
+                          save = FALSE,
+                          path = NULL,
                           dpi = 600,
                           omega_ymin_annot = NULL,
                           omega_ymax_annot = NULL,
@@ -150,7 +160,7 @@ boot_efa_plot <- function(boot_efa_results,
         ggplot2::theme_bw() +
         ggplot2::scale_fill_manual(values = get_palette(pal, length(unique(dat_long$Variable)))) +
         ggplot2::coord_cartesian(ylim = c(min(res_tbl$min) - 0.1, 1)) +
-        ggplot2::labs(y = "\u03C9 values") +
+        ggplot2::labs(y = "omega values") +
         ggplot2::theme(legend.position = "none") +
         ggplot2::annotation_custom(tbl_grob,
                           xmin = 1, xmax = length(res_tbl$Variable),
@@ -286,6 +296,10 @@ boot_efa_plot <- function(boot_efa_results,
 
     # Guardar si se solicita
     if (isTRUE(save)) {
+      if (is.null(path)) {
+        stop("Please provide 'path' when save = TRUE, ",
+             "e.g. path = file.path(tempdir(), \"Plot_boot_efa.jpg\").")
+      }
       ggplot2::ggsave(
         filename = path,
         plot     = gridExtra::arrangeGrob(o$plot, c$plot, a$plot, ncol = 3),

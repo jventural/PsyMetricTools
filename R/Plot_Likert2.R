@@ -10,7 +10,7 @@
 #' @param item_range Range of item numbers to include.
 #' @return A ggplot object.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create sample survey data with binary Likert items
 #' set.seed(123)
 #' n <- 200

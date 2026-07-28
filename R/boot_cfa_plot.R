@@ -1,8 +1,9 @@
 #' @title Bootstrap CFA Plot
 #' @description Creates boxplot visualizations for bootstrap CFA results.
 #' @param df Data frame with results from boot_cfa().
-#' @param save Logical. Save the plot (default TRUE).
-#' @param path Path to save the plot (default "Plot_boot_cfa.jpg").
+#' @param save Logical. Save the plot (default FALSE).
+#' @param path Path to save the plot (default NULL; required when
+#'   \code{save = TRUE}, e.g. \code{file.path(tempdir(), "Plot_boot_cfa.jpg")}).
 #' @param dpi Resolution in DPI (default 600).
 #' @param omega_ymin_annot Y-axis minimum for omega annotation.
 #' @param omega_ymax_annot Y-axis maximum for omega annotation.
@@ -16,7 +17,7 @@
 #' @param ... Additional arguments passed to ggsave.
 #' @return A combined ggplot object (invisibly).
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # First run boot_cfa to get bootstrap results
 #' set.seed(123)
 #' n <- 300
@@ -38,13 +39,13 @@
 #'   new_df = data,
 #'   model_string = model,
 #'   item_prefix = "Item",
-#'   n_replications = 100
+#'   n_replications = 25
 #' )
 #'
 #' # Create boxplot visualization
 #' boot_cfa_plot(boot_results,
 #'               save = TRUE,
-#'               path = "bootstrap_cfa_results.jpg",
+#'               path = file.path(tempdir(), "bootstrap_cfa_results.jpg"),
 #'               palette = "grey",
 #'               show_tables = TRUE)
 #'
@@ -56,8 +57,8 @@
 #' }
 #' @export
 boot_cfa_plot <- function(df,
-                         save = TRUE,
-                         path = "Plot_boot_cfa.jpg",
+                         save = FALSE,
+                         path = NULL,
                          dpi = 600,
                          omega_ymin_annot = NULL,
                          omega_ymax_annot = NULL,
@@ -145,6 +146,7 @@ boot_cfa_plot <- function(df,
         dat <- df_repli[, sapply(df_repli, is.numeric)]
       }
 
+      dat[] <- lapply(dat, as.numeric)
       dat_long <- tidyr::pivot_longer(dat, tidyselect::everything(),
                                        names_to = "Variable", values_to = "Value")
 
@@ -166,7 +168,7 @@ boot_cfa_plot <- function(df,
         ggplot2::theme_bw() +
         ggplot2::scale_fill_manual(values = get_palette(pal, length(unique(dat_long$Variable)))) +
         ggplot2::coord_cartesian(ylim = c(min(res_tbl$min) - 0.1, 1)) +
-        ggplot2::labs(y = "\u03C9 values") +
+        ggplot2::labs(y = "omega values") +
         ggplot2::theme(legend.position = "none")
 
       if (show_tbl) {
@@ -303,6 +305,10 @@ boot_cfa_plot <- function(df,
 
     # Si se pide guardar en disco, volver a ensamblar con arrangeGrob
     if (isTRUE(save) && ncols > 0) {
+      if (is.null(path)) {
+        stop("Please provide 'path' when save = TRUE, ",
+             "e.g. path = file.path(tempdir(), \"Plot_boot_cfa.jpg\").")
+      }
       args <- c(plot_list, list(ncol = ncols))
       combined_plot <- do.call(gridExtra::arrangeGrob, args)
       ggplot2::ggsave(

@@ -20,7 +20,6 @@ A named list with items grouped by factor.
 Groups items by their factor loadings above a threshold.
 }
 \examples{
-\dontrun{
 # Create a data frame with factor loadings
 loadings_df <- data.frame(
   Items = c("Item1", "Item2", "Item3", "Item4", "Item5", "Item6"),
@@ -39,11 +38,4 @@ print(groups)
 # [1] "Item1" "Item2" "Item3"
 # $f2
 # [1] "Item4" "Item5" "Item6"
-
-# Use with EFA_modern results
-efa_result <- EFA_modern(n_factors = 2, n_items = 6,
-                         name_items = "Item", data = my_data,
-                         apply_threshold = TRUE)
-groups <- agrupar_por_factor(efa_result$result_df, threshold = 0.30)
-}
 }

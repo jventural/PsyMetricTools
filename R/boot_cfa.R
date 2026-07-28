@@ -3,13 +3,13 @@
 #' @param new_df Data frame with the data.
 #' @param model_string Lavaan model specification string.
 #' @param item_prefix Prefix for item column names.
-#' @param seed Random seed (default 2023).
+#' @param seed Optional random seed for reproducibility (default NULL, no seed is set).
 #' @param n_replications Number of bootstrap replications (default 1000).
 #' @param ordered Logical indicating if variables are ordinal (default TRUE).
 #' @param estimator Estimator to use (default "WLSMV").
 #' @return Data frame with bootstrap results including fit measures and reliability.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create sample data with 9 Likert-type items (3 factors, 3 items each)
 #' set.seed(123)
 #' n <- 300
@@ -38,7 +38,7 @@
 #'   model_string = model,
 #'   item_prefix = "Item",
 #'   seed = 2023,
-#'   n_replications = 100,
+#'   n_replications = 25,
 #'   ordered = TRUE,
 #'   estimator = "WLSMV"
 #' )
@@ -53,7 +53,7 @@
 #' result[, c("Rel1", "Rel2", "Rel3")]
 #' }
 #' @export
-boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replications = 1000, ordered = TRUE, estimator = "WLSMV") {
+boot_cfa <- function(new_df, model_string, item_prefix, seed = NULL, n_replications = 1000, ordered = TRUE, estimator = "WLSMV") {
   # Funcion interna
   lavaan_estimator <- function(x) {
     opts <- lavaan::lavInspect(x, "options")
@@ -258,7 +258,7 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = 2023, n_replicati
     return(fit_measure)
   }
 
-  set.seed(seed)
+  if (!is.null(seed)) set.seed(seed)
 
   # Replicar el dataframe con reemplazo
   new_df <- purrr::map_dfr(integer(n_replications), ~ dplyr::sample_n(new_df, size = nrow(new_df), replace = TRUE), .id = "obs")

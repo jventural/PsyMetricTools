@@ -6,7 +6,7 @@
 #'
 #' @return A matrix of factor correlations rounded to 2 decimals.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(psych)
 #'
 #' # Create sample data

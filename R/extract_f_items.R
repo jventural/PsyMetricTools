@@ -7,7 +7,7 @@
 #'
 #' @return A character string with lavaan model syntax.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create a data frame with factor loadings (after EFA)
 #' loadings_df <- data.frame(
 #'   Items = c("Item1", "Item2", "Item3", "Item4", "Item5", "Item6"),
@@ -24,10 +24,6 @@
 #' # Output:
 #' # f1 =~ Item1 + Item2 + Item3
 #' # f2 =~ Item4 + Item5 + Item6
-#'
-#' # Use with lavaan
-#' library(lavaan)
-#' fit <- cfa(model_syntax, data = my_data, ordered = TRUE, estimator = "WLSMV")
 #' }
 #' @export
 extract_f_items <- function(data, prefixes) {

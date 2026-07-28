@@ -81,17 +81,19 @@ A combined ggplot figure.
 Creates line plots showing CFA fit indices across sample sizes.
 }
 \examples{
-\dontrun{
+\donttest{
 # First run boot_cfa_stability to get stability results
 set.seed(123)
-n <- 500
+n <- 300
+g <- rnorm(n)
+t1 <- 0.7 * g + rnorm(n, 0, 0.7)
+t2 <- 0.7 * g + rnorm(n, 0, 0.7)
+sim_item <- function(t) {
+  as.numeric(cut(t + rnorm(length(t), 0, 0.8), c(-Inf, -1, 0, 1, Inf)))
+}
 data <- data.frame(
-  Item1 = sample(1:5, n, replace = TRUE),
-  Item2 = sample(1:5, n, replace = TRUE),
-  Item3 = sample(1:5, n, replace = TRUE),
-  Item4 = sample(1:5, n, replace = TRUE),
-  Item5 = sample(1:5, n, replace = TRUE),
-  Item6 = sample(1:5, n, replace = TRUE)
+  Item1 = sim_item(t1), Item2 = sim_item(t1), Item3 = sim_item(t1),
+  Item4 = sim_item(t2), Item5 = sim_item(t2), Item6 = sim_item(t2)
 )
 
 model <- "
@@ -102,8 +104,9 @@ model <- "
 stability_results <- boot_cfa_stability(
   modelo = model,
   data = data,
-  num_replicas = 50,
-  estimator = "WLSMV"
+  num_replicas = 10,
+  estimator = "WLSMV",
+  n_cores = 2
 )
 
 # Create stability plots
@@ -118,7 +121,7 @@ figure <- plot_cfa_stability(
 )
 
 # Save the figure
-ggplot2::ggsave("stability_analysis.jpg", figure,
+ggplot2::ggsave(file.path(tempdir(), "stability_analysis.jpg"), figure,
                 width = 12, height = 8, dpi = 300)
 }
 }

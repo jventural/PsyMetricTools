@@ -39,7 +39,7 @@ A ggplot object.
 Creates a diverging stacked bar chart visualization for Likert scale items.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create sample survey data with binary Likert items
 set.seed(123)
 n <- 200

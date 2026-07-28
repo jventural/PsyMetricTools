@@ -6,7 +6,7 @@
 #' @return A data frame with one row per latent factor containing: \code{latent},
 #'   \code{CR}, and \code{AVE}, both rounded to three decimal places.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(lavaan)
 #' model <- 'F1 =~ x1 + x2 + x3
 #'            F2 =~ x4 + x5 + x6'

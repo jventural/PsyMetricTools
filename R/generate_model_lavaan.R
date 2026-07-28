@@ -9,7 +9,7 @@
 #'
 #' @return A character string with complete lavaan model syntax.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Generate a simple 1-factor model with 5 items and 4 thresholds
 #' model <- generate_model_lavaan(
 #'   num_items = 5,
@@ -58,7 +58,7 @@ generate_model_lavaan <- function(num_items,
       item_threshold_key <- paste("Item", i, "t", j, sep = "")
 
       # Si el ítem está excluido, comentar la línea
-      if (excluded_items != "none" && item_threshold_key %in% excluded_items) {
+      if (!identical(excluded_items, "none") && item_threshold_key %in% excluded_items) {
         line <- paste0("# ", line)
       }
       text <- paste0(text, line, "\n")

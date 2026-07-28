@@ -80,8 +80,23 @@
 #' equation modeling} (5th ed.). Guilford Press.
 #'
 #' @examples
-#' \dontrun{
-#' library(lavaan); library(PsyMetricTools)
+#' \donttest{
+#' library(lavaan)
+#'
+#' set.seed(123)
+#' n <- 400
+#' g <- rnorm(n)
+#' sim_f <- function(fscore, k) {
+#'   sapply(seq_len(k), function(i) {
+#'     as.numeric(cut(0.8 * fscore + rnorm(length(fscore), 0, 0.6),
+#'                    c(-Inf, -1, 0, 1, Inf)))
+#'   })
+#' }
+#' F1s <- 0.6 * g + rnorm(n, 0, 0.8)
+#' F2s <- 0.6 * g + rnorm(n, 0, 0.8)
+#' F3s <- 0.6 * g + rnorm(n, 0, 0.8)
+#' my_data <- data.frame(sim_f(F1s, 5), sim_f(F2s, 5), sim_f(F3s, 5))
+#' names(my_data) <- paste0("ITEM", 1:15)
 #'
 #' mod <- '
 #'   F1 =~ ITEM1 + ITEM2 + ITEM3 + ITEM4 + ITEM5

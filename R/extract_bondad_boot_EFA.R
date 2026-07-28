@@ -6,33 +6,21 @@
 #'
 #' @return A data frame of fit measures with sample identifiers.
 #' @examples
-#' \dontrun{
-#' # Assuming you have bootstrap EFA results from boot_efa()
-#' # This function extracts fit measures from all bootstrap samples
-#'
-#' # Run bootstrap EFA
-#' boot_efa_results <- boot_efa(
-#'   data = my_data,
-#'   n_factors = 3,
-#'   n_items = 15,
-#'   name_items = "Item",
-#'   n_replications = 100
+#' # Bootstrap results contain one Bondades list per sample
+#' resultados_bootstrap <- list(
+#'   Results = list(
+#'     list(CombinedResults = list(Bondades = list(
+#'       data.frame(CFI = 0.96, TLI = 0.95, RMSEA = 0.05)
+#'     ))),
+#'     list(CombinedResults = list(Bondades = list(
+#'       data.frame(CFI = 0.97, TLI = 0.96, RMSEA = 0.04)
+#'     )))
+#'   )
 #' )
 #'
-#' # Extract fit measures from bootstrap results
-#' fit_measures <- extract_bondad_boot_EFA(boot_efa_results)
-#'
-#' # View results
+#' # Extract and combine fit measures across all bootstrap samples
+#' fit_measures <- extract_bondad_boot_EFA(resultados_bootstrap)
 #' head(fit_measures)
-#'
-#' # Summarize across samples
-#' fit_measures %>%
-#'   group_by(ID) %>%
-#'   summarise(
-#'     mean_CFI = mean(cfi.scaled, na.rm = TRUE),
-#'     mean_RMSEA = mean(rmsea.scaled, na.rm = TRUE)
-#'   )
-#' }
 #' @export
 extract_bondad_boot_EFA <- function(resultados_bootstrap) {
   # Cargar las librerías necesarias

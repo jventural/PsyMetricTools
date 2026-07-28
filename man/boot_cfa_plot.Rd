@@ -6,8 +6,8 @@
 \usage{
 boot_cfa_plot(
   df,
-  save = TRUE,
-  path = "Plot_boot_cfa.jpg",
+  save = FALSE,
+  path = NULL,
   dpi = 600,
   omega_ymin_annot = NULL,
   omega_ymax_annot = NULL,
@@ -24,9 +24,10 @@ boot_cfa_plot(
 \arguments{
 \item{df}{Data frame with results from boot_cfa().}
 
-\item{save}{Logical. Save the plot (default TRUE).}
+\item{save}{Logical. Save the plot (default FALSE).}
 
-\item{path}{Path to save the plot (default "Plot_boot_cfa.jpg").}
+\item{path}{Path to save the plot (default NULL; required when
+\code{save = TRUE}, e.g. \code{file.path(tempdir(), "Plot_boot_cfa.jpg")}).}
 
 \item{dpi}{Resolution in DPI (default 600).}
 
@@ -57,7 +58,7 @@ A combined ggplot object (invisibly).
 Creates boxplot visualizations for bootstrap CFA results.
 }
 \examples{
-\dontrun{
+\donttest{
 # First run boot_cfa to get bootstrap results
 set.seed(123)
 n <- 300
@@ -79,13 +80,13 @@ boot_results <- boot_cfa(
   new_df = data,
   model_string = model,
   item_prefix = "Item",
-  n_replications = 100
+  n_replications = 25
 )
 
 # Create boxplot visualization
 boot_cfa_plot(boot_results,
               save = TRUE,
-              path = "bootstrap_cfa_results.jpg",
+              path = file.path(tempdir(), "bootstrap_cfa_results.jpg"),
               palette = "grey",
               show_tables = TRUE)
 

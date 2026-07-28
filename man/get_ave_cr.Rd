@@ -19,7 +19,7 @@ Computes the Average Variance Extracted (AVE) and Composite
   using standardized factor loadings and error variances.
 }
 \examples{
-\dontrun{
+\donttest{
 library(lavaan)
 model <- 'F1 =~ x1 + x2 + x3
            F2 =~ x4 + x5 + x6'

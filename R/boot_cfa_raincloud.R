@@ -1,8 +1,9 @@
 #' @title Raincloud Plot para Bootstrap CFA
 #' @description Crea visualizaciones raincloud elegantes para resultados de bootstrap CFA.
 #' @param df Data frame con resultados de boot_cfa().
-#' @param save Logical. Guardar el grafico (default TRUE).
-#' @param path Ruta para guardar el grafico (default "Plot_boot_raincloud.jpg").
+#' @param save Logical. Guardar el grafico (default FALSE).
+#' @param path Ruta para guardar el grafico (default NULL; obligatoria si
+#'   \code{save = TRUE}, e.g. \code{file.path(tempdir(), "Plot_boot_raincloud.jpg")}).
 #' @param dpi Resolucion en DPI (default 600).
 #' @param exclude_indices Vector de indices a excluir (e.g., c("RMSEA")).
 #' @param color_scheme Esquema de color: "ocean", "sunset", "forest", "lavender", "monochrome", "elegant".
@@ -11,7 +12,7 @@
 #' @param ... Argumentos adicionales para ggsave.
 #' @return Un objeto ggplot.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # First run boot_cfa to get bootstrap results
 #' set.seed(123)
 #' n <- 300
@@ -33,13 +34,13 @@
 #'   new_df = data,
 #'   model_string = model,
 #'   item_prefix = "Item",
-#'   n_replications = 100
+#'   n_replications = 25
 #' )
 #'
 #' # Create raincloud plot with ocean color scheme
 #' boot_cfa_raincloud(boot_results,
 #'                    save = TRUE,
-#'                    path = "bootstrap_raincloud.jpg",
+#'                    path = file.path(tempdir(), "bootstrap_raincloud.jpg"),
 #'                    color_scheme = "ocean",
 #'                    show_stats = TRUE,
 #'                    theme_style = "modern")
@@ -54,8 +55,8 @@
 #' }
 #' @export
 boot_cfa_raincloud <- function(df,
-                                save = TRUE,
-                                path = "Plot_boot_raincloud.jpg",
+                                save = FALSE,
+                                path = NULL,
                                 dpi = 600,
                                 exclude_indices = NULL,
                                 color_scheme = "ocean",
@@ -132,6 +133,7 @@ boot_cfa_raincloud <- function(df,
         dat <- df_repli[, sapply(df_repli, is.numeric)]
       }
 
+      dat[] <- lapply(dat, as.numeric)
       dat_long <- tidyr::pivot_longer(dat, tidyselect::everything(),
                                        names_to = "Index", values_to = "Value")
       dat_long$Index <- substr(dat_long$Index, 1, 3)
@@ -190,7 +192,6 @@ boot_cfa_raincloud <- function(df,
         )
 
       # Anadir jitter a los datos
-      set.seed(123)
       data <- dplyr::group_by(data, Label)
       data <- dplyr::mutate(data,
           x_base = as.numeric(factor(Label, levels = unique(data$Label))),
@@ -395,6 +396,10 @@ boot_cfa_raincloud <- function(df,
 
     # Guardar
     if (isTRUE(save)) {
+      if (is.null(path)) {
+        stop("Please provide 'path' when save = TRUE, ",
+             "e.g. path = file.path(tempdir(), \"Plot_boot_raincloud.jpg\").")
+      }
       combined <- do.call(gridExtra::arrangeGrob, args)
       ggplot2::ggsave(
         filename = path,

@@ -20,7 +20,7 @@ A list with filtered data and a table of aberrant cases.
 Identifies and filters cases with aberrant response patterns using Mahalanobis distance.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create sample data with some aberrant response patterns
 set.seed(123)
 n <- 200

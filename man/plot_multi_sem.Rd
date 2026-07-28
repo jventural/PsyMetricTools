@@ -32,7 +32,7 @@ plot_multi_sem(
   title.cex = 0.8,
   title.font = 2,
   save_plot = FALSE,
-  filename = "sem_models_plot",
+  filename = NULL,
   file_format = "png",
   width_per = 4,
   height = 4,
@@ -98,7 +98,8 @@ column per model when \code{nrow} is also \code{NULL}).}
 
 \item{save_plot}{Save plot to file (default FALSE).}
 
-\item{filename}{Output filename.}
+\item{filename}{Output filename without extension (default NULL; required
+when \code{save_plot = TRUE}, e.g. \code{file.path(tempdir(), "sem_plot")}).}
 
 \item{file_format}{Output format (png, pdf, tiff, jpeg).}
 
@@ -120,7 +121,7 @@ Creates a panel of SEM path diagrams for multiple models. The
   number of models does not fill the grid.
 }
 \examples{
-\dontrun{
+\donttest{
 library(lavaan)
 
 # Create sample data
@@ -156,7 +157,7 @@ plot_multi_sem(
   models = list(fit1, fit2, fit1),
   model_descriptions = c("Model 1", "Model 2", "Model 3"),
   nrow = 2, ncol = 2,
-  save_plot = TRUE, filename = "sem_grid",
+  save_plot = TRUE, filename = file.path(tempdir(), "sem_grid"),
   width_per = 6, height = 6
 )
 }

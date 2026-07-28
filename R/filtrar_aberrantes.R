@@ -11,7 +11,7 @@ utils::globalVariables(c("row_idx", "d_sq", "flagged"))
 #'
 #' @return A list with filtered data and a table of aberrant cases.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create sample data with some aberrant response patterns
 #' set.seed(123)
 #' n <- 200

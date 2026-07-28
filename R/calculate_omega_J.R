@@ -12,7 +12,7 @@
 #'   When \code{items} is a named list, a named numeric vector with one omega
 #'   per factor.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(lavaan)
 #' model <- 'F1 =~ x1 + x2 + x3
 #'            F2 =~ x4 + x5 + x6'

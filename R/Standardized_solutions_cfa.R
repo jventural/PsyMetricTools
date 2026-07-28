@@ -5,7 +5,7 @@
 #' @param apply_threshold Logical, whether to apply 0.30 threshold (default TRUE).
 #' @return A data frame with items and factor loadings.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(lavaan)
 #'
 #' # Create sample data

@@ -119,9 +119,16 @@ figura del modelo de mediación dual de presión académica) y en Bakioglu,
 Korkmaz y Ercan (2020, IJMHA, modelo de mediación del miedo a la COVID-19).
 }
 \examples{
-\dontrun{
+\donttest{
 library(lavaan)
-library(PsyMetricTools)
+
+set.seed(123)
+n <- 300
+X1 <- rnorm(n); X2 <- rnorm(n); X3 <- rnorm(n)
+M1 <- 0.5 * X1 + 0.3 * X2 + rnorm(n, 0, 0.8)
+M2 <- 0.4 * X2 + 0.3 * X3 + rnorm(n, 0, 0.8)
+Y  <- 0.4 * M1 + 0.3 * M2 + 0.2 * X1 + rnorm(n, 0, 0.7)
+your_data <- data.frame(X1, X2, X3, M1, M2, Y)
 
 # Modelo de senderos: 3 predictores distales -> 2 mediadores -> 1 outcome
 mod <- '
@@ -129,7 +136,7 @@ mod <- '
   M2 ~ X1 + X2 + X3
   Y  ~ M1 + M2 + X1 + X2 + X3
 '
-fit <- sem(mod, data = your_data, estimator = "MLR", missing = "fiml")
+fit <- sem(mod, data = your_data, estimator = "MLR")
 
 nodes <- data.frame(
   id    = c("X1","X2","X3","M1","M2","Y"),

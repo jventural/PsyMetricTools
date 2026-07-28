@@ -6,8 +6,8 @@
 \usage{
 boot_cfa_raincloud(
   df,
-  save = TRUE,
-  path = "Plot_boot_raincloud.jpg",
+  save = FALSE,
+  path = NULL,
   dpi = 600,
   exclude_indices = NULL,
   color_scheme = "ocean",
@@ -19,9 +19,10 @@ boot_cfa_raincloud(
 \arguments{
 \item{df}{Data frame con resultados de boot_cfa().}
 
-\item{save}{Logical. Guardar el grafico (default TRUE).}
+\item{save}{Logical. Guardar el grafico (default FALSE).}
 
-\item{path}{Ruta para guardar el grafico (default "Plot_boot_raincloud.jpg").}
+\item{path}{Ruta para guardar el grafico (default NULL; obligatoria si
+\code{save = TRUE}, e.g. \code{file.path(tempdir(), "Plot_boot_raincloud.jpg")}).}
 
 \item{dpi}{Resolucion en DPI (default 600).}
 
@@ -42,7 +43,7 @@ Un objeto ggplot.
 Crea visualizaciones raincloud elegantes para resultados de bootstrap CFA.
 }
 \examples{
-\dontrun{
+\donttest{
 # First run boot_cfa to get bootstrap results
 set.seed(123)
 n <- 300
@@ -64,13 +65,13 @@ boot_results <- boot_cfa(
   new_df = data,
   model_string = model,
   item_prefix = "Item",
-  n_replications = 100
+  n_replications = 25
 )
 
 # Create raincloud plot with ocean color scheme
 boot_cfa_raincloud(boot_results,
                    save = TRUE,
-                   path = "bootstrap_raincloud.jpg",
+                   path = file.path(tempdir(), "bootstrap_raincloud.jpg"),
                    color_scheme = "ocean",
                    show_stats = TRUE,
                    theme_style = "modern")

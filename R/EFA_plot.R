@@ -5,7 +5,7 @@
 #' @param item_prefix Prefix for item names.
 #' @return A ggplot object showing factor loadings.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Example 1: Using with EFA_modern() result
 #' set.seed(123)
 #' n <- 300

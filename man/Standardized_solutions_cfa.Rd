@@ -20,7 +20,7 @@ A data frame with items and factor loadings.
 Extracts and formats standardized factor loadings from lavaan CFA.
 }
 \examples{
-\dontrun{
+\donttest{
 library(lavaan)
 
 # Create sample data

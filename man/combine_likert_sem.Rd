@@ -51,7 +51,7 @@ A combined patchwork plot.
 Creates a combined visualization with a Likert plot and SEM path diagram.
 }
 \examples{
-\dontrun{
+\donttest{
 library(lavaan)
 library(ggplot2)
 
@@ -95,7 +95,7 @@ combined_plot <- combine_likert_sem(
 print(combined_plot)
 
 # Save combined plot
-ggsave("combined_likert_sem.jpg", combined_plot,
+ggsave(file.path(tempdir(), "combined_likert_sem.jpg"), combined_plot,
        width = 14, height = 8, dpi = 300)
 }
 }

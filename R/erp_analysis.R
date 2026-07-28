@@ -14,7 +14,7 @@
 #'   \code{Flag_ERP}, and formatted percentage columns. Rows are sorted by
 #'   descending ERP.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' set.seed(123)
 #' df <- data.frame(
 #'   IT1 = sample(1:5, 200, replace = TRUE),
@@ -71,7 +71,7 @@ erp_by_item <- function(data, items, extremes = c(1, 5), threshold = 0.30) {
 #' @param threshold Numeric threshold for the reference line (default 0.30).
 #' @return A \code{ggplot} object.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' set.seed(123)
 #' df <- data.frame(
 #'   IT1 = sample(1:5, 200, replace = TRUE),

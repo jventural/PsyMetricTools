@@ -16,7 +16,7 @@ A data frame with model fit indices and omega reliability values.
 Creates a comprehensive table combining fit indices and reliability measures.
 }
 \examples{
-\dontrun{
+\donttest{
 # First run multi_cfa to get results
 set.seed(123)
 n <- 300

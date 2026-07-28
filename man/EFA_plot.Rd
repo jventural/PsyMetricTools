@@ -19,7 +19,7 @@ A ggplot object showing factor loadings.
 Creates a visualization of factor loadings from EFA.
 }
 \examples{
-\dontrun{
+\donttest{
 # Example 1: Using with EFA_modern() result
 set.seed(123)
 n <- 300

@@ -33,7 +33,8 @@
 #' @param title.cex Title size (default 0.8).
 #' @param title.font Title font (default 2).
 #' @param save_plot Save plot to file (default FALSE).
-#' @param filename Output filename.
+#' @param filename Output filename without extension (default NULL; required
+#'   when \code{save_plot = TRUE}, e.g. \code{file.path(tempdir(), "sem_plot")}).
 #' @param file_format Output format (png, pdf, tiff, jpeg).
 #' @param width_per Width per plot in inches (per column).
 #' @param height Height in inches (per row).
@@ -41,7 +42,7 @@
 #' @param units Units for dimensions.
 #' @return NULL (plots are drawn to device).
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(lavaan)
 #'
 #' # Create sample data
@@ -77,7 +78,7 @@
 #'   models = list(fit1, fit2, fit1),
 #'   model_descriptions = c("Model 1", "Model 2", "Model 3"),
 #'   nrow = 2, ncol = 2,
-#'   save_plot = TRUE, filename = "sem_grid",
+#'   save_plot = TRUE, filename = file.path(tempdir(), "sem_grid"),
 #'   width_per = 6, height = 6
 #' )
 #' }
@@ -115,7 +116,7 @@ plot_multi_sem <- function(models,
                            title.font = 2,
                            # Parametros para guardar
                            save_plot   = FALSE,
-                           filename    = "sem_models_plot",
+                           filename    = NULL,
                            file_format = "png",
                            width_per   = 4,    # ancho (in) por cada columna
                            height      = 4,    # altura (in) por cada fila
@@ -147,6 +148,10 @@ plot_multi_sem <- function(models,
 
   # Abrir dispositivo para guardar si se requiere
   if (save_plot) {
+    if (is.null(filename)) {
+      stop("Please provide 'filename' (without extension) when save_plot = TRUE, ",
+           "e.g. filename = file.path(tempdir(), \"sem_models_plot\").")
+    }
     total_width  <- width_per * ncol
     total_height <- height * nrow
     if (file_format == "png") {
@@ -179,6 +184,8 @@ plot_multi_sem <- function(models,
   }
 
   # Configurar canvas: nrow filas x ncol columnas
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar), add = TRUE)
   par(mfrow = c(nrow, ncol), mar = outerMar)
 
   for (i in seq_len(n)) {
@@ -243,9 +250,6 @@ plot_multi_sem <- function(models,
   if (resto > 0) {
     for (k in seq_len(resto)) plot.new()
   }
-
-  # Restaurar dispositivo
-  par(mfrow = c(1,1))
 
   if (save_plot) {
     dev.off()

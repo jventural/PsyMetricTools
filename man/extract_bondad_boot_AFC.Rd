@@ -16,29 +16,13 @@ A combined data frame of fit measures with sample and iteration identifiers.
 Extracts and combines fit measures from bootstrap CFA analyses.
 }
 \examples{
-\dontrun{
-# Assuming you have bootstrap CFA results with FitMeasuresDf elements
-# This function extracts and combines fit measures across all bootstrap samples
+# Bootstrap CFA results contain one FitMeasuresDf element per sample
+results_list <- list(
+  list(FitMeasuresDf = data.frame(CFI = 0.96, TLI = 0.95, RMSEA = 0.05)),
+  list(FitMeasuresDf = data.frame(CFI = 0.97, TLI = 0.96, RMSEA = 0.04))
+)
 
-# results_list structure:
-# list(
-#   list(FitMeasuresDf = data.frame(...)),
-#   list(FitMeasuresDf = data.frame(...)),
-#   ...
-# )
-
-# Extract all fit measures
+# Extract and combine fit measures across all bootstrap samples
 all_fit_measures <- extract_bondad_boot_AFC(results_list)
-
-# View combined results
 head(all_fit_measures)
-
-# Summarize by sample
-all_fit_measures \%>\%
-  group_by(muestra) \%>\%
-  summarise(
-    mean_CFI = mean(CFI, na.rm = TRUE),
-    mean_RMSEA = mean(RMSEA, na.rm = TRUE)
-  )
-}
 }

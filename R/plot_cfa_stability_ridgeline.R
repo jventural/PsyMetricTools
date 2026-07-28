@@ -19,7 +19,25 @@
 #' @return Un objeto ggplot.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' set.seed(123)
+#' n <- 300
+#' g <- rnorm(n)
+#' t1 <- 0.7 * g + rnorm(n, 0, 0.7)
+#' t2 <- 0.7 * g + rnorm(n, 0, 0.7)
+#' sim_item <- function(t) {
+#'   as.numeric(cut(t + rnorm(length(t), 0, 0.8), c(-Inf, -1, 0, 1, Inf)))
+#' }
+#' data <- data.frame(
+#'   Item1 = sim_item(t1), Item2 = sim_item(t1), Item3 = sim_item(t1),
+#'   Item4 = sim_item(t2), Item5 = sim_item(t2), Item6 = sim_item(t2)
+#' )
+#' model <- "F1 =~ Item1 + Item2 + Item3
+#'           F2 =~ Item4 + Item5 + Item6"
+#' resultado_stability <- boot_cfa_stability(
+#'   modelo = model, data = data, num_replicas = 10,
+#'   estimator = "WLSMV", n_cores = 2
+#' )
 #' plot_cfa_stability_ridgeline(resultado_stability)
 #' plot_cfa_stability_ridgeline(resultado_stability, indices = c("cfi.scaled", "rmsea.scaled"))
 #' }

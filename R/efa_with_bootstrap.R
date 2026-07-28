@@ -12,30 +12,30 @@
 #' @param exclude_items Optional vector of items to exclude.
 #' @param bootstrap Logical, whether to perform bootstrap (default: FALSE).
 #' @param n_bootstrap Number of bootstrap samples (default: 1000).
-#' @param bootstrap_seed Seed for reproducibility (default: 123).
+#' @param bootstrap_seed Optional seed for reproducibility (default: NULL, no
+#'   seed is set; supply a number to make the bootstrap reproducible).
 #'
 #' @return A list with EFA results and optional bootstrap statistics.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create sample data
 #' set.seed(123)
-#' n <- 300
+#' n <- 200
+#' g <- rnorm(n)
+#' t1 <- 0.7 * g + rnorm(n, 0, 0.7)
+#' t2 <- 0.7 * g + rnorm(n, 0, 0.7)
+#' sim_item <- function(t) {
+#'   as.numeric(cut(t + rnorm(length(t), 0, 0.8), c(-Inf, -1, 0, 1, Inf)))
+#' }
 #' data <- data.frame(
-#'   Item1 = sample(1:5, n, replace = TRUE),
-#'   Item2 = sample(1:5, n, replace = TRUE),
-#'   Item3 = sample(1:5, n, replace = TRUE),
-#'   Item4 = sample(1:5, n, replace = TRUE),
-#'   Item5 = sample(1:5, n, replace = TRUE),
-#'   Item6 = sample(1:5, n, replace = TRUE),
-#'   Item7 = sample(1:5, n, replace = TRUE),
-#'   Item8 = sample(1:5, n, replace = TRUE),
-#'   Item9 = sample(1:5, n, replace = TRUE)
+#'   Item1 = sim_item(t1), Item2 = sim_item(t1), Item3 = sim_item(t1),
+#'   Item4 = sim_item(t2), Item5 = sim_item(t2), Item6 = sim_item(t2)
 #' )
 #'
 #' # Basic EFA without bootstrap
 #' result_basic <- efa_with_bootstrap(
-#'   n_factors = 3,
-#'   n_items = 9,
+#'   n_factors = 2,
+#'   n_items = 6,
 #'   name_items = "Item",
 #'   data = data,
 #'   apply_threshold = TRUE,
@@ -50,13 +50,13 @@
 #'
 #' # EFA with bootstrap for stability analysis
 #' result_boot <- efa_with_bootstrap(
-#'   n_factors = 3,
-#'   n_items = 9,
+#'   n_factors = 2,
+#'   n_items = 6,
 #'   name_items = "Item",
 #'   data = data,
 #'   apply_threshold = TRUE,
 #'   bootstrap = TRUE,
-#'   n_bootstrap = 100,  # Use 1000 in practice
+#'   n_bootstrap = 5,  # Use 1000 in practice
 #'   bootstrap_seed = 123
 #' )
 #'
@@ -80,7 +80,7 @@ efa_with_bootstrap <- function(n_factors,
                                exclude_items = NULL,
                                bootstrap = FALSE,
                                n_bootstrap = 1000,
-                               bootstrap_seed = 123) {
+                               bootstrap_seed = NULL) {
 
   # Funcion auxiliar interna para realizar un analisis EFA individual
   run_single_efa <- function(data_sample) {
@@ -366,7 +366,7 @@ efa_with_bootstrap <- function(n_factors,
   }
 
   # Analisis original con datos completos
-  cat("Realizando analisis factorial exploratorio original...\n")
+  message("Realizando analisis factorial exploratorio original...")
   original_results <- run_single_efa(data)
 
   if (!original_results$success) {
@@ -389,7 +389,7 @@ efa_with_bootstrap <- function(n_factors,
 
   # Realizar bootstrap si se solicita
   if (bootstrap) {
-    cat("Iniciando analisis de bootstrap con", n_bootstrap, "muestras...\n")
+    message("Iniciando analisis de bootstrap con ", n_bootstrap, " muestras...")
 
     # Configurar semilla para reproducibilidad
     if (!is.null(bootstrap_seed)) {
@@ -426,7 +426,7 @@ efa_with_bootstrap <- function(n_factors,
     }
     close(pb)
 
-    cat("\nBootstrap completado:", successful_iterations, "de", n_bootstrap, "iteraciones exitosas\n")
+    message("Bootstrap completado: ", successful_iterations, " de ", n_bootstrap, " iteraciones exitosas")
 
     if (successful_iterations > 0) {
       # Procesar resultados de bondades de ajuste

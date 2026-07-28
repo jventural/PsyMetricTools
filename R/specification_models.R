@@ -11,22 +11,24 @@
 #'
 #' @return A list of fitted lavaan model objects.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create sample data
 #' set.seed(123)
 #' n <- 300
+#' g <- rnorm(n)
+#' t1 <- 0.7 * g + rnorm(n, 0, 0.7)
+#' t2 <- 0.7 * g + rnorm(n, 0, 0.7)
+#' sim_item <- function(t) {
+#'   as.numeric(cut(t + rnorm(length(t), 0, 0.8), c(-Inf, -1, 0, 1, Inf)))
+#' }
 #' data <- data.frame(
-#'   Item1 = sample(1:5, n, replace = TRUE),
-#'   Item2 = sample(1:5, n, replace = TRUE),
-#'   Item3 = sample(1:5, n, replace = TRUE),
-#'   Item4 = sample(1:5, n, replace = TRUE),
-#'   Item5 = sample(1:5, n, replace = TRUE),
-#'   Item6 = sample(1:5, n, replace = TRUE)
+#'   Item1 = sim_item(t1), Item2 = sim_item(t1), Item3 = sim_item(t1),
+#'   Item4 = sim_item(t2), Item5 = sim_item(t2), Item6 = sim_item(t2)
 #' )
 #'
 #' # Generate EFA models for 1 to 3 factors
 #' models <- generate_modelos(
-#'   n_factors = 3,
+#'   n_factors = 2,
 #'   name_items = "Item",
 #'   n_items = 6
 #' )

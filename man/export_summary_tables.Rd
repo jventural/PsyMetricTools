@@ -8,7 +8,7 @@ export_summary_tables(
   summary_Tabla_Total,
   summary_Tabla_EFA,
   summary_Tabla_CFA,
-  file_name = "Tablas_Resumenes.xlsx"
+  file_name
 )
 }
 \arguments{
@@ -18,7 +18,8 @@ export_summary_tables(
 
 \item{summary_Tabla_CFA}{Summary table for CFA sample.}
 
-\item{file_name}{Output file name (default "Tablas_Resumenes.xlsx").}
+\item{file_name}{Output file name (no default; supply a full path, e.g.
+\code{file.path(tempdir(), "Tablas_Resumenes.xlsx")}).}
 }
 \value{
 Invisibly returns the merged data frame.

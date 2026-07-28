@@ -20,7 +20,7 @@ A data frame with items and factor loadings.
 Extracts and formats standardized factor loadings from lavaan EFA.
 }
 \examples{
-\dontrun{
+\donttest{
 # First run EFA_modern to get the specification object
 set.seed(123)
 n <- 300

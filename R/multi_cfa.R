@@ -10,7 +10,7 @@
 #'
 #' @return A list with fits, fit indices, modification indices, correlations, and reliability.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create sample data
 #' set.seed(123)
 #' n <- 300

@@ -10,7 +10,7 @@
 #'
 #' @return A data frame with oversampled minority classes.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create imbalanced multiclass data
 #' set.seed(123)
 #' data <- data.frame(

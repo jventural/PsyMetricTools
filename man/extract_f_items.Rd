@@ -18,7 +18,7 @@ A character string with lavaan model syntax.
 Creates lavaan model syntax by extracting items with non-zero loadings per factor.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create a data frame with factor loadings (after EFA)
 loadings_df <- data.frame(
   Items = c("Item1", "Item2", "Item3", "Item4", "Item5", "Item6"),
@@ -35,9 +35,5 @@ cat(model_syntax)
 # Output:
 # f1 =~ Item1 + Item2 + Item3
 # f2 =~ Item4 + Item5 + Item6
-
-# Use with lavaan
-library(lavaan)
-fit <- cfa(model_syntax, data = my_data, ordered = TRUE, estimator = "WLSMV")
 }
 }

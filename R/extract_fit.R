@@ -6,7 +6,7 @@
 #'
 #' @return A data frame with fit index names and values.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(psych)
 #'
 #' # Create sample data

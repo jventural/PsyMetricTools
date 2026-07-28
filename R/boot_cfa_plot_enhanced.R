@@ -15,7 +15,8 @@
 #'
 #' @param df Data frame producido por \code{boot_cfa()}.
 #' @param save Lógico. Guardar el gráfico (default \code{FALSE}).
-#' @param path Ruta del archivo a guardar.
+#' @param path Ruta del archivo a guardar (default \code{NULL}; obligatoria si
+#'   \code{save = TRUE}, e.g. \code{file.path(tempdir(), "Plot_boot_cfa_enhanced.jpg")}).
 #' @param dpi Resolución (default 600).
 #' @param palette \[Deprecated\] Vector de 3 colores. Si se especifica, se usará
 #'   ignorando \code{semantic_colors}. Se mantiene por compatibilidad hacia atrás.
@@ -68,24 +69,23 @@
 #'   \code{patchwork::wrap_elements()}.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' set.seed(123)
+#' n <- 300
+#' df <- as.data.frame(lapply(setNames(1:6, paste0("PHQ", 1:6)),
+#'                            function(i) sample(1:5, n, replace = TRUE)))
+#' m <- "F1 =~ PHQ1 + PHQ2 + PHQ3
+#'       F2 =~ PHQ4 + PHQ5 + PHQ6"
 #' results_boot <- boot_cfa(new_df = df, model_string = m,
-#'                          item_prefix = "PHQ", n_replications = 1000)
+#'                          item_prefix = "PHQ", n_replications = 30)
 #' boot_cfa_plot_enhanced(results_boot)
-#'
-#' # Combinar con ridgeline (Panel B)
-#' library(patchwork)
-#' panel_A <- wrap_elements(boot_cfa_plot_enhanced(results_boot)) + ggtitle("A")
-#' panel_B <- wrap_elements(plot_cfa_stability_ridgeline(stab,
-#'             gradient_colors = c("#9ecae1", "#08519c"))) + ggtitle("B")
-#' panel_A / panel_B
 #' }
 #'
 #' @export
 #' @importFrom dplyr %>%
 boot_cfa_plot_enhanced <- function(df,
                                     save = FALSE,
-                                    path = "Plot_boot_cfa_enhanced.jpg",
+                                    path = NULL,
                                     dpi = 600,
                                     palette = NULL,
                                     accent_color = NULL,
@@ -114,14 +114,14 @@ boot_cfa_plot_enhanced <- function(df,
   table_style <- match.arg(table_style)
   i18n <- list(
     es = list(
-      y_omega  = "\u03c9 (Confiabilidad)",
+      y_omega  = "omega (Confiabilidad)",
       y_comp   = "Comparativos",
       y_abs    = "Absolutos",
       pass_int = "%.0f%% pasa",
       pass_dec = "%.1f%% pasa"
     ),
     en = list(
-      y_omega  = "\u03c9 (Reliability)",
+      y_omega  = "omega (Reliability)",
       y_comp   = "Comparative",
       y_abs    = "Absolute",
       pass_int = "%.0f%% pass",
@@ -472,6 +472,10 @@ boot_cfa_plot_enhanced <- function(df,
   }
 
   if (isTRUE(save)) {
+    if (is.null(path)) {
+      stop("Please provide 'path' when save = TRUE, ",
+           "e.g. path = file.path(tempdir(), \"Plot_boot_cfa_enhanced.jpg\").")
+    }
     ggplot2::ggsave(filename = path, plot = combined,
                     width = 13, height = 6.5, dpi = dpi, units = "in", ...)
   }

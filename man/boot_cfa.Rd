@@ -8,7 +8,7 @@ boot_cfa(
   new_df,
   model_string,
   item_prefix,
-  seed = 2023,
+  seed = NULL,
   n_replications = 1000,
   ordered = TRUE,
   estimator = "WLSMV"
@@ -21,7 +21,7 @@ boot_cfa(
 
 \item{item_prefix}{Prefix for item column names.}
 
-\item{seed}{Random seed (default 2023).}
+\item{seed}{Optional random seed for reproducibility (default NULL, no seed is set).}
 
 \item{n_replications}{Number of bootstrap replications (default 1000).}
 
@@ -36,7 +36,7 @@ Data frame with bootstrap results including fit measures and reliability.
 Performs bootstrap CFA with reliability estimation.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create sample data with 9 Likert-type items (3 factors, 3 items each)
 set.seed(123)
 n <- 300
@@ -65,7 +65,7 @@ result <- boot_cfa(
   model_string = model,
   item_prefix = "Item",
   seed = 2023,
-  n_replications = 100,
+  n_replications = 25,
   ordered = TRUE,
   estimator = "WLSMV"
 )

@@ -24,7 +24,7 @@ A list with fits, fit indices, modification indices, correlations, and reliabili
 Fits multiple CFA models and extracts fit indices, modification indices, and reliability.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create sample data
 set.seed(123)
 n <- 300

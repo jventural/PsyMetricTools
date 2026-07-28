@@ -6,8 +6,8 @@
 \usage{
 boot_cfa_density(
   df,
-  save = TRUE,
-  path = "Plot_boot_density.jpg",
+  save = FALSE,
+  path = NULL,
   dpi = 600,
   exclude_indices = NULL,
   show_ci = TRUE,
@@ -21,9 +21,10 @@ boot_cfa_density(
 \arguments{
 \item{df}{Data frame con resultados de boot_cfa().}
 
-\item{save}{Logical. Guardar el grafico (default TRUE).}
+\item{save}{Logical. Guardar el grafico (default FALSE).}
 
-\item{path}{Ruta para guardar (default "Plot_boot_density.jpg").}
+\item{path}{Ruta para guardar (default NULL; obligatoria si \code{save = TRUE},
+e.g. \code{file.path(tempdir(), "Plot_boot_density.jpg")}).}
 
 \item{dpi}{Resolucion (default 600).}
 
@@ -42,14 +43,15 @@ boot_cfa_density(
 \item{...}{Argumentos adicionales para ggsave.}
 }
 \value{
-Un objeto ggplot.
+Un objeto ggplot. La tabla de estadisticos bootstrap se adjunta como
+  atributo \code{"stats"} y puede extraerse con \code{attr(x, "stats")}.
 }
 \description{
 Visualiza la dispersion de resultados bootstrap mediante graficos
   de densidad con intervalos de confianza y valores de referencia.
 }
 \examples{
-\dontrun{
+\donttest{
 # First run boot_cfa to get bootstrap results
 set.seed(123)
 n <- 300
@@ -71,13 +73,13 @@ boot_results <- boot_cfa(
   new_df = data,
   model_string = model,
   item_prefix = "Item",
-  n_replications = 100
+  n_replications = 25
 )
 
 # Create density plot with confidence intervals
 boot_cfa_density(boot_results,
                  save = TRUE,
-                 path = "bootstrap_density.jpg",
+                 path = file.path(tempdir(), "bootstrap_density.jpg"),
                  show_ci = TRUE,
                  ci_level = 0.95,
                  show_reference = TRUE)

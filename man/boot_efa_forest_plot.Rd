@@ -6,8 +6,8 @@
 \usage{
 boot_efa_forest_plot(
   boot_efa_results,
-  save = TRUE,
-  path = "Forest_plot_efa.jpg",
+  save = FALSE,
+  path = NULL,
   dpi = 600,
   title = "Factor Loadings with 95\% CI (Bootstrap)",
   threshold_low = 0.4,
@@ -18,9 +18,10 @@ boot_efa_forest_plot(
 \arguments{
 \item{boot_efa_results}{Results from boot_efa function.}
 
-\item{save}{Logical, whether to save the plot (default: TRUE).}
+\item{save}{Logical, whether to save the plot (default: FALSE).}
 
-\item{path}{File path to save the plot (default: "Forest_plot_efa.jpg").}
+\item{path}{File path to save the plot (default: NULL; required when
+\code{save = TRUE}, e.g. \code{file.path(tempdir(), "Forest_plot_efa.jpg")}).}
 
 \item{dpi}{Resolution in dots per inch (default: 600).}
 
@@ -40,9 +41,18 @@ Creates a forest plot showing factor loadings with 95% confidence intervals
 from bootstrap EFA results. Style inspired by Solomon Kurz.
 }
 \examples{
-\dontrun{
+\donttest{
+set.seed(123)
+n <- 200
+data <- as.data.frame(lapply(setNames(1:6, paste0("PBA", 1:6)),
+                             function(i) sample(1:5, n, replace = TRUE)))
+results_boot_efa <- boot_efa(
+  data = data, n_factors = 2, n_items = 6, name_items = "PBA",
+  rotation = "oblimin", n_replications = 5
+)
 boot_efa_forest_plot(results_boot_efa,
-                     path = "Forest_PBA.jpg",
+                     save = TRUE,
+                     path = file.path(tempdir(), "Forest_PBA.jpg"),
                      title = "Factor Loadings PBA - Bootstrap EFA")
 }
 }

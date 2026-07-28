@@ -9,8 +9,8 @@ boot_cfa_stability(
   data,
   num_replicas,
   estimator,
-  seed = 2023,
-  n_cores = 4
+  seed = NULL,
+  n_cores = 2
 )
 }
 \arguments{
@@ -22,9 +22,9 @@ boot_cfa_stability(
 
 \item{estimator}{Estimator to use (e.g., "WLSMV").}
 
-\item{seed}{Random seed (default 2023).}
+\item{seed}{Optional random seed for reproducibility (default NULL, no seed is set).}
 
-\item{n_cores}{Number of cores for parallel processing (default 4).}
+\item{n_cores}{Number of cores for parallel processing (default 2).}
 }
 \value{
 Data frame with fit measures and reliability across sample sizes.
@@ -33,17 +33,19 @@ Data frame with fit measures and reliability across sample sizes.
 Performs bootstrap CFA stability analysis across different sample sizes.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create sample data
 set.seed(123)
-n <- 500
+n <- 300
+g <- rnorm(n)
+t1 <- 0.7 * g + rnorm(n, 0, 0.7)
+t2 <- 0.7 * g + rnorm(n, 0, 0.7)
+sim_item <- function(t) {
+  as.numeric(cut(t + rnorm(length(t), 0, 0.8), c(-Inf, -1, 0, 1, Inf)))
+}
 data <- data.frame(
-  Item1 = sample(1:5, n, replace = TRUE),
-  Item2 = sample(1:5, n, replace = TRUE),
-  Item3 = sample(1:5, n, replace = TRUE),
-  Item4 = sample(1:5, n, replace = TRUE),
-  Item5 = sample(1:5, n, replace = TRUE),
-  Item6 = sample(1:5, n, replace = TRUE)
+  Item1 = sim_item(t1), Item2 = sim_item(t1), Item3 = sim_item(t1),
+  Item4 = sim_item(t2), Item5 = sim_item(t2), Item6 = sim_item(t2)
 )
 
 # Define CFA model
@@ -56,10 +58,10 @@ model <- "
 stability_results <- boot_cfa_stability(
   modelo = model,
   data = data,
-  num_replicas = 50,
+  num_replicas = 10,
   estimator = "WLSMV",
   seed = 2023,
-  n_cores = 4
+  n_cores = 2
 )
 
 # View results - fit indices and reliability at different sample sizes

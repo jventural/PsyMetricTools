@@ -22,7 +22,7 @@ Data frame with reversed items.
 Reverses the scoring of specified items in a data frame.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create sample data with 5-point Likert scale (1-5)
 set.seed(123)
 data <- data.frame(

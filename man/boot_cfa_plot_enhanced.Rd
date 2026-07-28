@@ -7,7 +7,7 @@
 boot_cfa_plot_enhanced(
   df,
   save = FALSE,
-  path = "Plot_boot_cfa_enhanced.jpg",
+  path = NULL,
   dpi = 600,
   palette = NULL,
   accent_color = NULL,
@@ -38,7 +38,8 @@ boot_cfa_plot_enhanced(
 
 \item{save}{Lógico. Guardar el gráfico (default \code{FALSE}).}
 
-\item{path}{Ruta del archivo a guardar.}
+\item{path}{Ruta del archivo a guardar (default \code{NULL}; obligatoria si
+\code{save = TRUE}, e.g. \code{file.path(tempdir(), "Plot_boot_cfa_enhanced.jpg")}).}
 
 \item{dpi}{Resolución (default 600).}
 
@@ -128,17 +129,16 @@ Versión mejorada de \code{boot_cfa_plot()} que mantiene el lenguaje
   La función original \code{boot_cfa_plot()} permanece intacta.
 }
 \examples{
-\dontrun{
+\donttest{
+set.seed(123)
+n <- 300
+df <- as.data.frame(lapply(setNames(1:6, paste0("PHQ", 1:6)),
+                           function(i) sample(1:5, n, replace = TRUE)))
+m <- "F1 =~ PHQ1 + PHQ2 + PHQ3
+      F2 =~ PHQ4 + PHQ5 + PHQ6"
 results_boot <- boot_cfa(new_df = df, model_string = m,
-                         item_prefix = "PHQ", n_replications = 1000)
+                         item_prefix = "PHQ", n_replications = 30)
 boot_cfa_plot_enhanced(results_boot)
-
-# Combinar con ridgeline (Panel B)
-library(patchwork)
-panel_A <- wrap_elements(boot_cfa_plot_enhanced(results_boot)) + ggtitle("A")
-panel_B <- wrap_elements(plot_cfa_stability_ridgeline(stab,
-            gradient_colors = c("#9ecae1", "#08519c"))) + ggtitle("B")
-panel_A / panel_B
 }
 
 }

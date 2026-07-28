@@ -6,8 +6,8 @@
 \usage{
 boot_efa_plot(
   boot_efa_results,
-  save = TRUE,
-  path = "Plot_boot_efa.jpg",
+  save = FALSE,
+  path = NULL,
   dpi = 600,
   omega_ymin_annot = NULL,
   omega_ymax_annot = NULL,
@@ -22,9 +22,10 @@ boot_efa_plot(
 \arguments{
 \item{boot_efa_results}{Results from boot_efa function.}
 
-\item{save}{Logical, whether to save the plot (default: TRUE).}
+\item{save}{Logical, whether to save the plot (default: FALSE).}
 
-\item{path}{File path to save the plot (default: "Plot_boot_efa.jpg").}
+\item{path}{File path to save the plot (default: NULL; required when
+\code{save = TRUE}, e.g. \code{file.path(tempdir(), "Plot_boot_efa.jpg")}).}
 
 \item{dpi}{Resolution in dots per inch (default: 600).}
 
@@ -52,9 +53,18 @@ Creates a three-panel plot showing omega reliability, CFI/TLI, and RMSEA/SRMR/CR
 from bootstrap EFA results.
 }
 \examples{
-\dontrun{
+\donttest{
+set.seed(123)
+n <- 200
+data <- as.data.frame(lapply(setNames(1:6, paste0("PBA", 1:6)),
+                             function(i) sample(1:5, n, replace = TRUE)))
+results_boot_efa <- boot_efa(
+  data = data, n_factors = 2, n_items = 6, name_items = "PBA",
+  rotation = "oblimin", n_replications = 5
+)
 boot_efa_plot(results_boot_efa,
-              path = "mi_grafico_efa.jpg",
+              save = TRUE,
+              path = file.path(tempdir(), "mi_grafico_efa.jpg"),
               omega_ymin_annot = 0.70,
               omega_ymax_annot = 0.80)
 }

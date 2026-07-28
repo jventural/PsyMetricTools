@@ -3,13 +3,14 @@
 #' @param summary_Tabla_Total Summary table for total sample.
 #' @param summary_Tabla_EFA Summary table for EFA sample.
 #' @param summary_Tabla_CFA Summary table for CFA sample.
-#' @param file_name Output file name (default "Tablas_Resumenes.xlsx").
+#' @param file_name Output file name (no default; supply a full path, e.g.
+#'   \code{file.path(tempdir(), "Tablas_Resumenes.xlsx")}).
 #' @return Invisibly returns the merged data frame.
 #' @export
 export_summary_tables <- function(summary_Tabla_Total,
                                   summary_Tabla_EFA,
                                   summary_Tabla_CFA,
-                                  file_name = "Tablas_Resumenes.xlsx") {
+                                  file_name) {
   df_total <- summary_Tabla_Total %>%
     dplyr::rename(Total_n   = n,  Total_pct = `%`)
   df_efa <- summary_Tabla_EFA %>%

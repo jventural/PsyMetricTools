@@ -7,7 +7,7 @@
 #' @param text_size Text size for labels (default 3).
 #' @return A ggplot object.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create sample survey data with Likert items (1-5 scale)
 #' set.seed(123)
 #' n <- 200

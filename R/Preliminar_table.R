@@ -3,7 +3,7 @@
 #' @param data Data frame containing the items.
 #' @return A tibble with response frequencies as percentages.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create sample Likert data (1-5 scale)
 #' set.seed(123)
 #' data <- data.frame(

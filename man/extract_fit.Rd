@@ -16,7 +16,7 @@ A data frame with fit index names and values.
 Extracts fit indices (RMSEA, TLI, CFI, BIC) from psych factor analysis results.
 }
 \examples{
-\dontrun{
+\donttest{
 library(psych)
 
 # Create sample data

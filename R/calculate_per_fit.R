@@ -7,7 +7,7 @@
 #'
 #' @return A data frame with percentages for each fit measure.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # First run boot_cfa to get bootstrap results
 #' set.seed(123)
 #' n <- 300
@@ -29,7 +29,7 @@
 #'   new_df = data,
 #'   model_string = model,
 #'   item_prefix = "Item",
-#'   n_replications = 100
+#'   n_replications = 25
 #' )
 #'
 #' # Define threshold string

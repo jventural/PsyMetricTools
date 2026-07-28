@@ -16,7 +16,7 @@ A matrix of factor correlations rounded to 2 decimals.
 Extracts the inter-factor correlation matrix (Phi) from EFA results.
 }
 \examples{
-\dontrun{
+\donttest{
 library(psych)
 
 # Create sample data

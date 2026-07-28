@@ -39,7 +39,7 @@ A list containing fit indices, specifications, interfactor correlations, and pat
 Performs exploratory factor analysis using lavaan with rotation.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create sample data with 15 Likert-type items
 set.seed(123)
 n <- 300

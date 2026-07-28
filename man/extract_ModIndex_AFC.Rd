@@ -16,22 +16,30 @@ A combined data frame of modification indices with sample identifiers.
 Extracts and combines modification indices from multiple CFA analyses.
 }
 \examples{
-\dontrun{
+\donttest{
 library(lavaan)
 
 # Create sample data
 set.seed(123)
 n <- 300
+g <- rnorm(n)
+t1 <- 0.7 * g + rnorm(n, 0, 0.7)
+t2 <- 0.7 * g + rnorm(n, 0, 0.7)
+sim_item <- function(t) {
+  as.numeric(cut(t + rnorm(length(t), 0, 0.8), c(-Inf, -1, 0, 1, Inf)))
+}
 data <- data.frame(
-  Item1 = sample(1:5, n, replace = TRUE),
-  Item2 = sample(1:5, n, replace = TRUE),
-  Item3 = sample(1:5, n, replace = TRUE),
-  Item4 = sample(1:5, n, replace = TRUE),
-  Item5 = sample(1:5, n, replace = TRUE),
-  Item6 = sample(1:5, n, replace = TRUE)
+  Item1 = sim_item(t1), Item2 = sim_item(t1), Item3 = sim_item(t1),
+  Item4 = sim_item(t2), Item5 = sim_item(t2), Item6 = sim_item(t2)
 )
 
-# Assume you have multiple CFA results from boot_cfa or similar
+# Fit the same CFA model on three bootstrap samples
+model <- "F1 =~ Item1 + Item2 + Item3
+          F2 =~ Item4 + Item5 + Item6"
+fit1 <- cfa(model, data = data[sample(n, n, replace = TRUE), ])
+fit2 <- cfa(model, data = data[sample(n, n, replace = TRUE), ])
+fit3 <- cfa(model, data = data[sample(n, n, replace = TRUE), ])
+
 # Each result contains a ModificationsDf element
 results_list <- list(
   list(ModificationsDf = modificationIndices(fit1, sort = TRUE)),
@@ -41,14 +49,6 @@ results_list <- list(
 
 # Extract and combine modification indices
 all_mod_indices <- extract_ModIndex_AFC(results_list)
-
-# View combined results with sample identifiers
 head(all_mod_indices)
-
-# Find most frequent modification suggestions
-all_mod_indices \%>\%
-  group_by(lhs, op, rhs) \%>\%
-  summarise(n = n(), mean_mi = mean(mi)) \%>\%
-  arrange(desc(n))
 }
 }

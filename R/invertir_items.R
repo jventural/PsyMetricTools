@@ -6,7 +6,7 @@
 #' @param comienza_con_cero Logical, whether responses start with 0 (default TRUE).
 #' @return Data frame with reversed items.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create sample data with 5-point Likert scale (1-5)
 #' set.seed(123)
 #' data <- data.frame(

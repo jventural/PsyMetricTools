@@ -18,7 +18,7 @@ A character string with lavaan model syntax.
 Creates lavaan model syntax from item prefix and factor specifications.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create a 3-factor CFA model with item prefix "Item"
 model <- crear_modelo_lavaan(
   nombre = "Item",
@@ -39,9 +39,5 @@ model2 <- crear_modelo_lavaan(
   Depression = c(2, 4, 6, 8)
 )
 cat(model2)
-
-# Use with lavaan
-library(lavaan)
-fit <- cfa(model, data = my_data, ordered = TRUE, estimator = "WLSMV")
 }
 }

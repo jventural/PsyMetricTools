@@ -2,8 +2,9 @@
 #' @description Visualiza la dispersion de resultados bootstrap mediante graficos
 #'   de densidad con intervalos de confianza y valores de referencia.
 #' @param df Data frame con resultados de boot_cfa().
-#' @param save Logical. Guardar el grafico (default TRUE).
-#' @param path Ruta para guardar (default "Plot_boot_density.jpg").
+#' @param save Logical. Guardar el grafico (default FALSE).
+#' @param path Ruta para guardar (default NULL; obligatoria si \code{save = TRUE},
+#'   e.g. \code{file.path(tempdir(), "Plot_boot_density.jpg")}).
 #' @param dpi Resolucion (default 600).
 #' @param exclude_indices Vector de indices a excluir (e.g., c("RMSEA")).
 #' @param show_ci Mostrar intervalo de confianza sombreado (default TRUE).
@@ -12,9 +13,10 @@
 #' @param fill_color Color de relleno de densidad (default "#3498db").
 #' @param ci_color Color del area de IC (default "#e74c3c").
 #' @param ... Argumentos adicionales para ggsave.
-#' @return Un objeto ggplot.
+#' @return Un objeto ggplot. La tabla de estadisticos bootstrap se adjunta como
+#'   atributo \code{"stats"} y puede extraerse con \code{attr(x, "stats")}.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # First run boot_cfa to get bootstrap results
 #' set.seed(123)
 #' n <- 300
@@ -36,13 +38,13 @@
 #'   new_df = data,
 #'   model_string = model,
 #'   item_prefix = "Item",
-#'   n_replications = 100
+#'   n_replications = 25
 #' )
 #'
 #' # Create density plot with confidence intervals
 #' boot_cfa_density(boot_results,
 #'                  save = TRUE,
-#'                  path = "bootstrap_density.jpg",
+#'                  path = file.path(tempdir(), "bootstrap_density.jpg"),
 #'                  show_ci = TRUE,
 #'                  ci_level = 0.95,
 #'                  show_reference = TRUE)
@@ -55,8 +57,8 @@
 #' }
 #' @export
 boot_cfa_density <- function(df,
-                              save = TRUE,
-                              path = "Plot_boot_density.jpg",
+                              save = FALSE,
+                              path = NULL,
                               dpi = 600,
                               exclude_indices = NULL,
                               show_ci = TRUE,
@@ -80,6 +82,7 @@ boot_cfa_density <- function(df,
       omega_data <- df[, sapply(df, is.numeric)]
     }
 
+    omega_data[] <- lapply(omega_data, as.numeric)
     omega_long <- tidyr::pivot_longer(omega_data, tidyselect::everything(),
                                        names_to = "Index", values_to = "Value")
     omega_long$Index <- paste0("omega (", substr(omega_long$Index, 1, 3), ")")
@@ -245,11 +248,12 @@ boot_cfa_density <- function(df,
         plot.margin = ggplot2::margin(20, 20, 15, 15)
       )
 
-    # Mostrar
-    print(p)
-
     # Guardar
     if (isTRUE(save)) {
+      if (is.null(path)) {
+        stop("Please provide 'path' when save = TRUE, ",
+             "e.g. path = file.path(tempdir(), \"Plot_boot_density.jpg\").")
+      }
       n_facets <- length(unique(all_data$Index))
       n_rows <- ceiling(n_facets / 2)
 
@@ -266,12 +270,11 @@ boot_cfa_density <- function(df,
       message("Grafico guardado en: ", path)
     }
 
-    # Imprimir tabla de estadisticos
-    cat("\n=== Bootstrap Statistics ===\n\n")
+    # Adjuntar tabla de estadisticos al objeto retornado
     stats_print <- stats_df
     stats_print[sapply(stats_print, is.numeric)] <- round(stats_print[sapply(stats_print, is.numeric)], 3)
-    print(as.data.frame(stats_print), row.names = FALSE)
+    attr(p, "stats") <- as.data.frame(stats_print)
 
-    invisible(p)
+    p
   })
 }

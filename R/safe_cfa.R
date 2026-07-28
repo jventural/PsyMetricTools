@@ -9,7 +9,13 @@
 #' @param stdlv Logical; standardize latent variables (default \code{TRUE}).
 #' @return A fitted lavaan object, or \code{NULL} if the model failed.
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' set.seed(123)
+#' mydata <- data.frame(
+#'   x1 = sample(1:5, 200, replace = TRUE),
+#'   x2 = sample(1:5, 200, replace = TRUE),
+#'   x3 = sample(1:5, 200, replace = TRUE)
+#' )
 #' model <- 'F1 =~ x1 + x2 + x3'
 #' fit <- safe_cfa(model, data = mydata, items = c("x1", "x2", "x3"))
 #' if (!is.null(fit)) summary(fit)
@@ -35,8 +41,15 @@ safe_cfa <- function(syntax, data, items, estimator = "WLSMV", stdlv = TRUE) {
 #'   includes chi-square, df, CFI, TLI, RMSEA, SRMR, and WRMR, all scaled).
 #' @return A one-row data frame with the requested fit measures.
 #' @examples
-#' \dontrun{
-#' fit <- safe_cfa(model, data = mydata, items = items)
+#' \donttest{
+#' set.seed(123)
+#' mydata <- data.frame(
+#'   x1 = sample(1:5, 200, replace = TRUE),
+#'   x2 = sample(1:5, 200, replace = TRUE),
+#'   x3 = sample(1:5, 200, replace = TRUE)
+#' )
+#' model <- 'F1 =~ x1 + x2 + x3'
+#' fit <- safe_cfa(model, data = mydata, items = c("x1", "x2", "x3"))
 #' safe_measures(fit)
 #' }
 #' @importFrom lavaan fitMeasures
@@ -65,8 +78,15 @@ safe_measures <- function(fit, wanted = c("chisq.scaled", "df.scaled",
 #'   \code{"NONCONV/FAIL"} if the model is \code{NULL}, or a description of
 #'   the problems found.
 #' @examples
-#' \dontrun{
-#' fit <- safe_cfa(model, data = mydata, items = items)
+#' \donttest{
+#' set.seed(123)
+#' mydata <- data.frame(
+#'   x1 = sample(1:5, 200, replace = TRUE),
+#'   x2 = sample(1:5, 200, replace = TRUE),
+#'   x3 = sample(1:5, 200, replace = TRUE)
+#' )
+#' model <- 'F1 =~ x1 + x2 + x3'
+#' fit <- safe_cfa(model, data = mydata, items = c("x1", "x2", "x3"))
 #' latents <- lavaan::lavNames(fit, type = "lv")
 #' admis_simple(fit, latents)
 #' }

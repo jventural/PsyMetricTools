@@ -17,7 +17,7 @@
 #'
 #' @return A combined patchwork plot.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(lavaan)
 #' library(ggplot2)
 #'
@@ -61,7 +61,7 @@
 #' print(combined_plot)
 #'
 #' # Save combined plot
-#' ggsave("combined_likert_sem.jpg", combined_plot,
+#' ggsave(file.path(tempdir(), "combined_likert_sem.jpg"), combined_plot,
 #'        width = 14, height = 8, dpi = 300)
 #' }
 #' @export

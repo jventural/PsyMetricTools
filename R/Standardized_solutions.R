@@ -5,7 +5,7 @@
 #' @param apply_threshold Logical, whether to apply 0.30 threshold (default TRUE).
 #' @return A data frame with items and factor loadings.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # First run EFA_modern to get the specification object
 #' set.seed(123)
 #' n <- 300

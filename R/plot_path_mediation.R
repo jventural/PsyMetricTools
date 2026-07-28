@@ -79,9 +79,16 @@
 #' \doi{10.1186/s12889-025-25805-3}
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(lavaan)
-#' library(PsyMetricTools)
+#'
+#' set.seed(123)
+#' n <- 300
+#' X1 <- rnorm(n); X2 <- rnorm(n); X3 <- rnorm(n)
+#' M1 <- 0.5 * X1 + 0.3 * X2 + rnorm(n, 0, 0.8)
+#' M2 <- 0.4 * X2 + 0.3 * X3 + rnorm(n, 0, 0.8)
+#' Y  <- 0.4 * M1 + 0.3 * M2 + 0.2 * X1 + rnorm(n, 0, 0.7)
+#' your_data <- data.frame(X1, X2, X3, M1, M2, Y)
 #'
 #' # Modelo de senderos: 3 predictores distales -> 2 mediadores -> 1 outcome
 #' mod <- '
@@ -89,7 +96,7 @@
 #'   M2 ~ X1 + X2 + X3
 #'   Y  ~ M1 + M2 + X1 + X2 + X3
 #' '
-#' fit <- sem(mod, data = your_data, estimator = "MLR", missing = "fiml")
+#' fit <- sem(mod, data = your_data, estimator = "MLR")
 #'
 #' nodes <- data.frame(
 #'   id    = c("X1","X2","X3","M1","M2","Y"),
@@ -230,13 +237,13 @@ plot_path_mediation <- function(fit,
     if (!is.null(fi) && length(fi) > 0) {
       labs <- toupper(sub("\\.robust$", "", names(fi)))
       sub_pieces <- c(sub_pieces,
-        paste(sprintf("%s = %.3f", labs, as.numeric(fi)), collapse = " \u2022 "))
+        paste(sprintf("%s = %.3f", labs, as.numeric(fi)), collapse = " | "))
     }
     if (show_r2) {
       r2 <- tryCatch(lavaan::lavInspect(fit, "r2"), error = function(e) NULL)
       if (!is.null(r2)) {
         sub_pieces <- c(sub_pieces,
-          paste0("R\u00b2 \u2014 ",
+          paste0("R\u00b2 - ",
                  paste(sprintf("%s = %.2f", names(r2), r2), collapse = ", ")))
       }
     }

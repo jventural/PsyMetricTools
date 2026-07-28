@@ -9,7 +9,7 @@
 #'
 #' @return A list with omega values and item statistics.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create a sample loadings data frame (from EFA or CFA)
 #' loadings_df <- data.frame(
 #'   Items = c("Item1", "Item2", "Item3", "Item4", "Item5", "Item6"),
@@ -38,12 +38,6 @@
 #'
 #' # View item-level statistics
 #' result2$item_stats$Factor1
-#'
-#' # Using with EFA_modern output
-#' efa_result <- EFA_modern(n_factors = 2, n_items = 6,
-#'                          name_items = "Item", data = my_data,
-#'                          apply_threshold = FALSE)
-#' omega_result <- calcula_omega_mcdonald(efa_result$result_df)
 #' }
 #' @export
 calcula_omega_mcdonald <- function(loadings_df,

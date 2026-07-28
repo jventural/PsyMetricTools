@@ -24,7 +24,7 @@ A ggplot object.
 Creates a visualization for Likert scale items.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create sample survey data with Likert items (1-5 scale)
 set.seed(123)
 n <- 200

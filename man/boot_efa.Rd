@@ -14,7 +14,7 @@ boot_efa(
   estimator = "WLSMV",
   ordered = TRUE,
   apply_threshold = FALSE,
-  seed = 2023,
+  seed = NULL,
   n_replications = 1000
 )
 }
@@ -38,7 +38,7 @@ Set to FALSE for continuous indicators with ML estimator.}
 
 \item{apply_threshold}{Whether to apply threshold to loadings (default: FALSE).}
 
-\item{seed}{Random seed for reproducibility (default: 2023).}
+\item{seed}{Optional random seed for reproducibility (default: NULL, no seed is set).}
 
 \item{n_replications}{Number of bootstrap replications (default: 1000).}
 }
@@ -59,15 +59,18 @@ calculating fit measures, factor loadings, and McDonald's omega reliability
 for each replication.
 }
 \examples{
-\dontrun{
+\donttest{
+set.seed(123)
+n <- 200
+data <- as.data.frame(lapply(setNames(1:6, paste0("PBA", 1:6)),
+                             function(i) sample(1:5, n, replace = TRUE)))
 results <- boot_efa(
-  data = my_data,
-  n_factors = 3,
-  n_items = 23,
+  data = data,
+  n_factors = 2,
+  n_items = 6,
   name_items = "PBA",
-  exclude_items = c("PBA13", "PBA23"),
   rotation = "oblimin",
-  n_replications = 1000
+  n_replications = 5
 )
 }
 }

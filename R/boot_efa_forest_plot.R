@@ -4,8 +4,9 @@
 #' from bootstrap EFA results. Style inspired by Solomon Kurz.
 #'
 #' @param boot_efa_results Results from boot_efa function.
-#' @param save Logical, whether to save the plot (default: TRUE).
-#' @param path File path to save the plot (default: "Forest_plot_efa.jpg").
+#' @param save Logical, whether to save the plot (default: FALSE).
+#' @param path File path to save the plot (default: NULL; required when
+#'   \code{save = TRUE}, e.g. \code{file.path(tempdir(), "Forest_plot_efa.jpg")}).
 #' @param dpi Resolution in dots per inch (default: 600).
 #' @param title Plot title.
 #' @param threshold_low Low loading threshold (default: 0.4).
@@ -16,14 +17,23 @@
 #'
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' set.seed(123)
+#' n <- 200
+#' data <- as.data.frame(lapply(setNames(1:6, paste0("PBA", 1:6)),
+#'                              function(i) sample(1:5, n, replace = TRUE)))
+#' results_boot_efa <- boot_efa(
+#'   data = data, n_factors = 2, n_items = 6, name_items = "PBA",
+#'   rotation = "oblimin", n_replications = 5
+#' )
 #' boot_efa_forest_plot(results_boot_efa,
-#'                      path = "Forest_PBA.jpg",
+#'                      save = TRUE,
+#'                      path = file.path(tempdir(), "Forest_PBA.jpg"),
 #'                      title = "Factor Loadings PBA - Bootstrap EFA")
 #' }
 boot_efa_forest_plot <- function(boot_efa_results,
-                                 save = TRUE,
-                                 path = "Forest_plot_efa.jpg",
+                                 save = FALSE,
+                                 path = NULL,
                                  dpi = 600,
                                  title = "Factor Loadings with 95% CI (Bootstrap)",
                                  threshold_low = 0.4,
@@ -160,6 +170,10 @@ boot_efa_forest_plot <- function(boot_efa_results,
 
   # Guardar si se solicita
   if (isTRUE(save)) {
+    if (is.null(path)) {
+      stop("Please provide 'path' when save = TRUE, ",
+           "e.g. path = file.path(tempdir(), \"Forest_plot_efa.jpg\").")
+    }
     n_items <- length(unique(loadings_summary$item))
     n_factors <- length(factor_cols)
 

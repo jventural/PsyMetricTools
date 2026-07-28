@@ -22,7 +22,7 @@ A character string with complete lavaan model syntax.
 Generates complete lavaan model syntax including factor loadings and item thresholds.
 }
 \examples{
-\dontrun{
+\donttest{
 # Generate a simple 1-factor model with 5 items and 4 thresholds
 model <- generate_model_lavaan(
   num_items = 5,

@@ -46,10 +46,23 @@ Realiza analisis de invarianza factorial para datos ordinales
   utilizando el enfoque de Wu y Estabrook (2016) con estimador WLSMV.
 }
 \examples{
-\dontrun{
+\donttest{
+set.seed(123)
+n <- 400
+theta <- rnorm(n)
+sim_item <- function(theta) {
+  as.numeric(cut(theta + rnorm(length(theta), 0, 0.8),
+                 breaks = c(-Inf, -1, 0, 1, Inf)))
+}
+mydata <- data.frame(
+  item1 = sim_item(theta), item2 = sim_item(theta),
+  item3 = sim_item(theta), item4 = sim_item(theta),
+  sex = rep(c("M", "F"), each = n / 2)
+)
+
 # Ejemplo con todos los indices por defecto
 res <- easy_invariance(
-  model = "F =~ item1 + item2 + item3",
+  model = "F =~ item1 + item2 + item3 + item4",
   data = mydata,
   estimator = "WLSMV",
   ordered = TRUE,
@@ -60,7 +73,7 @@ res <- easy_invariance(
 
 # Ejemplo excluyendo RMSEA
 res <- easy_invariance(
-  model = "F =~ item1 + item2 + item3",
+  model = "F =~ item1 + item2 + item3 + item4",
   data = mydata,
   estimator = "WLSMV",
   ordered = TRUE,
