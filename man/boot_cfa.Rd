@@ -31,6 +31,12 @@ boot_cfa(
 }
 \value{
 Data frame with bootstrap results including fit measures and reliability.
+  When the fitted model uses a robust test statistic (WLSMV, WLSM, MLR, MLM,
+  MLMV, ULSMV, ...), the columns `CFI`, `TLI`, `RMSEA`, `RMSEA.CI.LOWER` and
+  `RMSEA.CI.UPPER` inside `fit_measures1` hold the **scaled (robust)** values,
+  that is `cfi.scaled`, `tli.scaled` and `rmsea.scaled`. The `.scaled` suffix is
+  dropped from the column names so that the plotting functions keep working; the
+  `estimator` column states which estimator was detected.
 }
 \description{
 Performs bootstrap CFA with reliability estimation.

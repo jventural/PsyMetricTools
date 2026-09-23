@@ -8,6 +8,12 @@
 #' @param ordered Logical indicating if variables are ordinal (default TRUE).
 #' @param estimator Estimator to use (default "WLSMV").
 #' @return Data frame with bootstrap results including fit measures and reliability.
+#'   When the fitted model uses a robust test statistic (WLSMV, WLSM, MLR, MLM,
+#'   MLMV, ULSMV, ...), the columns `CFI`, `TLI`, `RMSEA`, `RMSEA.CI.LOWER` and
+#'   `RMSEA.CI.UPPER` inside `fit_measures1` hold the **scaled (robust)** values,
+#'   that is `cfi.scaled`, `tli.scaled` and `rmsea.scaled`. The `.scaled` suffix is
+#'   dropped from the column names so that the plotting functions keep working; the
+#'   `estimator` column states which estimator was detected.
 #' @examples
 #' \donttest{
 #' # Create sample data with 9 Likert-type items (3 factors, 3 items each)
@@ -57,52 +63,56 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = NULL, n_replicati
   # Funcion interna
   lavaan_estimator <- function(x) {
     opts <- lavaan::lavInspect(x, "options")
-    test_val <- opts$test[1]
+    # lavaan >= 0.6-14 devuelve opts$test como vector, p. ej.
+    # c("standard", "scaled.shifted") con WLSMV: quedarse con el primer elemento
+    # daba siempre "standard" y clasificaba mal el estimador.
+    test_types <- opts$test
+    test_match <- function(target) any(test_types %in% target)
     se_val <- opts$se
     est_val <- opts$estimator
 
     if (est_val == "DWLS") {
-      if (se_val == "robust.sem" && test_val == "satorra.bentler") {
+      if (se_val == "robust.sem" && test_match("satorra.bentler")) {
         est <- "WLSM"
-      } else if (se_val == "robust.sem" && test_val == "mean.var.adjusted") {
+      } else if (se_val == "robust.sem" && test_match("mean.var.adjusted")) {
         est <- "WLSMVS"
-      } else if (se_val == "robust.sem" && test_val == "scaled.shifted") {
+      } else if (se_val == "robust.sem" && test_match("scaled.shifted")) {
         est <- "WLSMV"
-      } else if (se_val == "standard" && test_val == "standard") {
+      } else if (se_val == "standard" && test_match("standard")) {
         est <- "DWLS"
       } else {
         est <- "DWLS_variant"
       }
     } else if (est_val == "ULS") {
       if (se_val == "robust.sem" &
-          test_val == "satorra.bentler") {
+          test_match("satorra.bentler")) {
         est <- "ULSM"
       } else if (se_val == "robust.sem" &
-                 test_val == "mean.var.adjusted") {
+                 test_match("mean.var.adjusted")) {
         est <- "ULSMVS"
       } else if (se_val == "robust.sem" &
-                 test_val == "scaled.shifted") {
+                 test_match("scaled.shifted")) {
         est <- "ULSMV"
       } else if (se_val == "standard" &
-                 test_val == "standard") {
+                 test_match("standard")) {
         est <- "ULS"
       } else {
         est <- "ULS_variant"
       }
     } else if (est_val == "ML") {
-      if (se_val == "robust.sem" && test_val == "satorra.bentler") {
+      if (se_val == "robust.sem" && test_match("satorra.bentler")) {
         est <- "MLM"
       } else if (se_val == "robust.huber.white" &&
-                 test_val %in% c("yuan.bentler.mplus", "yuan.bentler")) {
+                 test_match(c("yuan.bentler.mplus", "yuan.bentler"))) {
         est <- "MLR"
-      } else if (se_val == "robust.sem" && test_val == "mean.var.adjusted") {
+      } else if (se_val == "robust.sem" && test_match("mean.var.adjusted")) {
         est <- "MLMVS"
-      } else if (se_val == "robust.sem" && test_val == "scaled.shifted") {
+      } else if (se_val == "robust.sem" && test_match("scaled.shifted")) {
         est <- "MLMV"
-      } else if (se_val == "standard" && test_val == "standard" &&
+      } else if (se_val == "standard" && test_match("standard") &&
                  unique(opts$information)[1] == "expected") {
         est <- "ML"
-      } else if (se_val == "standard" && test_val == "standard" &&
+      } else if (se_val == "standard" && test_match("standard") &&
                  unique(opts$information)[1] == "first.order") {
         est <- "MLF"
       } else {
@@ -117,14 +127,17 @@ boot_cfa <- function(new_df, model_string, item_prefix, seed = NULL, n_replicati
 
   # Funcion interna
   is_robust_estimator_lavaan <- function(x) {
-    test_val <- lavaan::lavInspect(x, "options")[["test"]][1]
-    if (test_val %in% c(
+    # Igual que arriba: hay que mirar TODOS los tests declarados, no solo el
+    # primero. Si no, con WLSMV/MLR la funcion devolvia "non-robust" y
+    # fit_lavaan() entregaba el CFI/TLI/RMSEA sin escalar.
+    test_types <- lavaan::lavInspect(x, "options")[["test"]]
+    if (any(test_types %in% c(
       "satorra.bentler",
       "yuan.bentler",
       "yuan.bentler.mplus",
       "mean.var.adjusted",
       "scaled.shifted"
-    )) {
+    ))) {
       type <- "robust"
     } else {
       type <- "non-robust"

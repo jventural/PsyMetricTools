@@ -1,5 +1,5 @@
 Package: PsyMetricTools
-Version: 1.2.2
+Version: 1.2.3
 Title: Psychometric and Statistical Analysis Tools
 Description: Provides tools for psychometric and statistical analysis in
     social sciences, including functions for data preprocessing, factor
@@ -60,7 +60,10 @@ Suggests:
     ggplotify,
     patchwork,
     wesanderson,
-    circlize
+    circlize,
+    shiny,
+    bslib,
+    semPower
 Config/testthat/edition: 3
 RoxygenNote: 7.3.2
 NeedsCompilation: no

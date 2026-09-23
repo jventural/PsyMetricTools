@@ -1,3 +1,36 @@
+# PsyMetricTools 1.2.3
+
+## New features
+
+* New `run_sempowerlab()`: launches the SemPowerLab Shiny application, which plans the sample
+  size of a predictive design with latent variables (two correlated latent predictors and a
+  latent criterion) by wrapping `semPower::semPower.powerRegression()`. It draws the model,
+  plots the power curve, crosses the effect with the average factor loading, and writes the
+  reproducible script and a draft of the Participants section. The application moves here
+  from the InterconectaR package. `shiny`, `bslib` and `semPower` added to Suggests.
+* The application passes the criterion as the first factor, as semPower expects, and every
+  output (cards, curve, script and paragraph) follows the specification that produced the
+  result rather than inputs edited afterwards.
+
+## Bug fixes
+
+* `boot_cfa()` now returns the **scaled (robust)** fit indices when the model is
+  fitted with a robust test statistic. Since lavaan 0.6-14 the `test` option is a
+  vector (`c("standard", "scaled.shifted")` for WLSMV), and the internal helpers
+  `is_robust_estimator_lavaan()` and `lavaan_estimator()` inspected only its first
+  element. That element is always `"standard"`, so every robust fit was classified
+  as non-robust and `fit_measures1` carried `cfi`, `tli` and `rmsea` instead of
+  `cfi.scaled`, `tli.scaled` and `rmsea.scaled`. With ordinal data the gap is not
+  cosmetic: in a 23-item five-factor model the reported CFI was .988 against a true
+  robust value of .947, which made the bootstrap figure contradict the fit table.
+  Both helpers now test every declared statistic with `any(test_types %in% ...)`,
+  the same way `boot_efa()` already did. As a side effect the `estimator` column
+  now reports `WLSMV` instead of `DWLS_variant`.
+* The column names keep their current form (`CFI`, `TLI`, `RMSEA`, ...) so the
+  plotting functions `boot_cfa_plot()`, `boot_cfa_plot_enhanced()`,
+  `boot_cfa_density()`, `boot_cfa_raincloud()` and `calculate_per_fit()` are
+  unaffected; only the values change.
+
 # PsyMetricTools 1.2.1
 
 ## CRAN fixes
